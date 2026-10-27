@@ -127,7 +127,7 @@ export async function processWithLLM({
   const bucketName = process.env.DOCUMENT_BUCKET || "";
 
   // Get user preference for language if userId is provided
-  let userLanguage = DEFAULT_LANGUAGE;
+  let userLanguage: string = DEFAULT_LANGUAGE;
   if (userId) {
     try {
       console.log(

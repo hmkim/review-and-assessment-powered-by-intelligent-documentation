@@ -32,7 +32,7 @@ export default function CheckListSetList({
   onDelete,
   onDuplicate,
 }: CheckListSetListProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const navigate = useNavigate();
 
@@ -54,7 +54,7 @@ export default function CheckListSetList({
         return t("date.invalidDate");
       }
 
-      return new Intl.DateTimeFormat("ja-JP", {
+      return new Intl.DateTimeFormat(i18n.language, {
         year: "numeric",
         month: "2-digit",
         day: "2-digit",

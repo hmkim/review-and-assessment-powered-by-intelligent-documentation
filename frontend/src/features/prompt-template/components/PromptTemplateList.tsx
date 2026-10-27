@@ -22,7 +22,7 @@ export const PromptTemplateList: React.FC<PromptTemplateListProps> = ({
   onCreateNew,
   isLoading,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   // Define columns
   const columns: TableColumn<PromptTemplate>[] = [
     {
@@ -59,7 +59,7 @@ export const PromptTemplateList: React.FC<PromptTemplateListProps> = ({
       header: t("promptTemplate.updatedAt"),
       render: (template) => (
         <div className="text-sm text-aws-font-color-gray">
-          {new Date(template.updatedAt).toLocaleString()}
+          {new Date(template.updatedAt).toLocaleString(i18n.language)}
         </div>
       ),
     },

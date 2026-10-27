@@ -28,7 +28,7 @@ export async function preReviewItemProcessor(
 ): Promise<any> {
   const { reviewJobId, checkId, reviewResultId, userId } = params;
 
-  let userLanguage = DEFAULT_LANGUAGE;
+  let userLanguage: string = DEFAULT_LANGUAGE;
 
   if (userId) {
     try {

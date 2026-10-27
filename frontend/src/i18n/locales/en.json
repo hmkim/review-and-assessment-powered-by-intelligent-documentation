@@ -325,8 +325,9 @@
     "dateError": "Date error"
   },
   "language": {
-    "ja": "Japanese",
-    "en": "English"
+    "ja": "日本語",
+    "en": "English",
+    "ko": "한국어"
   },
   "table": {
     "actions": "Actions"

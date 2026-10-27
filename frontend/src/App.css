@@ -3,6 +3,17 @@ body {
   font-family: 'M PLUS Rounded 1c', sans-serif;
 }
 
+/*
+ * 韓国語 UI 向けフォント
+ * <html lang> は i18n 初期化時に現在の言語へ同期される。'M PLUS Rounded 1c' は
+ * ハングルのグリフを持たないため、韓国語ではハングル対応のシステムフォントを優先する。
+ * 閉域網デプロイを考慮し、外部フォントは読み込まない。
+ */
+body:lang(ko) {
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic',
+    system-ui, sans-serif;
+}
+
 /* スクロールバーのカスタマイズ */
 ::-webkit-scrollbar {
   width: 8px;

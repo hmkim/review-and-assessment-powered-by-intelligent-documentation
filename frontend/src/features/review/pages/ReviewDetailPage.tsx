@@ -13,7 +13,7 @@ import Breadcrumb from "../../../components/Breadcrumb";
 import TotalReviewCostSummary from "../components/TotalReviewCostSummary";
 
 export default function ReviewDetailPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -125,12 +125,12 @@ export default function ReviewDetailPage() {
             </span>
           </p>
           <p className="text-aws-font-color-gray">
-            {t("review.createdAt")}: {new Date(job.createdAt).toLocaleString()}
+            {t("review.createdAt")}: {new Date(job.createdAt).toLocaleString(i18n.language)}
           </p>
           {job.completedAt && (
             <p className="text-aws-font-color-gray">
               {t("review.completedAt", "Completed At")}:{" "}
-              {new Date(job.completedAt).toLocaleString()}
+              {new Date(job.completedAt).toLocaleString(i18n.language)}
             </p>
           )}
         </div>

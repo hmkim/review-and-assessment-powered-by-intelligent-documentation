@@ -7,6 +7,10 @@ import {
   CheckListItemEntity,
 } from "../model/checklist";
 import { makePrismaUserPreferenceRepository } from "../../../user-preference/domain/repository";
+import {
+  DEFAULT_LANGUAGE,
+  getLanguageName,
+} from "../../../../../utils/language";
 
 const BEDROCK_REGION = process.env.BEDROCK_REGION || "us-west-2";
 const MODEL_ID =
@@ -78,14 +82,11 @@ export const detectAmbiguity = async (params: {
   const userPreferenceRepository = await makePrismaUserPreferenceRepository();
   const userPreference =
     await userPreferenceRepository.getUserPreference(userId);
-  const userLanguage = userPreference?.language || "en";
+  const userLanguage = userPreference?.language || DEFAULT_LANGUAGE;
 
-  // Map language codes to display names
-  const languageMap: Record<string, string> = {
-    en: "English",
-    ja: "Japanese",
-  };
-  const languageName = languageMap[userLanguage] || "English";
+  // Map language code to the display name used in the prompt (shared with the
+  // checklist/review workflows so every LLM output follows the same language)
+  const languageName = getLanguageName(userLanguage);
 
   const bedrockClient = new BedrockRuntimeClient({ region: BEDROCK_REGION });
 
