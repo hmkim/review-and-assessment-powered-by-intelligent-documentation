@@ -326,7 +326,8 @@
   },
   "language": {
     "ja": "日本語",
-    "en": "English"
+    "en": "English",
+    "ko": "한국어"
   },
   "table": {
     "actions": "操作"

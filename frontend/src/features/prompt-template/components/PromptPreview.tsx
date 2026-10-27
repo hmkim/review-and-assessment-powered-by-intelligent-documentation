@@ -8,7 +8,7 @@ interface PromptPreviewProps {
 }
 
 export const PromptPreview: React.FC<PromptPreviewProps> = ({ template }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   return (
     <div className="space-y-4">
       <div>
@@ -37,7 +37,7 @@ export const PromptPreview: React.FC<PromptPreviewProps> = ({ template }) => {
       <div className="pt-4 text-right">
         <p className="text-xs text-aws-font-color-gray dark:text-aws-font-color-dark">
           {t("promptTemplate.lastUpdatedLabel")}:{" "}
-          {new Date(template.updatedAt).toLocaleString()}
+          {new Date(template.updatedAt).toLocaleString(i18n.language)}
         </p>
       </div>
     </div>

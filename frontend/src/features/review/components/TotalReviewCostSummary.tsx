@@ -16,7 +16,7 @@ export default function TotalReviewCostSummary({
   formattedTotalCost,
   summary,
 }: TotalReviewCostSummaryProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <div className="inline-flex items-center space-x-4 rounded-lg border border-gray px-4 py-2">
@@ -29,8 +29,8 @@ export default function TotalReviewCostSummary({
         </span>
       </div>
       <div className="text-xs text-aws-font-color-gray">
-        {summary.totalInputTokens.toLocaleString()}
-        {t("review.input")} + {summary.totalOutputTokens.toLocaleString()}
+        {summary.totalInputTokens.toLocaleString(i18n.language)}
+        {t("review.input")} + {summary.totalOutputTokens.toLocaleString(i18n.language)}
         {t("review.output")}
       </div>
     </div>

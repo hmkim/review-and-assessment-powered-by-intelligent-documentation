@@ -1084,7 +1084,7 @@ def process_review_from_s3(
     document_paths: list,
     check_name: str,
     check_description: str,
-    language_name: str = "日本語",
+    language_name: str = "English",
     model_id: Optional[str] = None,
     toolConfiguration: Optional[Dict[str, Any]] = None,
     feedback_summary: Optional[str] = None,
@@ -1097,7 +1097,8 @@ def process_review_from_s3(
         document_paths: List of S3 object keys
         check_name: Check item name
         check_description: Check item description
-        language_name: Language name (default: "日本語")
+        language_name: Language name for all generated text (default: "English",
+            matching the backend DEFAULT_LANGUAGE; e.g. "Japanese", "Korean")
         model_id: Model ID (auto-selected if None)
         toolConfiguration: Tool configuration
         feedback_summary: Feedback summary

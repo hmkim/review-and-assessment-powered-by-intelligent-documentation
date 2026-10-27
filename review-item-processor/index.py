@@ -68,7 +68,14 @@ def handler(event, context):
     document_paths = event.get("documentPaths", [])
     check_name = event.get("checkName", "")
     check_description = event.get("checkDescription", "")
-    language_name = event.get("languageName", "日本語")
+    # The backend always sends languageName (resolved from the user's language
+    # preference). Fall back to the same default as backend DEFAULT_LANGUAGE.
+    language_name = event.get("languageName")
+    if not language_name:
+        logger.warning(
+            "[Strands MCP] languageName missing from event; defaulting to English"
+        )
+        language_name = "English"
 
     if not document_paths:
         raise ValueError("Missing document paths")

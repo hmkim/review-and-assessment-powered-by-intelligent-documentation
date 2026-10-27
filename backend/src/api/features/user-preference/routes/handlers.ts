@@ -1,4 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
+import { ApplicationError } from "../../../core/errors";
 import {
   getUserPreference,
   updateLanguage,
@@ -64,6 +65,11 @@ export const updateLanguageHandler = async (
       data: updatedPreference,
     });
   } catch (error) {
+    // Validation errors (unsupported language) are mapped to 4xx by the
+    // global error handler; only unexpected failures become a 500 here.
+    if (error instanceof ApplicationError) {
+      throw error;
+    }
     console.error("Error updating language preference:", error);
     reply.code(500).send({
       success: false,

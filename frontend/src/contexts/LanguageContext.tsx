@@ -2,9 +2,10 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useUpdateLanguage } from "../features/user-preference/hooks/useUserPreferenceMutations";
 import { useAuth } from "./AuthContext";
+import { normalizeLanguage, SupportedLanguage } from "../i18n";
 
 type LanguageContextType = {
-  language: string;
+  language: SupportedLanguage;
   changeLanguage: (lang: string) => void;
 };
 
@@ -16,20 +17,27 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { i18n } = useTranslation();
-  const [language, setLanguage] = useState(i18n.language || "ja");
+  // i18next has already resolved the detected/stored language against the
+  // supported list at this point; normalize defensively so the context never
+  // holds a region-qualified or unsupported code.
+  const [language, setLanguage] = useState<SupportedLanguage>(() =>
+    normalizeLanguage(i18n.language)
+  );
   const { updateLanguage } = useUpdateLanguage();
   const { isAuthenticated } = useAuth();
 
   const changeLanguage = (lang: string) => {
+    const normalized = normalizeLanguage(lang);
+
     // フロントエンドの言語設定を更新（常に真）
-    i18n.changeLanguage(lang);
-    setLanguage(lang);
+    i18n.changeLanguage(normalized);
+    setLanguage(normalized);
 
     // バックエンドに同期（未認証時は 401 になるためスキップ）
     if (!isAuthenticated) {
       return;
     }
-    updateLanguage({ language: lang }).catch((error) => {
+    updateLanguage({ language: normalized }).catch((error) => {
       console.error("Failed to sync language with backend:", error);
     });
   };
@@ -39,9 +47,11 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!isAuthenticated) {
       return;
     }
-    updateLanguage({ language: i18n.language }).catch((error) => {
-      console.error("Failed to sync language with backend:", error);
-    });
+    updateLanguage({ language: normalizeLanguage(i18n.language) }).catch(
+      (error) => {
+        console.error("Failed to sync language with backend:", error);
+      }
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
 

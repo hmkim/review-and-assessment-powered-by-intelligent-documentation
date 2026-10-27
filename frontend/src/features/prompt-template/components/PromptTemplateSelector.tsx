@@ -18,7 +18,7 @@ export const PromptTemplateSelector: React.FC<PromptTemplateSelectorProps> = ({
   onChange,
   isLoading,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [previewTemplate, setPreviewTemplate] = useState<PromptTemplate | null>(
     null
@@ -123,7 +123,7 @@ export const PromptTemplateSelector: React.FC<PromptTemplateSelectorProps> = ({
                   )}
                   <p className="mt-1 text-xs text-aws-font-color-gray">
                     {t("checklist.lastUpdated", "Last updated")}:{" "}
-                    {new Date(template.updatedAt).toLocaleString()}
+                    {new Date(template.updatedAt).toLocaleString(i18n.language)}
                   </p>
                 </label>
               </div>
