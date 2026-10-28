@@ -21,10 +21,10 @@ Guide for adding new use cases to the Examples feature when contributors provide
 
 Ask the user for:
 
-- **Use case name** (English or Japanese)
+- **Use case name** (English, Japanese or Korean)
 - **Use case description**
 - **Category tags**: See `ExampleTag` type in `frontend/src/features/examples/types/index.ts`
-- **Language**: `en` or `ja`
+- **Language**: `en`, `ja` or `ko` (must be a `SupportedLanguage` in `frontend/src/i18n/index.ts`)
 - **Files provided** with types: `checklist`, `review`, `knowledge`
 - **Location** of files provided by contributor
 
@@ -33,7 +33,7 @@ Ask the user for:
 1. Read `frontend/src/features/examples/data/examples-metadata.json`
 2. Determine next available use case number:
    - Check existing IDs in the appropriate language array
-   - Use `use_case_NNN` for English or `use_case_NNN_ja` for Japanese
+   - Use `use_case_NNN` for English, `use_case_NNN_ja` for Japanese, `use_case_NNN_ko` for Korean
 3. Create directory: `examples/{language}/use_case_NNN_descriptive_name/`
 4. Copy contributor files, organize by type, use descriptive filenames
 
@@ -51,7 +51,9 @@ For each file, construct the raw GitHub URL:
 https://raw.githubusercontent.com/aws-samples/review-and-assessment-powered-by-intelligent-documentation/main/examples/{lang}/{folder}/{file}
 ```
 
-**Important**: Japanese characters MUST be URL-encoded using `encodeURIComponent()`.
+**Important**: Japanese and Korean characters MUST be URL-encoded using `encodeURIComponent()`.
+
+**Korean PDFs**: the reportlab CID fonts used for Japanese have no Hangul glyphs. Generate Korean documents with `scripts/create_korean_example_pdfs.py` (embeds Noto Sans KR, OFL) and keep the content in `scripts/korean_examples/`; see `examples/ko/README.md` for the regeneration commands.
 
 ### Phase 5: Update Metadata
 

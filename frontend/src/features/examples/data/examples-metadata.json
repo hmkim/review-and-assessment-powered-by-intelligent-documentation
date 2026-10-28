@@ -371,5 +371,112 @@
         }
       ]
     }
+  ],
+  "ko": [
+    {
+      "id": "use_case_001_ko",
+      "name": "개인정보 처리방침 점검",
+      "tags": ["corporate-governance"],
+      "description": "기업이 홈페이지에 공개한 개인정보 처리방침이 「개인정보 보호법」 제30조와 개인정보보호위원회 작성지침의 기재 사항을 모두 갖추었는지 점검합니다. 체크리스트는 법령 원문과 작성지침 기재 사항 24개로 구성되고, 작성지침 발췌와 법령 원문을 Knowledge Base로 참조하여 근거를 인용하는 AI 심사를 수행합니다. 심사 대상은 가상의 여행사 처리방침으로, 보유기간 추상 기재·파기 조항 누락 등 6개의 결함이 들어 있습니다.",
+      "setupTypes": ["knowledge-base"],
+      "githubUrl": "https://github.com/hmkim/review-and-assessment-powered-by-intelligent-documentation/tree/main/examples/ko#유스케이스-001-개인정보-처리방침-점검",
+      "files": [
+        {
+          "id": "checklist_001_ko",
+          "name": "개인정보_처리방침_점검_체크리스트.pdf",
+          "type": "checklist",
+          "url": "https://raw.githubusercontent.com/hmkim/review-and-assessment-powered-by-intelligent-documentation/main/examples/ko/use_case_001_privacy_policy_review/%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4_%EC%B2%98%EB%A6%AC%EB%B0%A9%EC%B9%A8_%EC%A0%90%EA%B2%80_%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8.pdf",
+          "imagePath": "/examples/images/use_case_001_ko/checklist_001_ko.jpg"
+        },
+        {
+          "id": "review_001_ko",
+          "name": "심사대상_가온누리투어_개인정보_처리방침.pdf",
+          "type": "review",
+          "url": "https://raw.githubusercontent.com/hmkim/review-and-assessment-powered-by-intelligent-documentation/main/examples/ko/use_case_001_privacy_policy_review/%EC%8B%AC%EC%82%AC%EB%8C%80%EC%83%81_%EA%B0%80%EC%98%A8%EB%88%84%EB%A6%AC%ED%88%AC%EC%96%B4_%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4_%EC%B2%98%EB%A6%AC%EB%B0%A9%EC%B9%A8.pdf",
+          "imagePath": "/examples/images/use_case_001_ko/review_001_ko.jpg"
+        },
+        {
+          "id": "knowledge_001_ko_1",
+          "name": "KB_01_개인정보보호법_제30조_시행령_제31조_원문.txt",
+          "type": "knowledge",
+          "url": "https://raw.githubusercontent.com/hmkim/review-and-assessment-powered-by-intelligent-documentation/main/examples/ko/use_case_001_privacy_policy_review/knowledge_base_sources/KB_01_%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%EB%B3%B4%ED%98%B8%EB%B2%95_%EC%A0%9C30%EC%A1%B0_%EC%8B%9C%ED%96%89%EB%A0%B9_%EC%A0%9C31%EC%A1%B0_%EC%9B%90%EB%AC%B8.txt",
+          "imagePath": "/examples/images/use_case_001_ko/knowledge_001_ko_1.jpg"
+        },
+        {
+          "id": "knowledge_001_ko_2",
+          "name": "KB_02_작성지침_PartII_작성기본사항.txt",
+          "type": "knowledge",
+          "url": "https://raw.githubusercontent.com/hmkim/review-and-assessment-powered-by-intelligent-documentation/main/examples/ko/use_case_001_privacy_policy_review/knowledge_base_sources/KB_02_%EC%9E%91%EC%84%B1%EC%A7%80%EC%B9%A8_PartII_%EC%9E%91%EC%84%B1%EA%B8%B0%EB%B3%B8%EC%82%AC%ED%95%AD.txt",
+          "imagePath": "/examples/images/use_case_001_ko/knowledge_001_ko_2.jpg"
+        },
+        {
+          "id": "knowledge_001_ko_3",
+          "name": "KB_03_작성지침_PartIII_01-08_처리목적_항목_보유기간_파기_제3자제공.txt",
+          "type": "knowledge",
+          "url": "https://raw.githubusercontent.com/hmkim/review-and-assessment-powered-by-intelligent-documentation/main/examples/ko/use_case_001_privacy_policy_review/knowledge_base_sources/KB_03_%EC%9E%91%EC%84%B1%EC%A7%80%EC%B9%A8_PartIII_01-08_%EC%B2%98%EB%A6%AC%EB%AA%A9%EC%A0%81_%ED%95%AD%EB%AA%A9_%EB%B3%B4%EC%9C%A0%EA%B8%B0%EA%B0%84_%ED%8C%8C%EA%B8%B0_%EC%A0%9C3%EC%9E%90%EC%A0%9C%EA%B3%B5.txt",
+          "imagePath": "/examples/images/use_case_001_ko/knowledge_001_ko_3.jpg"
+        },
+        {
+          "id": "knowledge_001_ko_4",
+          "name": "KB_04_작성지침_PartIII_09-15_위탁_국외이전_안전성확보_자동수집장치.txt",
+          "type": "knowledge",
+          "url": "https://raw.githubusercontent.com/hmkim/review-and-assessment-powered-by-intelligent-documentation/main/examples/ko/use_case_001_privacy_policy_review/knowledge_base_sources/KB_04_%EC%9E%91%EC%84%B1%EC%A7%80%EC%B9%A8_PartIII_09-15_%EC%9C%84%ED%83%81_%EA%B5%AD%EC%99%B8%EC%9D%B4%EC%A0%84_%EC%95%88%EC%A0%84%EC%84%B1%ED%99%95%EB%B3%B4_%EC%9E%90%EB%8F%99%EC%88%98%EC%A7%91%EC%9E%A5%EC%B9%98.txt",
+          "imagePath": "/examples/images/use_case_001_ko/knowledge_001_ko_4.jpg"
+        },
+        {
+          "id": "knowledge_001_ko_5",
+          "name": "KB_05_작성지침_PartIII_16-24_권리행사_보호책임자_구제방법_변경.txt",
+          "type": "knowledge",
+          "url": "https://raw.githubusercontent.com/hmkim/review-and-assessment-powered-by-intelligent-documentation/main/examples/ko/use_case_001_privacy_policy_review/knowledge_base_sources/KB_05_%EC%9E%91%EC%84%B1%EC%A7%80%EC%B9%A8_PartIII_16-24_%EA%B6%8C%EB%A6%AC%ED%96%89%EC%82%AC_%EB%B3%B4%ED%98%B8%EC%B1%85%EC%9E%84%EC%9E%90_%EA%B5%AC%EC%A0%9C%EB%B0%A9%EB%B2%95_%EB%B3%80%EA%B2%BD.txt",
+          "imagePath": "/examples/images/use_case_001_ko/knowledge_001_ko_5.jpg"
+        }
+      ]
+    },
+    {
+      "id": "use_case_002_ko",
+      "name": "건축허가 설계개요 검산",
+      "tags": ["real-estate"],
+      "description": "건축허가 신청 전 설계개요서의 건폐율·연면적·용적률이 기재된 원자료로부터 올바르게 계산되었는지, 용도지역별 법정 상한 이내인지 검산합니다. 체크리스트는 건축법·시행령·국토계획법 시행령 원문과 검산 공식으로 구성되며, Code Interpreter가 수치를 다시 계산해 기재 오류(지하층 면적을 포함한 용적률, 층별 면적 합계 불일치)를 찾아내는 시나리오입니다.",
+      "githubUrl": "https://github.com/hmkim/review-and-assessment-powered-by-intelligent-documentation/tree/main/examples/ko#유스케이스-002-건축허가-설계개요-검산",
+      "files": [
+        {
+          "id": "checklist_002_ko",
+          "name": "건축허가_설계개요_검산_체크리스트.pdf",
+          "type": "checklist",
+          "url": "https://raw.githubusercontent.com/hmkim/review-and-assessment-powered-by-intelligent-documentation/main/examples/ko/use_case_002_building_design_summary_check/%EA%B1%B4%EC%B6%95%ED%97%88%EA%B0%80_%EC%84%A4%EA%B3%84%EA%B0%9C%EC%9A%94_%EA%B2%80%EC%82%B0_%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8.pdf",
+          "imagePath": "/examples/images/use_case_002_ko/checklist_002_ko.jpg"
+        },
+        {
+          "id": "review_002_ko",
+          "name": "심사대상_근린생활시설_신축_설계개요서.pdf",
+          "type": "review",
+          "url": "https://raw.githubusercontent.com/hmkim/review-and-assessment-powered-by-intelligent-documentation/main/examples/ko/use_case_002_building_design_summary_check/%EC%8B%AC%EC%82%AC%EB%8C%80%EC%83%81_%EA%B7%BC%EB%A6%B0%EC%83%9D%ED%99%9C%EC%8B%9C%EC%84%A4_%EC%8B%A0%EC%B6%95_%EC%84%A4%EA%B3%84%EA%B0%9C%EC%9A%94%EC%84%9C.pdf",
+          "imagePath": "/examples/images/use_case_002_ko/review_002_ko.jpg"
+        }
+      ]
+    },
+    {
+      "id": "use_case_003_ko",
+      "name": "위험성평가 결과서 점검",
+      "tags": ["manufacturing"],
+      "description": "제조 사업장의 공정 위험성평가 결과서가 「사업장 위험성평가에 관한 지침」(고용노동부고시)의 절차(사전준비·근로자 참여·위험성 결정·감소대책 수립과 이행 확인·공유·기록)를 빠짐없이 거쳤는지 점검합니다. 체크리스트는 고시 원문과 점검 항목 14개로 구성되고, 심사 대상은 가상의 프레스 공정 결과서로 근로자 참여 누락, 허용 위험성 수준 미확정, 감소대책 우선순위 미반영 등 5개의 결함이 들어 있습니다.",
+      "githubUrl": "https://github.com/hmkim/review-and-assessment-powered-by-intelligent-documentation/tree/main/examples/ko#유스케이스-003-위험성평가-결과서-점검",
+      "files": [
+        {
+          "id": "checklist_003_ko",
+          "name": "위험성평가_실시_점검_체크리스트.pdf",
+          "type": "checklist",
+          "url": "https://raw.githubusercontent.com/hmkim/review-and-assessment-powered-by-intelligent-documentation/main/examples/ko/use_case_003_risk_assessment_report/%EC%9C%84%ED%97%98%EC%84%B1%ED%8F%89%EA%B0%80_%EC%8B%A4%EC%8B%9C_%EC%A0%90%EA%B2%80_%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8.pdf",
+          "imagePath": "/examples/images/use_case_003_ko/checklist_003_ko.jpg"
+        },
+        {
+          "id": "review_003_ko",
+          "name": "심사대상_프레스공정_위험성평가_결과서.pdf",
+          "type": "review",
+          "url": "https://raw.githubusercontent.com/hmkim/review-and-assessment-powered-by-intelligent-documentation/main/examples/ko/use_case_003_risk_assessment_report/%EC%8B%AC%EC%82%AC%EB%8C%80%EC%83%81_%ED%94%84%EB%A0%88%EC%8A%A4%EA%B3%B5%EC%A0%95_%EC%9C%84%ED%97%98%EC%84%B1%ED%8F%89%EA%B0%80_%EA%B2%B0%EA%B3%BC%EC%84%9C.pdf",
+          "imagePath": "/examples/images/use_case_003_ko/review_003_ko.jpg"
+        }
+      ]
+    }
   ]
 }

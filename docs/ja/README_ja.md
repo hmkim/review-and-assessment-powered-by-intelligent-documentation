@@ -6,7 +6,7 @@
 | デプロイオプション（CloudShell のオプション・閉域網・AI モデル）    | [English](../en/deployment-options.md) \| [日本語](./deployment-options.md)                 |
 | 開発者ガイド（アーキテクチャ・トラブルシューティング）              | [English](../en/developer-guide.md) \| [日本語](./developer-guide.md)                       |
 | ローカル開発（手元でアプリを実行）                                  | [English](../en/local-development.md) \| [日本語](./local-development.md)                   |
-| サンプル集（業界別のサンプルシナリオと書類）                        | [English](../../examples/en/README.md) \| [日本語](../../examples/ja/README.md)             |
+| サンプル集（業界別のサンプルシナリオと書類）                        | [English](../../examples/en/README.md) \| [日本語](../../examples/ja/README.md) \| [한국어](../../examples/ko/README.md) |
 
 このサンプルは生成 AI (Amazon Bedrock) を活用した書類審査ソリューションです。膨大な書類と複雑なチェックリストによる審査業務を、Human in the Loop アプローチで効率化します。チェックリストの構造化から AI による審査、そして人間の最終判断までの一連のプロセスをサポートし、審査時間の短縮と品質向上を実現します。
 

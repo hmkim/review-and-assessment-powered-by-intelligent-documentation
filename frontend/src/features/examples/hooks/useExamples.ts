@@ -1,26 +1,32 @@
 import { useMemo } from "react";
-import { Example, ExampleTag } from "../types";
+import { Example, ExampleTag, ExamplesMetadata } from "../types";
 import examplesMetadata from "../data/examples-metadata.json";
+import type { SupportedLanguage } from "../../../i18n";
+
+const metadata = examplesMetadata as ExamplesMetadata;
 
 /**
  * サンプルデータの取得とフィルタリングを行うカスタムフック
- * 選択されたタグと言語に基づいてサンプルをフィルタリングします
+ * 選択されたタグと言語に基づいてサンプルをフィルタリングします。
+ * 指定言語のサンプルが無い場合は英語のサンプルを返し、isFallback を true にします。
  */
-export function useExamples(language: "en" | "ja", selectedTags: ExampleTag[]) {
-  const examples = useMemo(() => {
-    // 言語に基づいてサンプルを取得
-    const languageExamples = (examplesMetadata[language] ?? []) as Example[];
-
-    // タグが選択されていない場合は全てを返す
-    if (selectedTags.length === 0) {
-      return languageExamples;
-    }
+export function useExamples(
+  language: SupportedLanguage,
+  selectedTags: ExampleTag[]
+) {
+  return useMemo(() => {
+    const own = metadata[language] ?? [];
+    const isFallback = own.length === 0 && language !== "en";
+    const languageExamples: Example[] = isFallback ? metadata.en : own;
 
     // 選択されたタグのいずれかを持つサンプルをフィルタリング (OR条件)
-    return languageExamples.filter((example) =>
-      example.tags.some((tag) => selectedTags.includes(tag))
-    );
-  }, [language, selectedTags]);
+    const examples =
+      selectedTags.length === 0
+        ? languageExamples
+        : languageExamples.filter((example) =>
+            example.tags.some((tag) => selectedTags.includes(tag))
+          );
 
-  return examples;
+    return { examples, isFallback };
+  }, [language, selectedTags]);
 }

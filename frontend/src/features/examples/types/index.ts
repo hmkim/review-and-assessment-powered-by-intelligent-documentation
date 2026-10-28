@@ -1,3 +1,5 @@
+import type { SupportedLanguage } from "../../../i18n";
+
 /**
  * タグの種類
  */
@@ -45,8 +47,8 @@ export interface Example {
 
 /**
  * 言語別のサンプルデータ
+ * i18n の SupportedLanguage (en / ja / ko) ごとに配列を持つ。言語にサンプルが無い場合は en にフォールバックする。
  */
-export interface ExamplesMetadata {
+export type ExamplesMetadata = Partial<Record<SupportedLanguage, Example[]>> & {
   en: Example[];
-  ja: Example[];
-}
+};
