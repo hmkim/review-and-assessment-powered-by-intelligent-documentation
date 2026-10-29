@@ -27,6 +27,9 @@ class ModelConfig:
     supports_citation: bool
     supports_caching: bool
     notes: Optional[str] = None
+    # Claude 5.x models reject the `temperature` inference parameter
+    # ("`temperature` is deprecated for this model"); the agent omits it when False.
+    supports_temperature: bool = True
     
     @property
     def base_model_id(self) -> str:
@@ -200,6 +203,67 @@ _MODEL_REGISTRY = {
         supports_document_block=True,
         supports_citation=True,
         supports_caching=True,
+    ),
+
+    # Claude Sonnet 5.5 (1M context, 128K output). Global CRIS $2.00/$10.00 per 1M tokens, geo CRIS $2.20/$11.00.
+    "global.anthropic.claude-sonnet-5-5": ModelConfig(
+        model_id="global.anthropic.claude-sonnet-5-5",
+        display_name="Claude Sonnet 5.5 (Global)",
+        input_per_1k=0.002,
+        output_per_1k=0.01,
+        supports_document_block=True,
+        supports_citation=True,
+        supports_caching=True,
+        supports_temperature=False,
+        notes="Claude 5.x: `temperature` is deprecated (omitted); adaptive thinking is on by default.",
+    ),
+
+    "us.anthropic.claude-sonnet-5-5": ModelConfig(
+        model_id="us.anthropic.claude-sonnet-5-5",
+        display_name="Claude Sonnet 5.5 (US)",
+        input_per_1k=0.0022,
+        output_per_1k=0.011,
+        supports_document_block=True,
+        supports_citation=True,
+        supports_caching=True,
+        supports_temperature=False,
+        notes="Claude 5.x: `temperature` is deprecated (omitted); adaptive thinking is on by default.",
+    ),
+
+    "eu.anthropic.claude-sonnet-5-5": ModelConfig(
+        model_id="eu.anthropic.claude-sonnet-5-5",
+        display_name="Claude Sonnet 5.5 (EU)",
+        input_per_1k=0.0022,
+        output_per_1k=0.011,
+        supports_document_block=True,
+        supports_citation=True,
+        supports_caching=True,
+        supports_temperature=False,
+        notes="Claude 5.x: `temperature` is deprecated (omitted); adaptive thinking is on by default.",
+    ),
+
+    "au.anthropic.claude-sonnet-5-5": ModelConfig(
+        model_id="au.anthropic.claude-sonnet-5-5",
+        display_name="Claude Sonnet 5.5 (AU)",
+        input_per_1k=0.0022,
+        output_per_1k=0.011,
+        supports_document_block=True,
+        supports_citation=True,
+        supports_caching=True,
+        supports_temperature=False,
+        notes="Claude 5.x: `temperature` is deprecated (omitted); adaptive thinking is on by default.",
+    ),
+
+    "anthropic.claude-sonnet-5-5": ModelConfig(
+        model_id="anthropic.claude-sonnet-5-5",
+        display_name="Claude Sonnet 5.5",
+        input_per_1k=0.002,
+        output_per_1k=0.01,
+        supports_document_block=True,
+        supports_citation=True,
+        supports_caching=True,
+        supports_temperature=False,
+        notes="Claude 5.x: `temperature` is deprecated (omitted); adaptive thinking is on by default.",
     ),
 
     # Claude Sonnet 4.6

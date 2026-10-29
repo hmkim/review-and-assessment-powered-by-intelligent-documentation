@@ -76,8 +76,8 @@ IMAGE_FILE_EXTENSIONS = [
 PDF_FILE_EXTENSIONS = [".pdf"]
 
 # Default model IDs
-DEFAULT_DOCUMENT_MODEL_ID = "global.anthropic.claude-sonnet-4-6"  # For all processing
-DEFAULT_IMAGE_MODEL_ID = "global.anthropic.claude-sonnet-4-6"  # For image processing (same as document by default)
+DEFAULT_DOCUMENT_MODEL_ID = "global.anthropic.claude-sonnet-5-5"  # For all processing
+DEFAULT_IMAGE_MODEL_ID = "global.anthropic.claude-sonnet-5-5"  # For image processing (same as document by default)
 
 # Get model IDs from environment variables with fallback to defaults
 DOCUMENT_MODEL_ID = os.environ.get(
@@ -434,7 +434,8 @@ def _run_agent_with_file_read_tool(
     bedrock_config = {
         "model_id": model_id,
         "region_name": BEDROCK_REGION,
-        "temperature": temperature,
+        # Claude 5.x rejects `temperature` ("deprecated for this model"); Strands drops None values
+        "temperature": temperature if model.supports_temperature else None,
         "streaming": False,  # Always disable streaming since this app doesn't use streaming
     }
 
@@ -547,7 +548,7 @@ def _run_agent_with_document_block(
     bedrock_config = {
         "model_id": model_id,
         "region_name": BEDROCK_REGION,
-        "temperature": temperature,
+        "temperature": temperature if model.supports_temperature else None,
         "streaming": False,
     }
 
@@ -579,6 +580,30 @@ def _run_agent_with_document_block(
 
 
 # Message parsing functions
+def _message_text_parts(message: Any) -> List[str]:
+    """
+    Collect the generated text of a message in order.
+
+    With the Citations API the model's answer comes back as a mix of `text` blocks
+    and `citationsContent` blocks; the cited sentences live inside the latter.
+    Reading only `text` blocks drops those sentences, which breaks the JSON string
+    the model emitted (e.g. "제8조에는 고만 되어 있고") and loses the cited spans.
+    """
+    parts: List[str] = []
+    if not (isinstance(message, dict) and "content" in message):
+        return parts
+    for block in message["content"]:
+        if not isinstance(block, dict):
+            continue
+        if "text" in block:
+            parts.append(block["text"])
+        elif "citationsContent" in block:
+            for generated in block["citationsContent"].get("content", []) or []:
+                if isinstance(generated, dict) and "text" in generated:
+                    parts.append(generated["text"])
+    return parts
+
+
 def _extract_json_from_message(message: Any) -> Tuple[Optional[Dict[str, Any]], str]:
     """
     メッセージからJSONとテキストを抽出
@@ -590,12 +615,7 @@ def _extract_json_from_message(message: Any) -> Tuple[Optional[Dict[str, Any]], 
         Tuple[Optional[Dict], str]: (抽出されたJSON dict, 全テキスト)
     """
     if isinstance(message, dict) and "content" in message:
-        text_blocks = []
-        for block in message["content"]:
-            if isinstance(block, dict) and "text" in block:
-                text_blocks.append(block["text"])
-
-        combined = "".join(text_blocks).strip()
+        combined = "".join(_message_text_parts(message)).strip()
     else:
         combined = str(message).strip()
 
@@ -622,34 +642,58 @@ def _extract_json_from_message(message: Any) -> Tuple[Optional[Dict[str, Any]], 
 
 def _extract_citations_text(message: Any) -> List[str]:
     """
-    Extract citations from JSON response as array.
+    Extract the cited source passages from an agent message as an array.
 
-    Note: This method parses citations from the JSON output instead of using
-    citationsContent blocks because Strands Agent does not properly support
-    citationsContent in non-streaming mode. The model generates <cite> tags
-    instead of proper citation blocks when using the Citations API.
+    Preferred source: `citationsContent` blocks returned by the Converse API
+    (Strands passes them through in non-streaming mode). Each citation carries
+    the verbatim `sourceContent` of the document span it points at, which is
+    exactly what the UI shows as "extracted text".
 
-    Workaround: We explicitly instruct the model to include citations as a
-    JSON array field in the response, then parse and return them here.
+    Fallback: the JSON fields the prompt asks the model to fill — a `citations`
+    array (older prompt variants) or the `extractedText` string — so models or
+    paths without citation blocks still return something.
 
     Args:
-        message: AgentResult.message containing JSON response
+        message: AgentResult.message
 
     Returns:
-        List[str]: Citations array, or empty list if none found
+        List[str]: Cited passages in order of appearance, or an empty list
     """
-    try:
-        # Extract JSON from message
-        parsed_json, _ = _extract_json_from_message(message)
+    cited: List[str] = []
+    seen = set()
+    if isinstance(message, dict) and "content" in message:
+        for block in message["content"]:
+            citations_content = (
+                block.get("citationsContent") if isinstance(block, dict) else None
+            )
+            if not citations_content:
+                continue
+            for citation in citations_content.get("citations", []) or []:
+                source = "".join(
+                    part.get("text", "")
+                    for part in citation.get("sourceContent", []) or []
+                    if isinstance(part, dict)
+                ).strip()
+                if source and source not in seen:
+                    seen.add(source)
+                    cited.append(source)
+    if cited:
+        return cited
 
-        if parsed_json and "citations" in parsed_json:
-            citations = parsed_json["citations"]
-            if citations and isinstance(citations, list):
-                return citations
+    try:
+        parsed_json, _ = _extract_json_from_message(message)
+        if parsed_json:
+            citations = parsed_json.get("citations")
+            if isinstance(citations, list) and citations:
+                return [str(c) for c in citations]
+            extracted = parsed_json.get("extractedText")
+            if isinstance(extracted, list) and extracted:
+                return [str(c) for c in extracted]
+            if isinstance(extracted, str) and extracted.strip():
+                return [extracted.strip()]
     except Exception as e:
         logger.warning(f"Failed to extract citations from JSON: {e}")
 
-    # Return empty list if no citations found
     return []
 
 

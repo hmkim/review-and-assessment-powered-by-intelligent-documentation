@@ -33,8 +33,8 @@ wget -O - https://raw.githubusercontent.com/aws-samples/review-and-assessment-po
 | `--closed-network`               | 完全閉域モードでデプロイするかどうかを指定します（true/false、既定: false）。`closedNetwork` に対応します。詳細は[閉域網デプロイ](#閉域網デプロイ)をご覧ください。                     |
 | `--agentcore-network-mode`       | 閉域時の AgentCore Runtime のネットワークモードを `PUBLIC` または `VPC` で指定します（既定: PUBLIC）。`agentCoreNetworkMode` に対応します。               |
 | `--bedrock-region`               | Amazon Bedrock を利用するリージョンを指定します（既定: us-west-2）。`bedrockRegion` に対応します。                                              |
-| `--document-model`               | ドキュメント処理に使う AI モデル ID を指定します（既定: global.anthropic.claude-sonnet-4-6）。`documentProcessingModelId` に対応します。              |
-| `--image-model`                  | 画像審査に使う AI モデル ID を指定します（既定: global.anthropic.claude-sonnet-4-6）。`imageReviewModelId` に対応します。                          |
+| `--document-model`               | ドキュメント処理に使う AI モデル ID を指定します（既定: global.anthropic.claude-sonnet-5-5）。`documentProcessingModelId` に対応します。              |
+| `--image-model`                  | 画像審査に使う AI モデル ID を指定します（既定: global.anthropic.claude-sonnet-5-5）。`imageReviewModelId` に対応します。                          |
 | `--disable-ipv6`                 | フロントエンド WAF と CloudFront の IPv6 サポートを無効にします。                                                                          |
 | `--repo-url`                     | デプロイするリポジトリの URL を指定します。                                                                                                  |
 | `--branch`                       | デプロイするブランチ名を指定します。                                                                                                        |
@@ -86,6 +86,9 @@ CloudShell スクリプトのオプションで指定する場合:
 **ツール使用対応モデルの例**:
 
 - `global.anthropic.claude-opus-4-6-v1` (Claude Opus 4.6 Global)
+- `global.anthropic.claude-sonnet-5-5` (Claude Sonnet 5.5 Global, default)
+- `us.anthropic.claude-sonnet-5-5` (Claude Sonnet 5.5 US)
+- `eu.anthropic.claude-sonnet-5-5` (Claude Sonnet 5.5 EU)
 - `global.anthropic.claude-sonnet-4-6` (Claude Sonnet 4.6 Global)
 - `us.anthropic.claude-sonnet-4-6` (Claude Sonnet 4.6 US)
 - `eu.anthropic.claude-sonnet-4-6` (Claude Sonnet 4.6 EU)
@@ -113,7 +116,7 @@ CloudShell スクリプトのオプションで指定する場合:
 
 ```typescript
 export const parameters = {
-  documentProcessingModelId: "global.anthropic.claude-sonnet-4-6", // Claude Sonnet 4.6 (Global)
+  documentProcessingModelId: "global.anthropic.claude-sonnet-5-5", // Claude Sonnet 5.5 (Global)
   bedrockRegion: "us-west-2", // Oregon region
   // ...
 };
@@ -121,7 +124,7 @@ export const parameters = {
 
 ### チェックリスト項目ごとのモデル選択
 
-デフォルトでは、各チェックリスト項目に `availableModels` リストから特定の AI モデルを割り当てることができます。デフォルトのモデルセットには Claude Opus 4.6、Sonnet 4.6、Haiku 4.5、Sonnet 4 (Global) が含まれています。項目にモデルが選択されていない場合、ドキュメントには `documentProcessingModelId`（デフォルト: `global.anthropic.claude-sonnet-4-6`）、画像には `imageReviewModelId`（デフォルト: `global.anthropic.claude-sonnet-4-6`）が使用されます。
+デフォルトでは、各チェックリスト項目に `availableModels` リストから特定の AI モデルを割り当てることができます。デフォルトのモデルセットには Claude Sonnet 5.5、Opus 4.6、Sonnet 4.6、Haiku 4.5、Sonnet 4 (Global) が含まれています。項目にモデルが選択されていない場合、ドキュメントには `documentProcessingModelId`（デフォルト: `global.anthropic.claude-sonnet-5-5`）、画像には `imageReviewModelId`（デフォルト: `global.anthropic.claude-sonnet-5-5`）が使用されます。
 
 利用可能なモデルをカスタマイズするには:
 
@@ -129,6 +132,7 @@ export const parameters = {
 export const parameters = {
   availableModels: [
     { modelId: "global.anthropic.claude-opus-4-6-v1", displayName: "Claude Opus 4.6 (Global)" },
+    { modelId: "global.anthropic.claude-sonnet-5-5", displayName: "Claude Sonnet 5.5 (Global)" },
     { modelId: "global.anthropic.claude-sonnet-4-6", displayName: "Claude Sonnet 4.6 (Global)" },
     { modelId: "global.anthropic.claude-haiku-4-5-20251001-v1:0", displayName: "Claude Haiku 4.5 (Global)" },
     { modelId: "global.anthropic.claude-sonnet-4-20250514-v1:0", displayName: "Claude Sonnet 4 (Global)" },
