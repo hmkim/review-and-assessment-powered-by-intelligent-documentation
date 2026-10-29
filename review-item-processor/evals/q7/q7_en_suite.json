@@ -1,0 +1,134 @@
+[
+  {
+    "name": "EN-UC004-PDF-insufficient-1",
+    "input": {
+      "document_paths": [
+        "review_document_internal_approval_request.pdf"
+      ],
+      "fixtures_dir": "../../../examples/en/use_case_004_internal_approval_request",
+      "check_name": "Prior-phase acceptance recorded",
+      "check_description": "Before this request, was the assessment-phase deliverable under document B-202506-0789 formally accepted, and is the acceptance (date and accepting manager) recorded in the project ledger? Confirm the acceptance date.",
+      "language_name": "English"
+    },
+    "expected_output": {
+      "result": "fail",
+      "insufficient_evidence": true
+    },
+    "metadata": {
+      "use_case": "use_case_004_int",
+      "kind": "insufficient",
+      "variant": "pdf",
+      "language": "en"
+    }
+  },
+  {
+    "name": "EN-UC004-PDF-insufficient-2",
+    "input": {
+      "document_paths": [
+        "review_document_internal_approval_request.pdf"
+      ],
+      "fixtures_dir": "../../../examples/en/use_case_004_internal_approval_request",
+      "check_name": "Budget line availability",
+      "check_description": "Is the requested contract amount within the remaining approved budget line for critical project ABC12345 in the finance system for the current fiscal year? Confirm the remaining budget after this commitment.",
+      "language_name": "English"
+    },
+    "expected_output": {
+      "result": "fail",
+      "insufficient_evidence": true
+    },
+    "metadata": {
+      "use_case": "use_case_004_int",
+      "kind": "insufficient",
+      "variant": "pdf",
+      "language": "en"
+    }
+  },
+  {
+    "name": "EN-UC005-PDF-insufficient-1",
+    "input": {
+      "document_paths": [
+        "review_document_equipment_specifications.pdf"
+      ],
+      "fixtures_dir": "../../../examples/en/use_case_005_sustainability_assessment",
+      "check_name": "Third-party efficiency verification",
+      "check_description": "Have the stated motor efficiency values been verified by an accredited test laboratory? Confirm the test report number, the laboratory and the report date.",
+      "language_name": "English"
+    },
+    "expected_output": {
+      "result": "fail",
+      "insufficient_evidence": true
+    },
+    "metadata": {
+      "use_case": "use_case_005_sus",
+      "kind": "insufficient",
+      "variant": "pdf",
+      "language": "en"
+    }
+  },
+  {
+    "name": "EN-UC005-PDF-insufficient-2",
+    "input": {
+      "document_paths": [
+        "review_document_equipment_specifications.pdf"
+      ],
+      "fixtures_dir": "../../../examples/en/use_case_005_sustainability_assessment",
+      "check_name": "Current released revision",
+      "check_description": "Is ESD-2025-001 the current released revision in the document management system? Confirm that the revision number and release date registered in the system match this copy.",
+      "language_name": "English"
+    },
+    "expected_output": {
+      "result": "fail",
+      "insufficient_evidence": true
+    },
+    "metadata": {
+      "use_case": "use_case_005_sus",
+      "kind": "insufficient",
+      "variant": "pdf",
+      "language": "en"
+    }
+  },
+  {
+    "name": "EN-UC001-PNG-insufficient-1",
+    "input": {
+      "document_paths": [
+        "review_document_floor_plan.png"
+      ],
+      "fixtures_dir": "../../../examples/en/use_case_001_house_maker_meeting_minutes",
+      "check_name": "Zoning setback compliance",
+      "check_description": "Does the floor plan comply with the municipality's current setback requirement for this lot? Confirm the zoning record and the required setback distance.",
+      "language_name": "English"
+    },
+    "expected_output": {
+      "result": "fail",
+      "insufficient_evidence": true
+    },
+    "metadata": {
+      "use_case": "use_case_001_hou",
+      "kind": "insufficient",
+      "variant": "image",
+      "language": "en"
+    }
+  },
+  {
+    "name": "EN-UC001-PNG-insufficient-2",
+    "input": {
+      "document_paths": [
+        "review_document_floor_plan.png"
+      ],
+      "fixtures_dir": "../../../examples/en/use_case_001_house_maker_meeting_minutes",
+      "check_name": "Architect of record approval",
+      "check_description": "Has this drawing been stamped by the licensed architect of record and registered with the permit office? Confirm the registration number and date.",
+      "language_name": "English"
+    },
+    "expected_output": {
+      "result": "fail",
+      "insufficient_evidence": true
+    },
+    "metadata": {
+      "use_case": "use_case_001_hou",
+      "kind": "insufficient",
+      "variant": "image",
+      "language": "en"
+    }
+  }
+]

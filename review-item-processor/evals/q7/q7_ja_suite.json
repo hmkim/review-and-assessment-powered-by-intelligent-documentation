@@ -1,0 +1,134 @@
+[
+  {
+    "name": "JA-UC003-PDF-insufficient-1",
+    "input": {
+      "document_paths": [
+        "申請書例.pdf"
+      ],
+      "fixtures_dir": "../../../examples/ja/ユースケース003_車庫申請",
+      "check_name": "印鑑証明書との整合",
+      "check_description": "申請者欄の住所・氏名が、運輸支局に提出する印鑑証明書の記載と一致しているか。印鑑証明書の発行日と記載内容を確認する。",
+      "language_name": "Japanese"
+    },
+    "expected_output": {
+      "result": "fail",
+      "insufficient_evidence": true
+    },
+    "metadata": {
+      "use_case": "ユースケース003_車庫申請",
+      "kind": "insufficient",
+      "variant": "pdf",
+      "language": "ja"
+    }
+  },
+  {
+    "name": "JA-UC003-PDF-insufficient-2",
+    "input": {
+      "document_paths": [
+        "申請書例.pdf"
+      ],
+      "fixtures_dir": "../../../examples/ja/ユースケース003_車庫申請",
+      "check_name": "警察署での受理状況",
+      "check_description": "本申請が保管場所を管轄する警察署に受理され、受理番号と受理日が記録されているか確認する。",
+      "language_name": "Japanese"
+    },
+    "expected_output": {
+      "result": "fail",
+      "insufficient_evidence": true
+    },
+    "metadata": {
+      "use_case": "ユースケース003_車庫申請",
+      "kind": "insufficient",
+      "variant": "pdf",
+      "language": "ja"
+    }
+  },
+  {
+    "name": "JA-UC005-PDF-insufficient-1",
+    "input": {
+      "document_paths": [
+        "作業手順書.pdf"
+      ],
+      "fixtures_dir": "../../../examples/ja/ユースケース005_社内文書（製造部門）",
+      "check_name": "承認権限者との一致",
+      "check_description": "承認欄の承認者が、文書管理システムに登録された当該工程の承認権限者と一致し、承認日が記録されているか確認する。",
+      "language_name": "Japanese"
+    },
+    "expected_output": {
+      "result": "fail",
+      "insufficient_evidence": true
+    },
+    "metadata": {
+      "use_case": "ユースケース005_社内文書（製",
+      "kind": "insufficient",
+      "variant": "pdf",
+      "language": "ja"
+    }
+  },
+  {
+    "name": "JA-UC005-PDF-insufficient-2",
+    "input": {
+      "document_paths": [
+        "作業手順書.pdf"
+      ],
+      "fixtures_dir": "../../../examples/ja/ユースケース005_社内文書（製造部門）",
+      "check_name": "最新有効版の確認",
+      "check_description": "本手順書（第1版）が文書管理システム上の最新有効版であるか。システムに登録された版数と発行日が本紙と一致するか確認する。",
+      "language_name": "Japanese"
+    },
+    "expected_output": {
+      "result": "fail",
+      "insufficient_evidence": true
+    },
+    "metadata": {
+      "use_case": "ユースケース005_社内文書（製",
+      "kind": "insufficient",
+      "variant": "pdf",
+      "language": "ja"
+    }
+  },
+  {
+    "name": "JA-UC006-PDF-insufficient-1",
+    "input": {
+      "document_paths": [
+        "見積書.pdf"
+      ],
+      "fixtures_dir": "../../../examples/ja/ユースケース006_見積書（購買部門）",
+      "check_name": "承認済み単価契約との照合",
+      "check_description": "各明細の単価が、購買部門の承認済み単価契約（単価マスタ）に登録された範囲内であるか確認する。",
+      "language_name": "Japanese"
+    },
+    "expected_output": {
+      "result": "fail",
+      "insufficient_evidence": true
+    },
+    "metadata": {
+      "use_case": "ユースケース006_見積書（購買",
+      "kind": "insufficient",
+      "variant": "pdf",
+      "language": "ja"
+    }
+  },
+  {
+    "name": "JA-UC006-PDF-insufficient-2",
+    "input": {
+      "document_paths": [
+        "見積書.pdf"
+      ],
+      "fixtures_dir": "../../../examples/ja/ユースケース006_見積書（購買部門）",
+      "check_name": "サプライヤー登録状況",
+      "check_description": "株式会社設備が承認済みサプライヤーマスタに登録され、与信状態が有効であるか。登録番号と登録日を確認する。",
+      "language_name": "Japanese"
+    },
+    "expected_output": {
+      "result": "fail",
+      "insufficient_evidence": true
+    },
+    "metadata": {
+      "use_case": "ユースケース006_見積書（購買",
+      "kind": "insufficient",
+      "variant": "pdf",
+      "language": "ja"
+    }
+  }
+]
