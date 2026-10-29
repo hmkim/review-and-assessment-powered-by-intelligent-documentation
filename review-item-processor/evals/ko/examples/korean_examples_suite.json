@@ -835,7 +835,7 @@
       ],
       "fixtures_dir": "../../../../examples/ko/use_case_003_risk_assessment_report",
       "check_name": "위험성 수준 판단 기준",
-      "check_description": "위험성의 수준과 그 수준을 판단하는 기준(빈도·강도 등급 정의, 조합 방법)이 평가 전에 확정되어 결과서에 기재되어 있는가.",
+      "check_description": "위험성의 수준과 그 수준을 판단하는 기준(빈도·강도 등급 정의, 조합 방법)이 평가 전에 확정되어 결과서에 기재되어 있는가. 허용 가능한 위험성 수준의 명시 여부는 이 항목이 아니라 항목 3에서 점검한다.",
       "language_name": "Korean"
     },
     "expected_output": {

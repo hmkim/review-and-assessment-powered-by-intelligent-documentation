@@ -2,40 +2,40 @@
   {
     "use_case": "001",
     "path": "review-item-processor/evals/ko/examples/fixtures/image/use_case_001_privacy_policy_review/심사대상_가온누리투어_개인정보_처리방침.pdf",
-    "sha256": "0cba4c122ab2da6ae50faa92752644704e8bf21f6740ace4ead0881cb149d3d2",
-    "size_bytes": 2656095,
+    "sha256": "238b1c8ddd0e8d39d2fa1ec601593f662955f40a9136532c684e0344fd5e13dc",
+    "size_bytes": 2811756,
     "pages": 4,
     "variant": "imgpdf"
   },
   {
     "use_case": "001",
     "path": "review-item-processor/evals/ko/examples/fixtures/image/use_case_001_privacy_policy_review/심사대상_가온누리투어_개인정보_처리방침_p01.png",
-    "sha256": "7b34c0339cabaf324459373a748a5a408ee03c0c5491d2fec4a7505859f3f16e",
-    "size_bytes": 884087,
+    "sha256": "167227f6735e70018b94778fce0698c26d2e0270c2dca17544abb3440c32b5ed",
+    "size_bytes": 903220,
     "pages": 1,
     "variant": "png"
   },
   {
     "use_case": "001",
     "path": "review-item-processor/evals/ko/examples/fixtures/image/use_case_001_privacy_policy_review/심사대상_가온누리투어_개인정보_처리방침_p02.png",
-    "sha256": "8e9427f4f837e9f8a7b0ab62f738253206978e183ed77937599cbeb25f794b52",
-    "size_bytes": 933306,
+    "sha256": "a0dbbe0d85f98c5127e9227ddf5a4e6ecb9c12ed3e35a8c28b6ecb8efc28ffbf",
+    "size_bytes": 950607,
     "pages": 1,
     "variant": "png"
   },
   {
     "use_case": "001",
     "path": "review-item-processor/evals/ko/examples/fixtures/image/use_case_001_privacy_policy_review/심사대상_가온누리투어_개인정보_처리방침_p03.png",
-    "sha256": "4205ec54ebf7a2aa7766d46341f18172459e45018bb2bcf0ede70be3a05db08b",
-    "size_bytes": 915646,
+    "sha256": "197e084b7ce182e982980e8125e6f34086762f1224e5b99895e729ef4f67fa2d",
+    "size_bytes": 929576,
     "pages": 1,
     "variant": "png"
   },
   {
     "use_case": "001",
     "path": "review-item-processor/evals/ko/examples/fixtures/image/use_case_001_privacy_policy_review/심사대상_가온누리투어_개인정보_처리방침_p04.png",
-    "sha256": "637152977f8c54d27472866066a986afc14d4dfdf45fb6f10cce26702be1abd1",
-    "size_bytes": 234860,
+    "sha256": "3e4930b968493153f89934b3f529645abe3ba9fdb21aef81d3012abd3a5d1d94",
+    "size_bytes": 391952,
     "pages": 1,
     "variant": "png"
   },
