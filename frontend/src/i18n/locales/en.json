@@ -464,6 +464,7 @@
     "knowledgeBase": "Knowledge Base",
     "openDocument": "Open Document",
     "emptyState": "No examples match your selected tags",
+    "fallbackNotice": "No examples are available in this language yet, so the English examples are shown.",
     "showMore": "+{{count}} more",
     "showLess": "Show less",
     "onboarding": {

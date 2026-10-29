@@ -6,7 +6,7 @@
 | Deployment Options (CloudShell options, closed network, AI models)  | [English](./docs/en/deployment-options.md) \| [日本語](./docs/ja/deployment-options.md)   |
 | Developer Guide (architecture, troubleshooting)                     | [English](./docs/en/developer-guide.md) \| [日本語](./docs/ja/developer-guide.md)         |
 | Local Development (run the app on your machine)                     | [English](./docs/en/local-development.md) \| [日本語](./docs/ja/local-development.md)     |
-| Example Use Cases (industry sample scenarios and documents)         | [English](./examples/en/README.md) \| [日本語](./examples/ja/README.md)                   |
+| Example Use Cases (industry sample scenarios and documents)         | [English](./examples/en/README.md) \| [日本語](./examples/ja/README.md) \| [한국어](./examples/ko/README.md) |
 
 This sample is a document review solution powered by generative AI (Amazon Bedrock). It streamlines review processes involving extensive documents and complex checklists using a Human in the Loop approach. It supports the entire process from checklist structuring to AI-assisted review and final human judgment, reducing review time and improving quality.
 

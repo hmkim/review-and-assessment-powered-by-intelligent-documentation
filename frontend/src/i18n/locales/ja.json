@@ -464,6 +464,7 @@
     "knowledgeBase": "ナレッジベース",
     "openDocument": "文書を開く",
     "emptyState": "選択したタグに一致するサンプルがありません",
+    "fallbackNotice": "この言語のサンプルはまだ用意されていないため、英語のサンプルを表示しています。",
     "showMore": "+{{count}}件を表示",
     "showLess": "表示を減らす",
     "onboarding": {

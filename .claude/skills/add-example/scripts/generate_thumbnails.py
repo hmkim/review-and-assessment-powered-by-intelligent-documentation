@@ -39,8 +39,28 @@ IMAGE_WIDTH = 800
 IMAGE_HEIGHT = 1200
 
 
+def resolve_local_file(url: str) -> Path | None:
+    """Map a raw.githubusercontent.com URL under examples/ to the local checkout.
+
+    Newly added files are not on GitHub yet when thumbnails are generated, and the
+    local file is also the authoritative copy, so prefer it whenever it exists.
+    """
+    from urllib.parse import unquote
+
+    path = unquote(urlparse(url).path)
+    marker = "/examples/"
+    if marker not in path:
+        return None
+    local = PROJECT_ROOT / "examples" / path.split(marker, 1)[1]
+    return local if local.is_file() else None
+
+
 def download_file(url: str) -> bytes:
-    """Download file from URL and return bytes"""
+    """Return file bytes, from the local checkout when possible, else from URL"""
+    local = resolve_local_file(url)
+    if local is not None:
+        print(f"  Reading local file: {local.relative_to(PROJECT_ROOT)}")
+        return local.read_bytes()
     print(f"  Downloading: {url}")
     try:
         with urlopen(url, timeout=30) as response:
@@ -48,6 +68,31 @@ def download_file(url: str) -> bytes:
     except Exception as e:
         print(f"  ⚠️  Failed to download {url}: {e}")
         return None
+
+
+def find_text_font(size: int):
+    """Find a font with CJK glyphs for .txt previews (env override, Noto cache, Linux, macOS)."""
+    from PIL import ImageFont
+
+    candidates = []
+    if os.environ.get("RAPID_THUMBNAIL_FONT"):
+        candidates.append(os.environ["RAPID_THUMBNAIL_FONT"])
+    candidates += [
+        str(Path.home() / ".cache/rapid-ko-fonts/NotoSansKR-Regular.static.ttf"),  # created by create_korean_example_pdfs.py
+        "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+        "/usr/share/fonts/noto-cjk/NotoSansCJK-Regular.ttc",
+        "/usr/share/fonts/truetype/nanum/NanumGothic.ttf",
+        "/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc",
+        "/System/Library/Fonts/Hiragino Sans GB.ttc",
+        "/System/Library/Fonts/AppleSDGothicNeo.ttc",
+    ]
+    for candidate in candidates:
+        try:
+            return ImageFont.truetype(candidate, size)
+        except OSError:
+            continue
+    print("  ⚠️  No CJK font found for text preview; set RAPID_THUMBNAIL_FONT=/path/to/font.ttf")
+    return ImageFont.load_default()
 
 
 def pdf_to_image(pdf_bytes: bytes) -> Image.Image:
@@ -108,17 +153,8 @@ def txt_to_image(text_content: bytes, filename: str, width: int, height: int) ->
         image = Image.new('RGB', (width, height), 'white')
         draw = ImageDraw.Draw(image)
 
-        # Try to use Japanese font, fallback to default
-        try:
-            # Try macOS Japanese fonts
-            text_font = ImageFont.truetype('/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc', 22)
-        except:
-            try:
-                # Try alternative font path
-                text_font = ImageFont.truetype('/System/Library/Fonts/Hiragino Sans GB.ttc', 22)
-            except:
-                # Fallback to default font
-                text_font = ImageFont.load_default()
+        # Fonts: env override > Noto Sans KR cache > Linux Noto CJK > macOS fonts > default
+        text_font = find_text_font(22)
 
         # Draw text content from the beginning
         y_position = 40
@@ -198,6 +234,13 @@ def process_file(file_info: dict, example_id: str) -> str:
 
 def main():
     """Main function to generate all thumbnails"""
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Generate example thumbnails from examples-metadata.json")
+    parser.add_argument("--lang", action="append", default=None,
+                        help="language key to process (repeatable, e.g. --lang ko). Default: every language in the metadata")
+    args = parser.parse_args()
+
     print("=" * 60)
     print("Thumbnail Generation Script")
     print("=" * 60)
@@ -212,6 +255,12 @@ def main():
     with open(METADATA_PATH, 'r', encoding='utf-8') as f:
         metadata = json.load(f)
 
+    languages = args.lang or list(metadata.keys())
+    unknown = [lang for lang in languages if lang not in metadata]
+    if unknown:
+        print(f"❌ Error: language(s) not in metadata: {', '.join(unknown)} (available: {', '.join(metadata.keys())})")
+        sys.exit(1)
+
     # Create output directory
     IMAGES_DIR.mkdir(parents=True, exist_ok=True)
     print(f"📁 Images will be saved to: {IMAGES_DIR.relative_to(PROJECT_ROOT)}")
@@ -220,7 +269,7 @@ def main():
     total_files = 0
     successful_thumbnails = 0
 
-    for lang in ['en', 'ja']:
+    for lang in languages:
         examples = metadata.get(lang, [])
         print(f"\n{'=' * 60}")
         print(f"Processing {lang.upper()} examples ({len(examples)} use cases)")

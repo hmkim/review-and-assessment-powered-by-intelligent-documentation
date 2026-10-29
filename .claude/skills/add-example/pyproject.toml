@@ -7,6 +7,8 @@ dependencies = [
     "pypdfium2>=5.0.0",
     "Pillow>=10.0.0",
     "reportlab>=4.0.0",
+    "fonttools>=4.40.0",
+    "pypdf>=4.0.0",
 ]
 
 [build-system]

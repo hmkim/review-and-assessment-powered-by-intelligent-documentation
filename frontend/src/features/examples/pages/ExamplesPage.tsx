@@ -4,6 +4,7 @@ import { ExampleTag } from "../types";
 import { useExamples } from "../hooks/useExamples";
 import TagFilter from "../components/TagFilter";
 import ExampleCard from "../components/ExampleCard";
+import { normalizeLanguage } from "../../../i18n";
 
 /**
  * サンプルユースケース一覧ページ
@@ -13,8 +14,8 @@ export default function ExamplesPage() {
   const { t, i18n } = useTranslation();
   const [selectedTags, setSelectedTags] = useState<ExampleTag[]>([]);
 
-  const currentLanguage = (i18n.language.startsWith("ja") ? "ja" : "en") as "en" | "ja";
-  const examples = useExamples(currentLanguage, selectedTags);
+  const currentLanguage = normalizeLanguage(i18n.language);
+  const { examples, isFallback } = useExamples(currentLanguage, selectedTags);
 
   const handleTagToggle = (tag: ExampleTag) => {
     setSelectedTags((prev) =>
@@ -36,6 +37,11 @@ export default function ExamplesPage() {
         <p className="text-aws-font-color-gray">
           {t("examples.description")}
         </p>
+        {isFallback && (
+          <p className="mt-2 text-sm text-aws-font-color-gray">
+            {t("examples.fallbackNotice")}
+          </p>
+        )}
       </div>
 
       {/* タグフィルター */}

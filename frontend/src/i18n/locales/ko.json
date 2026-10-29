@@ -464,6 +464,7 @@
     "knowledgeBase": "지식 베이스",
     "openDocument": "문서 열기",
     "emptyState": "선택한 태그에 해당하는 예제가 없습니다",
+    "fallbackNotice": "이 언어의 예제가 아직 준비되지 않아 영어 예제를 표시합니다.",
     "showMore": "+{{count}}개 더 보기",
     "showLess": "접기",
     "onboarding": {
