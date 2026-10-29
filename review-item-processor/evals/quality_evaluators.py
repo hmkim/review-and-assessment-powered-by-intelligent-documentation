@@ -61,6 +61,10 @@ _NEUTRAL_TOKENS = re.compile(
 )
 
 
+# Words/numbers used for the token-coverage figure of mismatched citations.
+_TOKEN_RE = re.compile(r"[0-9A-Za-z\uac00-\ud7a3]+")
+
+
 def strip_neutral_tokens(text: str) -> str:
     return _NEUTRAL_TOKENS.sub(" ", text)
 
@@ -231,6 +235,7 @@ class CitationFidelityEvaluator(Evaluator):
         super().__init__()
         self.fixtures_dir = Path(fixtures_dir) if fixtures_dir else None
         self._page_cache: dict[str, list[str]] = {}
+        self._raw_cache: dict[str, list[str]] = {}
 
     # -- helpers -------------------------------------------------------------
     def _resolve_documents(self, agent_input: ReviewAgentInput) -> list[Path]:
@@ -253,8 +258,14 @@ class CitationFidelityEvaluator(Evaluator):
             except ImportError as exc:  # pragma: no cover
                 raise RuntimeError("pypdf is required for CitationFidelityEvaluator (uv sync --extra evals)") from exc
             reader = PdfReader(str(pdf_path))
-            self._page_cache[key] = [normalize_for_match(page.extract_text() or "") for page in reader.pages]
+            raw = [page.extract_text() or "" for page in reader.pages]
+            self._raw_cache[key] = raw
+            self._page_cache[key] = [normalize_for_match(text) for text in raw]
         return self._page_cache[key]
+
+    def _raw_text(self, pdf_path: Path) -> str:
+        self._pages(pdf_path)
+        return " ".join(self._raw_cache[str(pdf_path)])
 
     # -- evaluation ------------------------------------------------------------
     def evaluate(self, evaluation_case: EvaluationData) -> list[EvaluationOutput]:
@@ -279,15 +290,31 @@ class CitationFidelityEvaluator(Evaluator):
             )]
 
         docs = [p for p in self._resolve_documents(agent_input) if p.suffix.lower() == ".pdf" and p.exists()]
+        reference = getattr(agent_input, "citation_reference_pdf", None)
+        used_reference = False
+        if reference:
+            ref_path = Path(reference)
+            if not ref_path.is_absolute():
+                base = Path(agent_input.fixtures_dir) if agent_input.fixtures_dir else self.fixtures_dir
+                ref_path = (base / ref_path) if base is not None else ref_path
+            if ref_path.exists():
+                docs, used_reference = [ref_path], True
         if not docs:
             return [EvaluationOutput(score=0.0, test_pass=False, reason="applicable=0|cause=pdf_not_found", label="citation")]
 
         all_pages: list[tuple[int, str]] = []  # (1-based page number across docs, normalised text)
         for doc in docs:
             all_pages.extend((i + 1, text) for i, text in enumerate(self._pages(doc)))
+        if not any(text for _, text in all_pages):
+            # Scanned PDF without a text layer and no reference copy: nothing to compare against.
+            return [EvaluationOutput(score=1.0, test_pass=True, reason="applicable=0|cause=no_text_layer", label="citation")]
         stated_page = out.page_number if isinstance(out.page_number, int) else None
 
         page_match = other_page = mismatch = 0
+        coverages: list[float] = []
+        # Raw (NFKC) document text for the coverage figure; substring containment rather than token
+        # equality because Korean attaches particles/endings to words (쿠키 vs 쿠키를).
+        doc_text = unicodedata.normalize("NFKC", " ".join(self._raw_text(d) for d in docs))
         for citation in citations:
             needle = normalize_for_match(citation)
             if not needle:
@@ -299,14 +326,20 @@ class CitationFidelityEvaluator(Evaluator):
                 other_page += 1
             else:
                 mismatch += 1
+                tokens = [t for t in _TOKEN_RE.findall(unicodedata.normalize("NFKC", citation)) if len(t) >= 2]
+                coverages.append(sum(1 for t in tokens if t in doc_text) / len(tokens) if tokens else 0.0)
 
         n = page_match + other_page + mismatch
         score = (page_match + 0.5 * other_page) / n if n else 0.0
         passed = n > 0 and mismatch == 0
         reason = (
             f"applicable=1|citations={n}|page_match={page_match}|other_page={other_page}"
-            f"|mismatch={mismatch}|page_number={stated_page}"
+            f"|mismatch={mismatch}|page_number={stated_page}|reference={int(used_reference)}"
         )
+        if coverages:
+            # mean share of a mismatched citation's tokens that do occur in the document:
+            # ~1.0 = recomposed/paraphrased from real content, low = fabricated
+            reason += f"|mismatch_coverage={sum(coverages) / len(coverages):.2f}"
         return [EvaluationOutput(score=score, test_pass=passed, reason=reason, label="citation")]
 
 

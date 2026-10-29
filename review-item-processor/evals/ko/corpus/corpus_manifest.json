@@ -1,0 +1,44 @@
+[
+  {
+    "corpus": "D2",
+    "path": "review-item-processor/evals/ko/corpus/external/D2_위험성평가지침_고시_전문.pdf",
+    "sha256": "2ff936bb5d4108a3823edfc23c62b6e7df89bcd202434d75eec8b7703bb276eb",
+    "size_bytes": 476192,
+    "pages": 18
+  },
+  {
+    "corpus": "D3",
+    "path": "review-item-processor/evals/ko/corpus/external/D3_별표_인정심사_항목_및_기준.pdf",
+    "sha256": "0b7c2d16b1feba01e2f112a5cb41637547df9718695d930e3b3c50260951f3ab",
+    "size_bytes": 87070,
+    "pages": 2
+  },
+  {
+    "corpus": "D3",
+    "path": "review-item-processor/evals/ko/corpus/external/D3_별지1_인정신청서.pdf",
+    "sha256": "9cb53af25d5ae2bd6da17ec47402ec371deda8f57f7231d9bdb9dd4aeb9d8d5d",
+    "size_bytes": 59654,
+    "pages": 2
+  },
+  {
+    "corpus": "D3",
+    "path": "review-item-processor/evals/ko/corpus/external/D3_별지4_컨설팅지원신청서.pdf",
+    "sha256": "2bb84df73bb37bc1b71817bd0dd0f26a17e0f3580c037dc7baf7ea4c95a03445",
+    "size_bytes": 58750,
+    "pages": 1
+  },
+  {
+    "corpus": "D3",
+    "path": "review-item-processor/evals/ko/corpus/external/D3_별지3_교육신청서.pdf",
+    "sha256": "64c59d007398c7a11afc6537de800dac2cfef8b51249741d14e69fff30500f4f",
+    "size_bytes": 56789,
+    "pages": 1
+  },
+  {
+    "corpus": "D5",
+    "path": "review-item-processor/evals/ko/corpus/fixtures/d5/클라우드_운영_및_재해복구_계획서_가온누리.pdf",
+    "sha256": "c20971f14d7e69eeda6b608c83e085096a9c8c707806ae2c7accad765170cfa1",
+    "size_bytes": 40213,
+    "pages": 2
+  }
+]

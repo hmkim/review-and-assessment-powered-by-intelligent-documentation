@@ -66,3 +66,7 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Korean eval fixtures that are regenerated/downloaded rather than committed
+evals/ko/examples/fixtures/image/
+evals/ko/corpus/external/

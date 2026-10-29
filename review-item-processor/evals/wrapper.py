@@ -25,6 +25,10 @@ class ReviewAgentInput:
     language_name: str = "日本語"
     tool_configuration: dict[str, Any] | None = None
     fixtures_dir: str | None = None
+    # Evaluation-only: for a scanned (image-only) fixture, the text-layer PDF of the same document,
+    # relative to fixtures_dir. CitationFidelityEvaluator checks citations against it, which turns
+    # the check into an OCR-fidelity measurement. Never passed to the agent.
+    citation_reference_pdf: str | None = None
 
     def to_agent_event(self, fixtures_dir: Path) -> dict[str, Any]:
         """Convert to agent event format with absolute paths."""
@@ -187,6 +191,7 @@ def load_test_case_from_json(
         language_name=input_data.get("language_name", "日本語"),
         tool_configuration=input_data.get("tool_configuration"),
         fixtures_dir=resolved_fixtures_dir,
+        citation_reference_pdf=input_data.get("citation_reference_pdf"),
     )
 
     # Parse expected output (for ground truth comparison)

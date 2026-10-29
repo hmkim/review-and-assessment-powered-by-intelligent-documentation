@@ -1,0 +1,47 @@
+{
+  "_comment": "Corpus D2/D3 fixtures. Government notices and their forms are not protected works under Article 7 of the Korean Copyright Act, but the files are not committed to this repository; evals/ko/corpus/fetch_external.sh downloads them into evals/ko/corpus/external/ and verifies the sha256 values below. Source: 국가법령정보센터 (law.go.kr), 「사업장 위험성평가에 관한 지침」 고용노동부고시 제2024-76호 (2024-12-18 일부개정, 2025-01-02 시행).",
+  "base_url": "https://www.law.go.kr/LSW/flDownload.do?flSeq=",
+  "page_url": "https://www.law.go.kr/행정규칙/사업장위험성평가에관한지침",
+  "files": [
+    {
+      "corpus": "D2",
+      "filename": "D2_위험성평가지침_고시_전문.pdf",
+      "flSeq": "146415417",
+      "description": "고시 일부개정 전문 (18쪽). 텍스트 레이어의 띄어쓰기가 대부분 소실된 PDF.",
+      "sha256": "2ff936bb5d4108a3823edfc23c62b6e7df89bcd202434d75eec8b7703bb276eb",
+      "pages": 18
+    },
+    {
+      "corpus": "D3",
+      "filename": "D3_별표_인정심사_항목_및_기준.pdf",
+      "flSeq": "146415471",
+      "description": "[별표] 위험성평가 인정심사 항목 및 기준 (2쪽, HWP 서식의 law.go.kr PDF 변환본).",
+      "sha256": "0b7c2d16b1feba01e2f112a5cb41637547df9718695d930e3b3c50260951f3ab",
+      "pages": 2
+    },
+    {
+      "corpus": "D3",
+      "filename": "D3_별지1_인정신청서.pdf",
+      "flSeq": "146415433",
+      "description": "[별지 제1호서식] 위험성평가 인정·재인정 신청서 (2쪽).",
+      "sha256": "9cb53af25d5ae2bd6da17ec47402ec371deda8f57f7231d9bdb9dd4aeb9d8d5d",
+      "pages": 2
+    },
+    {
+      "corpus": "D3",
+      "filename": "D3_별지3_교육신청서.pdf",
+      "flSeq": "146415445",
+      "description": "[별지 제3호서식] 위험성평가 사업주·평가담당자 교육 신청서 (1쪽).",
+      "sha256": "64c59d007398c7a11afc6537de800dac2cfef8b51249741d14e69fff30500f4f",
+      "pages": 1
+    },
+    {
+      "corpus": "D3",
+      "filename": "D3_별지4_컨설팅지원신청서.pdf",
+      "flSeq": "146415451",
+      "description": "[별지 제4호서식] 위험성평가 컨설팅 지원 신청서 (1쪽).",
+      "sha256": "2bb84df73bb37bc1b71817bd0dd0f26a17e0f3580c037dc7baf7ea4c95a03445",
+      "pages": 1
+    }
+  ]
+}

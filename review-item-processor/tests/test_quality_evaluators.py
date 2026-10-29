@@ -157,6 +157,42 @@ def test_normalize_for_match_ignores_whitespace_and_width():
     assert normalize_for_match("ＡＢＣ 가, 나\r\n다 / 라: 1") == "ABC가나다라1"
 
 
+@pytest.fixture(scope="module")
+def scanned_pdf(tmp_path_factory) -> Path:
+    """An image-only PDF (no text layer), as produced by evals/ko/corpus/rasterize_pdf.py."""
+    from PIL import Image
+
+    path = tmp_path_factory.mktemp("scan") / "scan.pdf"
+    Image.new("RGB", (300, 200), "white").save(str(path), format="PDF", save_all=True,
+                                                 append_images=[Image.new("RGB", (300, 200), "white")])
+    return path
+
+
+def test_citation_scanned_pdf_without_reference_is_not_applicable(scanned_pdf):
+    pytest.importorskip("pypdf")
+    o = _output(extracted_text=["개인정보 보호책임자 성명: 김가온"], page_number=1)
+    res = CitationFidelityEvaluator().evaluate(_case(o, agent_input=_pdf_input(scanned_pdf)))[0]
+    assert res.test_pass and parse_reason(res.reason)["cause"] == "no_text_layer"
+
+
+def test_citation_scanned_pdf_checked_against_reference(scanned_pdf, korean_pdf):
+    pytest.importorskip("pypdf")
+    agent_input = ReviewAgentInput(document_paths=[scanned_pdf.name], check_name="n", check_description="d", language_name="Korean",
+                                   fixtures_dir=str(scanned_pdf.parent), citation_reference_pdf=os.path.relpath(korean_pdf, scanned_pdf.parent))
+    exact = _output(extracted_text=["개인정보 보호책임자 성명: 김가온 / 직위: 경영지원본부장"], page_number=1)
+    r = parse_reason(CitationFidelityEvaluator().evaluate(_case(exact, agent_input=agent_input))[0].reason)
+    assert r["reference"] == "1" and r["page_match"] == "1"
+
+    recomposed = _output(extracted_text=["보호책임자 김가온 (경영지원본부장) / 쿠키 사용"], page_number=1)  # tokens real, span not verbatim
+    res = CitationFidelityEvaluator().evaluate(_case(recomposed, agent_input=agent_input))[0]
+    r = parse_reason(res.reason)
+    assert not res.test_pass and r["mismatch"] == "1" and float(r["mismatch_coverage"]) >= 0.8
+
+    fabricated = _output(extracted_text=["위험성평가 결과서는 매년 갱신한다"], page_number=1)
+    r = parse_reason(CitationFidelityEvaluator().evaluate(_case(fabricated, agent_input=agent_input))[0].reason)
+    assert r["mismatch"] == "1" and float(r["mismatch_coverage"]) < 0.5
+
+
 # --------------------------------------------------------------------------- insufficient evidence
 def test_insufficient_evidence_protocol():
     ev = InsufficientEvidenceEvaluator()
@@ -212,18 +248,31 @@ def test_suite_loader_honours_per_case_fixtures_dir(tmp_path):
     assert cases[0].metadata == {"kind": "pass"}
 
 
-def test_generated_korean_suite_is_consistent():
-    suite = Path(__file__).resolve().parent.parent / "evals" / "ko" / "examples" / "korean_examples_suite.json"
+@pytest.mark.parametrize("relative", [
+    "evals/ko/examples/korean_examples_suite.json",
+    "evals/ko/examples/korean_examples_image_suite.json",
+    "evals/ko/corpus/corpus_suite.json",
+])
+def test_generated_korean_suites_are_consistent(relative):
+    suite = Path(__file__).resolve().parent.parent / relative
     if not suite.exists():
-        pytest.skip("korean suite not generated")
+        pytest.skip(f"{relative} not generated")
     cases = json.loads(suite.read_text(encoding="utf-8"))
+    assert cases
     names = [c["name"] for c in cases]
     assert len(names) == len(set(names))
-    kinds = {c["metadata"]["kind"] for c in cases}
-    assert kinds == {"fail", "pass", "insufficient"}
     for c in cases:
-        assert c["input"]["language_name"] == "Korean"
-        if c["metadata"]["kind"] == "insufficient":
+        meta, inp = c["metadata"], c["input"]
+        assert inp["language_name"] == "Korean"
+        assert inp["fixtures_dir"] and inp["document_paths"]
+        assert meta["kind"] in {"fail", "pass", "insufficient"}
+        if meta["kind"] == "insufficient":
             assert c["expected_output"] == {"result": "fail", "insufficient_evidence": True}
         else:
-            assert c["expected_output"]["result"] == c["metadata"]["kind"]
+            assert c["expected_output"]["result"] == meta["kind"]
+        if meta["variant"] == "imgpdf":
+            assert inp["citation_reference_pdf"].endswith(".pdf")
+        if meta["variant"] == "png":
+            assert len(inp["document_paths"]) >= 1 and all(d.endswith(".png") for d in inp["document_paths"])
+        if meta["kind"] == "fail" and "defect" in meta:
+            assert isinstance(meta["defect"], int) and meta["defect"] >= 1

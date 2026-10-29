@@ -1,0 +1,649 @@
+[
+  {
+    "name": "KO-D2-PDF-pass-01",
+    "input": {
+      "document_paths": [
+        "D2_위험성평가지침_고시_전문.pdf"
+      ],
+      "fixtures_dir": "external",
+      "check_name": "위험성평가 실시 시기 구분",
+      "check_description": "위험성평가의 실시 시기가 최초평가, 수시평가, 정기평가(또는 상시평가)로 구분되어 규정되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "corpus": "D2",
+      "kind": "pass",
+      "tags": [
+        "manufacturing",
+        "law-text"
+      ],
+      "variant": "pdf",
+      "source": "law.go.kr 고용노동부고시 제2024-76호 전문 (flSeq 146415417)",
+      "truth_note": "제15조 (최초·수시·정기/상시)"
+    }
+  },
+  {
+    "name": "KO-D2-PDF-pass-02",
+    "input": {
+      "document_paths": [
+        "D2_위험성평가지침_고시_전문.pdf"
+      ],
+      "fixtures_dir": "external",
+      "check_name": "정기 재검토 주기",
+      "check_description": "실시한 위험성평가 결과의 적정성을 1년마다 정기적으로 재검토하도록 규정하고 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "corpus": "D2",
+      "kind": "pass",
+      "tags": [
+        "manufacturing",
+        "law-text"
+      ],
+      "variant": "pdf",
+      "source": "law.go.kr 고용노동부고시 제2024-76호 전문 (flSeq 146415417)",
+      "truth_note": "제15조제3항 '1년마다 정기적으로 재검토'"
+    }
+  },
+  {
+    "name": "KO-D2-PDF-pass-03",
+    "input": {
+      "document_paths": [
+        "D2_위험성평가지침_고시_전문.pdf"
+      ],
+      "fixtures_dir": "external",
+      "check_name": "근로자 참여 조항",
+      "check_description": "위험성평가를 실시할 때 해당 작업에 종사하는 근로자를 참여시켜야 하는 경우가 규정되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "corpus": "D2",
+      "kind": "pass",
+      "tags": [
+        "manufacturing",
+        "law-text"
+      ],
+      "variant": "pdf",
+      "source": "law.go.kr 고용노동부고시 제2024-76호 전문 (flSeq 146415417)",
+      "truth_note": "제6조(근로자 참여)"
+    }
+  },
+  {
+    "name": "KO-D2-PDF-fail-01",
+    "input": {
+      "document_paths": [
+        "D2_위험성평가지침_고시_전문.pdf"
+      ],
+      "fixtures_dir": "external",
+      "check_name": "인정 유효기간 5년 여부",
+      "check_description": "위험성평가 인정사업장의 인정 유효기간이 인정 결정일부터 5년으로 규정되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "corpus": "D2",
+      "kind": "fail",
+      "tags": [
+        "manufacturing",
+        "law-text"
+      ],
+      "variant": "pdf",
+      "source": "law.go.kr 고용노동부고시 제2024-76호 전문 (flSeq 146415417)",
+      "truth_note": "제19조제4항은 3년 → fail"
+    }
+  },
+  {
+    "name": "KO-D2-PDF-fail-02",
+    "input": {
+      "document_paths": [
+        "D2_위험성평가지침_고시_전문.pdf"
+      ],
+      "fixtures_dir": "external",
+      "check_name": "벌칙 규정 포함 여부",
+      "check_description": "이 고시에 위반 시 과태료 등 벌칙(제재) 조항이 포함되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "corpus": "D2",
+      "kind": "fail",
+      "tags": [
+        "manufacturing",
+        "law-text"
+      ],
+      "variant": "pdf",
+      "source": "law.go.kr 고용노동부고시 제2024-76호 전문 (flSeq 146415417)",
+      "truth_note": "고시에 벌칙·과태료 조항 없음 → fail"
+    }
+  },
+  {
+    "name": "KO-D2-PDF-insufficient-01",
+    "input": {
+      "document_paths": [
+        "D2_위험성평가지침_고시_전문.pdf"
+      ],
+      "fixtures_dir": "external",
+      "check_name": "최신 개정본 여부",
+      "check_description": "이 문서가 현재 시행 중인 「사업장 위험성평가에 관한 지침」의 최신 개정본인지, 이후 개정 고시가 있는지 확인한다.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail",
+      "insufficient_evidence": true
+    },
+    "metadata": {
+      "corpus": "D2",
+      "kind": "insufficient",
+      "tags": [
+        "manufacturing",
+        "law-text"
+      ],
+      "variant": "pdf",
+      "source": "law.go.kr 고용노동부고시 제2024-76호 전문 (flSeq 146415417)",
+      "truth_note": "문서 밖 정보 필요 → 근거 부족"
+    }
+  },
+  {
+    "name": "KO-D3-byl0000-pass-01",
+    "input": {
+      "document_paths": [
+        "D3_별표_인정심사_항목_및_기준.pdf"
+      ],
+      "fixtures_dir": "external",
+      "check_name": "영역별 가중치 명시",
+      "check_description": "종합점수 산정 기준에 심사 영역별 가중치(사업주의 관심도, 위험성평가 실행 수준, 구성원의 참여 및 이해 수준, 재해발생)가 백분율로 명시되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "corpus": "D3",
+      "kind": "pass",
+      "tags": [
+        "manufacturing",
+        "public-form"
+      ],
+      "variant": "pdf",
+      "form": "byl0000",
+      "source": "law.go.kr 별지/별표 PDF (HWP 서식 변환본)",
+      "truth_note": "2쪽 종합점수 산정 기준 10%/60%/25%/5%"
+    }
+  },
+  {
+    "name": "KO-D3-byl0000-pass-02",
+    "input": {
+      "document_paths": [
+        "D3_별표_인정심사_항목_및_기준.pdf"
+      ],
+      "fixtures_dir": "external",
+      "check_name": "수시평가 미실시 감점",
+      "check_description": "감점 기준에 산업재해 발생 후 수시 위험성평가를 실시하지 않은 경우의 감점 점수가 규정되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "corpus": "D3",
+      "kind": "pass",
+      "tags": [
+        "manufacturing",
+        "public-form"
+      ],
+      "variant": "pdf",
+      "form": "byl0000",
+      "source": "law.go.kr 별지/별표 PDF (HWP 서식 변환본)",
+      "truth_note": "2쪽 감점 기준 △5점"
+    }
+  },
+  {
+    "name": "KO-D3-byl0000-fail-01",
+    "input": {
+      "document_paths": [
+        "D3_별표_인정심사_항목_및_기준.pdf"
+      ],
+      "fixtures_dir": "external",
+      "check_name": "외부 전문기관 컨설팅 이력 항목",
+      "check_description": "심사항목에 외부 전문기관의 컨설팅 이수 이력에 대한 배점 항목이 포함되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "corpus": "D3",
+      "kind": "fail",
+      "tags": [
+        "manufacturing",
+        "public-form"
+      ],
+      "variant": "pdf",
+      "form": "byl0000",
+      "source": "law.go.kr 별지/별표 PDF (HWP 서식 변환본)",
+      "truth_note": "심사항목 표에 없음 → fail"
+    }
+  },
+  {
+    "name": "KO-D3-byl0001-pass-01",
+    "input": {
+      "document_paths": [
+        "D3_별지1_인정신청서.pdf"
+      ],
+      "fixtures_dir": "external",
+      "check_name": "위험성평가 담당자 기재란",
+      "check_description": "신청서에 위험성평가 담당자의 성명, 휴대전화번호, 전자우편 주소를 기재하는 란이 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "corpus": "D3",
+      "kind": "pass",
+      "tags": [
+        "manufacturing",
+        "public-form"
+      ],
+      "variant": "pdf",
+      "form": "byl0001",
+      "source": "law.go.kr 별지/별표 PDF (HWP 서식 변환본)",
+      "truth_note": "1쪽 신청인 란"
+    }
+  },
+  {
+    "name": "KO-D3-byl0001-pass-02",
+    "input": {
+      "document_paths": [
+        "D3_별지1_인정신청서.pdf"
+      ],
+      "fixtures_dir": "external",
+      "check_name": "개인정보 보유·이용기간 명시",
+      "check_description": "개인정보 수집·이용 및 제3자 제공 동의서에 항목별 보유·이용기간이 명시되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "corpus": "D3",
+      "kind": "pass",
+      "tags": [
+        "manufacturing",
+        "public-form"
+      ],
+      "variant": "pdf",
+      "form": "byl0001",
+      "source": "law.go.kr 별지/별표 PDF (HWP 서식 변환본)",
+      "truth_note": "2쪽 동의서 '다음연도부터 3년', '1년'"
+    }
+  },
+  {
+    "name": "KO-D3-byl0001-fail-01",
+    "input": {
+      "document_paths": [
+        "D3_별지1_인정신청서.pdf"
+      ],
+      "fixtures_dir": "external",
+      "check_name": "최근 3년 산업재해 건수 기재란",
+      "check_description": "신청서에 최근 3년간 산업재해 발생 건수를 기재하는 란이 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "corpus": "D3",
+      "kind": "fail",
+      "tags": [
+        "manufacturing",
+        "public-form"
+      ],
+      "variant": "pdf",
+      "form": "byl0001",
+      "source": "law.go.kr 별지/별표 PDF (HWP 서식 변환본)",
+      "truth_note": "해당 란 없음 → fail"
+    }
+  },
+  {
+    "name": "KO-D3-byl0004-pass-01",
+    "input": {
+      "document_paths": [
+        "D3_별지4_컨설팅지원신청서.pdf"
+      ],
+      "fixtures_dir": "external",
+      "check_name": "처리기간 명시",
+      "check_description": "신청서 상단에 접수 후 처리기간이 명시되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "corpus": "D3",
+      "kind": "pass",
+      "tags": [
+        "manufacturing",
+        "public-form"
+      ],
+      "variant": "pdf",
+      "form": "byl0004",
+      "source": "law.go.kr 별지/별표 PDF (HWP 서식 변환본)",
+      "truth_note": "'처리기간 1개월 10일'"
+    }
+  },
+  {
+    "name": "KO-D3-byl0004-fail-01",
+    "input": {
+      "document_paths": [
+        "D3_별지4_컨설팅지원신청서.pdf"
+      ],
+      "fixtures_dir": "external",
+      "check_name": "컨설팅 희망 분야 선택란",
+      "check_description": "신청서에 컨설팅을 희망하는 분야(공정·설비·작업 등)를 선택하거나 기재하는 란이 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "corpus": "D3",
+      "kind": "fail",
+      "tags": [
+        "manufacturing",
+        "public-form"
+      ],
+      "variant": "pdf",
+      "form": "byl0004",
+      "source": "law.go.kr 별지/별표 PDF (HWP 서식 변환본)",
+      "truth_note": "해당 란 없음 → fail"
+    }
+  },
+  {
+    "name": "KO-D3-byl0003-insufficient-01",
+    "input": {
+      "document_paths": [
+        "D3_별지3_교육신청서.pdf"
+      ],
+      "fixtures_dir": "external",
+      "check_name": "최신 서식 여부",
+      "check_description": "이 교육 신청서 양식이 한국산업안전보건공단 홈페이지에 게시된 현재 사용 중인 최신 양식과 동일한지 확인한다.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail",
+      "insufficient_evidence": true
+    },
+    "metadata": {
+      "corpus": "D3",
+      "kind": "insufficient",
+      "tags": [
+        "manufacturing",
+        "public-form"
+      ],
+      "variant": "pdf",
+      "form": "byl0003",
+      "source": "law.go.kr 별지/별표 PDF (HWP 서식 변환본)",
+      "truth_note": "문서 밖 정보 필요 → 근거 부족"
+    }
+  },
+  {
+    "name": "KO-D5-PDF-pass-item01",
+    "input": {
+      "document_paths": [
+        "클라우드_운영_및_재해복구_계획서_가온누리.pdf"
+      ],
+      "fixtures_dir": "fixtures/d5",
+      "check_name": "RTO/RPO 목표 정의",
+      "check_description": "복구시간목표(RTO)와 복구시점목표(RPO)가 각각 수치(시간 단위)로 정의되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "corpus": "D5",
+      "kind": "pass",
+      "tags": [
+        "it-operations"
+      ],
+      "variant": "pdf",
+      "item": "1"
+    }
+  },
+  {
+    "name": "KO-D5-PDF-fail-item02",
+    "input": {
+      "document_paths": [
+        "클라우드_운영_및_재해복구_계획서_가온누리.pdf"
+      ],
+      "fixtures_dir": "fixtures/d5",
+      "check_name": "RPO와 DR 데이터 복제 주기의 정합성",
+      "check_description": "RPO 목표와 DR 리전으로의 데이터 복제 주기가 정합하는가(복제 주기 ≤ RPO). 운영 DB와 객체 스토리지 각각에 대해 확인한다.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "corpus": "D5",
+      "kind": "fail",
+      "tags": [
+        "it-operations"
+      ],
+      "variant": "pdf",
+      "item": "2",
+      "defect": 1,
+      "defect_text": "RPO 목표는 1시간이지만 운영 DB 스냅샷의 DR 리전 복제는 1일 1회(24시간 주기)로 기재되어 복제 주기가 RPO를 초과한다."
+    }
+  },
+  {
+    "name": "KO-D5-PDF-pass-item03",
+    "input": {
+      "document_paths": [
+        "클라우드_운영_및_재해복구_계획서_가온누리.pdf"
+      ],
+      "fixtures_dir": "fixtures/d5",
+      "check_name": "가용성 목표(SLA) 수치",
+      "check_description": "서비스 가용성 목표가 백분율(%)로 명시되어 있고, 그에 상응하는 허용 다운타임이 함께 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "corpus": "D5",
+      "kind": "pass",
+      "tags": [
+        "it-operations"
+      ],
+      "variant": "pdf",
+      "item": "3"
+    }
+  },
+  {
+    "name": "KO-D5-PDF-fail-item04",
+    "input": {
+      "document_paths": [
+        "클라우드_운영_및_재해복구_계획서_가온누리.pdf"
+      ],
+      "fixtures_dir": "fixtures/d5",
+      "check_name": "DR 모의훈련 주기",
+      "check_description": "DR 전환 모의훈련(Failover Test)을 반기 1회 이상 실시하도록 정하고 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "corpus": "D5",
+      "kind": "fail",
+      "tags": [
+        "it-operations"
+      ],
+      "variant": "pdf",
+      "item": "4",
+      "defect": 2,
+      "defect_text": "DR 전환 모의훈련 주기가 연 1회로, 점검 기준(반기 1회 이상)에 미달한다."
+    }
+  },
+  {
+    "name": "KO-D5-PDF-pass-item05",
+    "input": {
+      "document_paths": [
+        "클라우드_운영_및_재해복구_계획서_가온누리.pdf"
+      ],
+      "fixtures_dir": "fixtures/d5",
+      "check_name": "저장 데이터 암호화 강도",
+      "check_description": "저장 데이터(Data at Rest) 암호화에 AES-256 이상의 알고리즘과 키 관리 방식(KMS 등)이 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "corpus": "D5",
+      "kind": "pass",
+      "tags": [
+        "it-operations"
+      ],
+      "variant": "pdf",
+      "item": "5"
+    }
+  },
+  {
+    "name": "KO-D5-PDF-fail-item06",
+    "input": {
+      "document_paths": [
+        "클라우드_운영_및_재해복구_계획서_가온누리.pdf"
+      ],
+      "fixtures_dir": "fixtures/d5",
+      "check_name": "개인정보 국외 이전 근거",
+      "check_description": "개인정보가 국외(해외 리전 등)에 저장·이전되는 경우, 그 사실과 「개인정보 보호법」 제28조의8에 따른 근거(정보주체 동의 또는 고지 등)가 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "corpus": "D5",
+      "kind": "fail",
+      "tags": [
+        "it-operations"
+      ],
+      "variant": "pdf",
+      "item": "6",
+      "defect": 3,
+      "defect_text": "DR 리전이 해외(Asia Pacific (Tokyo))여서 개인정보가 국외로 이전되는데 「개인정보 보호법」 제28조의8에 따른 근거(동의 또는 고지)가 기재되어 있지 않다."
+    }
+  },
+  {
+    "name": "KO-D5-PDF-pass-item07",
+    "input": {
+      "document_paths": [
+        "클라우드_운영_및_재해복구_계획서_가온누리.pdf"
+      ],
+      "fixtures_dir": "fixtures/d5",
+      "check_name": "정보보호 인증 현황",
+      "check_description": "ISO/IEC 27001 또는 ISMS-P 등 정보보호 인증의 보유 현황과 유지 계획이 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "corpus": "D5",
+      "kind": "pass",
+      "tags": [
+        "it-operations"
+      ],
+      "variant": "pdf",
+      "item": "7"
+    }
+  },
+  {
+    "name": "KO-D5-PDF-pass-item08",
+    "input": {
+      "document_paths": [
+        "클라우드_운영_및_재해복구_계획서_가온누리.pdf"
+      ],
+      "fixtures_dir": "fixtures/d5",
+      "check_name": "모니터링 경보 임계치",
+      "check_description": "CPU 사용률, 오류율 등 핵심 지표에 대한 경보(Alarm) 임계치가 수치로 정의되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "corpus": "D5",
+      "kind": "pass",
+      "tags": [
+        "it-operations"
+      ],
+      "variant": "pdf",
+      "item": "8"
+    }
+  },
+  {
+    "name": "KO-D5-PDF-pass-item09",
+    "input": {
+      "document_paths": [
+        "클라우드_운영_및_재해복구_계획서_가온누리.pdf"
+      ],
+      "fixtures_dir": "fixtures/d5",
+      "check_name": "변경관리 절차",
+      "check_description": "변경자문위원회(CAB) 등 정기 변경관리 절차와 긴급 변경의 처리 방식이 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "corpus": "D5",
+      "kind": "pass",
+      "tags": [
+        "it-operations"
+      ],
+      "variant": "pdf",
+      "item": "9"
+    }
+  },
+  {
+    "name": "KO-D5-PDF-insufficient-1",
+    "input": {
+      "document_paths": [
+        "클라우드_운영_및_재해복구_계획서_가온누리.pdf"
+      ],
+      "fixtures_dir": "fixtures/d5",
+      "check_name": "ISO/IEC 27001 인증서 유효기간",
+      "check_description": "문서에 기재된 ISO/IEC 27001 인증이 현재 유효한지 인증서의 유효기간(발급일·만료일)과 인증기관을 확인한다.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail",
+      "insufficient_evidence": true
+    },
+    "metadata": {
+      "corpus": "D5",
+      "kind": "insufficient",
+      "tags": [
+        "it-operations"
+      ],
+      "variant": "pdf"
+    }
+  }
+]

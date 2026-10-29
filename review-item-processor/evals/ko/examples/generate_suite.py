@@ -28,14 +28,18 @@ sha256 / size / page count of every referenced PDF is written next to the suite.
 Usage (from review-item-processor/):
     uv run python evals/ko/examples/generate_suite.py            # suite + manifest
     uv run python evals/ko/examples/generate_suite.py --with-image-variants
-        # also adds IMAGE cases for every "fail" case when the rasterised PDFs exist
-        # in evals/ko/examples/fixtures/image/<use case>/<file>.pdf (see M4-b)
+        # also writes korean_examples_image_suite.json (+ image_fixtures_manifest.json): the D4 scan
+        # variants of every "fail" case, when the rasterised files exist in
+        # evals/ko/examples/fixtures/image/<use case>/ (produced by evals/ko/corpus/rasterize_pdf.py --png):
+        #   IMGPDF  <file>.pdf            image-only PDF -> agent PDF path without a text layer
+        #   PNG     <stem>_p01.png, ...   page images    -> agent IMAGE path (image model, no citations)
 """
 
 from __future__ import annotations
 
 import argparse
 import hashlib
+import os
 import json
 import sys
 from pathlib import Path
@@ -107,9 +111,12 @@ def _page_count(path: Path) -> int | None:
         return None
 
 
-def build_cases(with_image_variants: bool) -> tuple[list[dict], list[dict]]:
+def build_cases(with_image_variants: bool) -> tuple[list[dict], list[dict], list[dict], list[dict]]:
+    """Return (pdf cases, pdf manifest, image-variant cases, image manifest)."""
     cases: list[dict] = []
     manifest: list[dict] = []
+    image_cases: list[dict] = []
+    image_manifest: list[dict] = []
     seen_files: set[Path] = set()
 
     for number, module, items, tags in USE_CASES:
@@ -138,7 +145,7 @@ def build_cases(with_image_variants: bool) -> tuple[list[dict], list[dict]]:
             assert item_no not in defect_items and item_no not in pass_items, f"UC{number} item {item_no} both ambiguous and used"
 
         def make_case(item_no: str, kind: str, expected: dict, extra_meta: dict | None = None,
-                      document: str = module.REVIEW_FILENAME, fixtures: Path = fixtures_rel, variant: str = "pdf") -> dict:
+                      documents: list[str] | None = None, fixtures: Path = fixtures_rel, variant: str = "pdf") -> dict:
             _, name, criteria, basis = by_number[item_no]
             meta = {"use_case": number, "item": item_no, "kind": kind, "basis": basis, "tags": tags, "variant": variant}
             if extra_meta:
@@ -146,7 +153,7 @@ def build_cases(with_image_variants: bool) -> tuple[list[dict], list[dict]]:
             return {
                 "name": f"KO-UC{number}-{variant.upper()}-{kind}-item{item_no.zfill(2)}",
                 "input": {
-                    "document_paths": [document],
+                    "document_paths": documents or [module.REVIEW_FILENAME],
                     "fixtures_dir": str(fixtures),
                     "check_name": name,
                     "check_description": criteria,
@@ -178,21 +185,38 @@ def build_cases(with_image_variants: bool) -> tuple[list[dict], list[dict]]:
 
         if with_image_variants:
             image_dir = HERE / "fixtures" / "image" / module.USE_CASE_DIR
+            image_rel = Path("fixtures") / "image" / module.USE_CASE_DIR
             image_pdf = image_dir / module.REVIEW_FILENAME
+            page_pngs = sorted(p.name for p in image_dir.glob(f"{Path(module.REVIEW_FILENAME).stem}_p*.png"))
             if image_pdf.exists():
-                image_rel = Path("fixtures") / "image" / module.USE_CASE_DIR
+                # Scanned PDF: no text layer, still routed through the agent's PDF path. Citations are
+                # checked against the text-layer original (OCR fidelity).
+                reference_rel = os.path.relpath(review_pdf, image_dir)
                 for item_no, defect_idx in defect_items.items():
-                    cases.append(make_case(item_no, "fail", {"result": "fail"},
-                                           {"defect": defect_idx}, fixtures=image_rel, variant="image"))
-                manifest.append({
+                    case = make_case(item_no, "fail", {"result": "fail"}, {"defect": defect_idx},
+                                     fixtures=image_rel, variant="imgpdf")
+                    case["input"]["citation_reference_pdf"] = reference_rel
+                    image_cases.append(case)
+                image_manifest.append({
                     "use_case": number, "path": str(image_pdf.relative_to(REPO_ROOT)),
                     "sha256": _sha256(image_pdf), "size_bytes": image_pdf.stat().st_size,
-                    "pages": _page_count(image_pdf), "variant": "image",
+                    "pages": _page_count(image_pdf), "variant": "imgpdf",
                 })
             else:
-                print(f"  (no image variant for UC{number}: {image_pdf} missing, skipped)")
+                print(f"  (UC{number}: no scanned PDF at {image_pdf.relative_to(REPO_ROOT)}; run corpus/rasterize_pdf.py)")
+            if page_pngs:
+                # Page images: routed through the agent's IMAGE path (image model, no citations).
+                for item_no, defect_idx in defect_items.items():
+                    image_cases.append(make_case(item_no, "fail", {"result": "fail"}, {"defect": defect_idx},
+                                                 documents=page_pngs, fixtures=image_rel, variant="png"))
+                for png in page_pngs:
+                    p = image_dir / png
+                    image_manifest.append({"use_case": number, "path": str(p.relative_to(REPO_ROOT)), "sha256": _sha256(p),
+                                     "size_bytes": p.stat().st_size, "pages": 1, "variant": "png"})
+            else:
+                print(f"  (UC{number}: no page PNGs in {image_rel}; run corpus/rasterize_pdf.py --png)")
 
-    return cases, manifest
+    return cases, manifest, image_cases, image_manifest
 
 
 def main() -> None:
@@ -201,7 +225,7 @@ def main() -> None:
     ap.add_argument("--out", type=Path, default=HERE / "korean_examples_suite.json")
     args = ap.parse_args()
 
-    cases, manifest = build_cases(args.with_image_variants)
+    cases, manifest, image_cases, image_manifest = build_cases(args.with_image_variants)
     args.out.write_text(json.dumps(cases, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     manifest_path = args.out.with_name("fixtures_manifest.json")
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -211,6 +235,16 @@ def main() -> None:
         kinds[c["metadata"]["kind"]] = kinds.get(c["metadata"]["kind"], 0) + 1
     print(f"wrote {len(cases)} cases -> {args.out.relative_to(REPO_ROOT)}  {kinds}")
     print(f"wrote manifest ({len(manifest)} files) -> {manifest_path.relative_to(REPO_ROOT)}")
+    if args.with_image_variants:
+        image_out = args.out.with_name("korean_examples_image_suite.json")
+        image_out.write_text(json.dumps(image_cases, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        image_manifest_path = args.out.with_name("image_fixtures_manifest.json")
+        image_manifest_path.write_text(json.dumps(image_manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        variants = {}
+        for c in image_cases:
+            variants[c["metadata"]["variant"]] = variants.get(c["metadata"]["variant"], 0) + 1
+        print(f"wrote {len(image_cases)} D4 cases -> {image_out.relative_to(REPO_ROOT)}  {variants}")
+        print(f"wrote image manifest ({len(image_manifest)} files) -> {image_manifest_path.relative_to(REPO_ROOT)}")
 
 
 if __name__ == "__main__":

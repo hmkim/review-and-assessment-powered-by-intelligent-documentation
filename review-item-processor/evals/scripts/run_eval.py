@@ -103,6 +103,15 @@ def main():
         help="Verbose output",
     )
 
+    parser.add_argument(
+        "--filter",
+        action="append",
+        default=[],
+        metavar="SUBSTRING",
+        help="Only run cases whose name contains SUBSTRING (repeatable; a case matching any value runs). "
+             "Example: --filter KO-D2 --filter PNG",
+    )
+
     args = parser.parse_args()
 
     # Change to evals directory for relative paths
@@ -151,6 +160,13 @@ def main():
         else:
             print(f"Loading test case: {args.case}")
             test_cases = [load_test_case_from_json(args.case, fixtures_dir=fixtures_dir)]
+
+        if args.filter:
+            test_cases = [c for c in test_cases if any(f in c.name for f in args.filter)]
+            print(f"Filter {args.filter}: {len(test_cases)} case(s) selected")
+            if not test_cases:
+                print("ERROR: no case matches the filter")
+                return 1
 
         # Create experiment
         print(f"\nCreating {args.experiment} experiment...")
@@ -388,25 +404,35 @@ def main():
 
         if "Quality" in aggregated:
             q = aggregated["Quality"]
+
+            def fmt(value, spec: str) -> str:
+                return "n/a" if value is None else format(value, spec)
+
             print(f"\n{'=' * 60}")
             print("OUTPUT QUALITY")
             print("=" * 60)
             if "language" in q:
                 lang = q["language"]
-                print(f"Language compliance:  {lang['compliance_rate']:.0%} ({lang['cases']} cases, foreign-script cases: {lang['foreign_letter_cases']})")
+                print(f"Language compliance:  {fmt(lang['compliance_rate'], '.0%')} ({lang['cases']} cases, foreign-script cases: {lang['foreign_letter_cases']})")
             if "json_parse" in q:
-                print(f"JSON parse rate:      {q['json_parse']['parse_rate']:.0%}")
+                print(f"JSON parse rate:      {fmt(q['json_parse']['parse_rate'], '.0%')}")
             if "short_explanation" in q:
                 se = q["short_explanation"]
-                print(f"shortExplanation:     median {se['median_chars']} chars, p95 {se['p95_chars']:.0f}, max {se['max_chars']}, over {se['limit']}: {se['over_limit_rate']:.0%}")
+                print(f"shortExplanation:     median {fmt(se['median_chars'], '')} chars, p95 {fmt(se['p95_chars'], '.0f')}, max {fmt(se['max_chars'], '')}, over {se['limit']}: {fmt(se['over_limit_rate'], '.0%')}")
             if "citation" in q:
                 c = q["citation"]
-                rate = f"{c['page_match_rate']:.0%}" if c["page_match_rate"] is not None else "n/a"
-                print(f"Citation fidelity:    page-match {rate} of {c['total_citations']} citations, other-page {c['other_page_count']}, mismatch {c['mismatch_count']}, no-citation cases {c['no_citation_cases']}")
+                print(f"Citation fidelity:    page-match {fmt(c['page_match_rate'], '.0%')} of {c['total_citations']} citations, other-page {c['other_page_count']}, mismatch {c['mismatch_count']}, no-citation cases {c['no_citation_cases']}")
+                if c.get("mismatch_mean_coverage") is not None:
+                    print(f"                      mismatched citations' token coverage (median per case): {c['mismatch_mean_coverage']:.2f}")
+                if c.get("ocr"):
+                    o = c["ocr"]
+                    print(f"                      of which scanned fixtures vs reference text (OCR): {o['cases']} cases, page-match {fmt(o['page_match_rate'], '.0%')} of {o['total_citations']}, mismatch {o['mismatch_count']}")
+                if c.get("no_text_layer_cases"):
+                    print(f"                      scanned fixtures without a reference copy (not verifiable): {c['no_text_layer_cases']}")
             if "insufficient_evidence" in q:
                 ie = q["insufficient_evidence"]
                 if ie["applicable_cases"]:
-                    print(f"Insufficient-evidence protocol: {ie['protocol_pass_rate']:.0%} of {ie['applicable_cases']} cases, {ie['distinct_phrases']} distinct phrase(s)")
+                    print(f"Insufficient-evidence protocol: {fmt(ie['protocol_pass_rate'], '.0%')} of {ie['applicable_cases']} cases, {ie['distinct_phrases']} distinct phrase(s)")
 
         print("\n" + "=" * 60)
 

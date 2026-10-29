@@ -455,7 +455,21 @@ def calculate_quality_metrics(reports_by_evaluator: dict[str, EvaluationReport])
             "other_page_count": other_page,
             "mismatch_count": mismatch,
             "not_applicable_cases": sum(1 for r in reasons if r.get("applicable") == "0"),
+            "no_text_layer_cases": sum(1 for r in reasons if r.get("cause") == "no_text_layer"),
+            # mean token coverage of mismatched citations (None when no mismatch)
+            "mismatch_mean_coverage": median_or_none([float(r["mismatch_coverage"]) for r in cited if "mismatch_coverage" in r]),
         }
+        # Scanned fixtures checked against their text-layer reference copy: OCR fidelity, kept apart
+        # from citations matched against the document's own text layer.
+        ocr = [r for r in cited if r.get("reference") == "1"]
+        if ocr:
+            ocr_total = sum(int(r["citations"]) for r in ocr)
+            out["citation"]["ocr"] = {
+                "cases": len(ocr),
+                "total_citations": ocr_total,
+                "page_match_rate": sum(int(r.get("page_match", "0")) for r in ocr) / ocr_total if ocr_total else None,
+                "mismatch_count": sum(int(r.get("mismatch", "0")) for r in ocr),
+            }
 
     rep = reports_by_evaluator.get("InsufficientEvidenceEvaluator")
     if rep and rep.scores:

@@ -1,0 +1,90 @@
+[
+  {
+    "use_case": "001",
+    "path": "review-item-processor/evals/ko/examples/fixtures/image/use_case_001_privacy_policy_review/심사대상_가온누리투어_개인정보_처리방침.pdf",
+    "sha256": "0cba4c122ab2da6ae50faa92752644704e8bf21f6740ace4ead0881cb149d3d2",
+    "size_bytes": 2656095,
+    "pages": 4,
+    "variant": "imgpdf"
+  },
+  {
+    "use_case": "001",
+    "path": "review-item-processor/evals/ko/examples/fixtures/image/use_case_001_privacy_policy_review/심사대상_가온누리투어_개인정보_처리방침_p01.png",
+    "sha256": "7b34c0339cabaf324459373a748a5a408ee03c0c5491d2fec4a7505859f3f16e",
+    "size_bytes": 884087,
+    "pages": 1,
+    "variant": "png"
+  },
+  {
+    "use_case": "001",
+    "path": "review-item-processor/evals/ko/examples/fixtures/image/use_case_001_privacy_policy_review/심사대상_가온누리투어_개인정보_처리방침_p02.png",
+    "sha256": "8e9427f4f837e9f8a7b0ab62f738253206978e183ed77937599cbeb25f794b52",
+    "size_bytes": 933306,
+    "pages": 1,
+    "variant": "png"
+  },
+  {
+    "use_case": "001",
+    "path": "review-item-processor/evals/ko/examples/fixtures/image/use_case_001_privacy_policy_review/심사대상_가온누리투어_개인정보_처리방침_p03.png",
+    "sha256": "4205ec54ebf7a2aa7766d46341f18172459e45018bb2bcf0ede70be3a05db08b",
+    "size_bytes": 915646,
+    "pages": 1,
+    "variant": "png"
+  },
+  {
+    "use_case": "001",
+    "path": "review-item-processor/evals/ko/examples/fixtures/image/use_case_001_privacy_policy_review/심사대상_가온누리투어_개인정보_처리방침_p04.png",
+    "sha256": "637152977f8c54d27472866066a986afc14d4dfdf45fb6f10cce26702be1abd1",
+    "size_bytes": 234860,
+    "pages": 1,
+    "variant": "png"
+  },
+  {
+    "use_case": "002",
+    "path": "review-item-processor/evals/ko/examples/fixtures/image/use_case_002_building_design_summary_check/심사대상_근린생활시설_신축_설계개요서.pdf",
+    "sha256": "e1c90dd692c77982b0ba2200fd2de15ebb6e3caa16c3888742e3fd142bd43ee9",
+    "size_bytes": 804846,
+    "pages": 2,
+    "variant": "imgpdf"
+  },
+  {
+    "use_case": "002",
+    "path": "review-item-processor/evals/ko/examples/fixtures/image/use_case_002_building_design_summary_check/심사대상_근린생활시설_신축_설계개요서_p01.png",
+    "sha256": "4689d793b0b256a95d5430d751cd9d410121f85df96682c5592fdd25a65d88b8",
+    "size_bytes": 504273,
+    "pages": 1,
+    "variant": "png"
+  },
+  {
+    "use_case": "002",
+    "path": "review-item-processor/evals/ko/examples/fixtures/image/use_case_002_building_design_summary_check/심사대상_근린생활시설_신축_설계개요서_p02.png",
+    "sha256": "21331cf60626561c8ea3c79c0c8dfdb0643f2948d7eba3dfb55811132cd1326f",
+    "size_bytes": 196339,
+    "pages": 1,
+    "variant": "png"
+  },
+  {
+    "use_case": "003",
+    "path": "review-item-processor/evals/ko/examples/fixtures/image/use_case_003_risk_assessment_report/심사대상_프레스공정_위험성평가_결과서.pdf",
+    "sha256": "d006b4f0bb0194b8f56d203a844c52249ffeeeab3fd176fc02d87eef1be90c93",
+    "size_bytes": 1198596,
+    "pages": 2,
+    "variant": "imgpdf"
+  },
+  {
+    "use_case": "003",
+    "path": "review-item-processor/evals/ko/examples/fixtures/image/use_case_003_risk_assessment_report/심사대상_프레스공정_위험성평가_결과서_p01.png",
+    "sha256": "b28c0532ef6bfd60b3b280005d3649ff0c08a3f6b8d84e3121f5edb63ea38e39",
+    "size_bytes": 677713,
+    "pages": 1,
+    "variant": "png"
+  },
+  {
+    "use_case": "003",
+    "path": "review-item-processor/evals/ko/examples/fixtures/image/use_case_003_risk_assessment_report/심사대상_프레스공정_위험성평가_결과서_p02.png",
+    "sha256": "539933e3cdc8a52963ec909c2721e31a5f63028505ebed62cf0a8fcb8dc26ef8",
+    "size_bytes": 606393,
+    "pages": 1,
+    "variant": "png"
+  }
+]
