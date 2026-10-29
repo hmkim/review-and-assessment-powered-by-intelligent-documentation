@@ -480,9 +480,17 @@ def calculate_quality_metrics(reports_by_evaluator: dict[str, EvaluationReport])
         for i in applicable_idx:
             phrase = reasons[i].get("phrase", "")
             phrases[phrase] = phrases.get(phrase, 0) + 1
+        def _rate(key: str) -> float | None:
+            idx = [i for i in applicable_idx if key in reasons[i]]
+            return (sum(reasons[i][key] == "1" for i in idx) / len(idx)) if idx else None
+
         out["insufficient_evidence"] = {
             "applicable_cases": len(applicable_idx),
             "protocol_pass_rate": (sum(passes[i] for i in applicable_idx) / len(applicable_idx)) if applicable_idx else None,
+            "result_fail_rate": _rate("result_fail"),
+            "low_confidence_rate": _rate("low_confidence"),
+            "standard_phrase_rate": _rate("standard_phrase"),
+            "empty_extracted_rate": _rate("empty_extracted"),
             "distinct_phrases": len(phrases),
             "phrases": phrases,
         }

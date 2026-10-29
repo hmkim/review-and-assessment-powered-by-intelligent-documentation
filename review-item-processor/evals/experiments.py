@@ -235,7 +235,7 @@ def create_quality_experiment(
         ShortExplanationLengthEvaluator(max_chars=max_short_chars),
         JsonParseEvaluator(),
         CitationFidelityEvaluator(fixtures_dir=fixtures_dir),
-        InsufficientEvidenceEvaluator(),
+        InsufficientEvidenceEvaluator(language=language),
     ]
     if with_llm_judge:
         evaluators.append(

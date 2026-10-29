@@ -195,14 +195,25 @@ def test_citation_scanned_pdf_checked_against_reference(scanned_pdf, korean_pdf)
 
 # --------------------------------------------------------------------------- insufficient evidence
 def test_insufficient_evidence_protocol():
-    ev = InsufficientEvidenceEvaluator()
+    ev = InsufficientEvidenceEvaluator(language="ko")
     expected = {"result": "fail", "insufficient_evidence": True}
-    good = ev.evaluate(_case(_output(confidence=0.4, extracted_text="", short_explanation="근거 불충분"), expected))[0]
-    bad = ev.evaluate(_case(_output(confidence=0.9, extracted_text=["x"]), expected))[0]
+    # Citing the passage that shows the gap is allowed: extractedText is reported, not required empty.
+    good = ev.evaluate(_case(_output(confidence=0.4, extracted_text=["승인:   (공란)"], short_explanation="근거 불충분: 승인일 없음"), expected))[0]
+    synonym = ev.evaluate(_case(_output(confidence=0.4, extracted_text="", short_explanation="증거 불충분: 승인일 없음"), expected))[0]
+    bad = ev.evaluate(_case(_output(confidence=0.9, extracted_text=["x"], short_explanation="승인란 공란으로 불일치"), expected))[0]
     skip = ev.evaluate(_case(_output()))[0]
-    assert good.test_pass and parse_reason(good.reason)["phrase"] == "근거 불충분"
+    g = parse_reason(good.reason)
+    assert good.test_pass and g["phrase"] == "근거 불충분: 승인일 없음" and g["empty_extracted"] == "0" and g["standard_phrase"] == "1"
+    assert not synonym.test_pass and parse_reason(synonym.reason)["standard_phrase"] == "0"
     assert not bad.test_pass and bad.score == pytest.approx(1 / 3)
     assert skip.test_pass and parse_reason(skip.reason)["applicable"] == "0"
+
+
+def test_insufficient_evidence_unknown_language_skips_phrase_check():
+    ev = InsufficientEvidenceEvaluator(language="fr")
+    expected = {"result": "fail", "insufficient_evidence": True}
+    r = ev.evaluate(_case(_output(confidence=0.4, short_explanation="Preuves insuffisantes"), expected))[0]
+    assert r.test_pass and "standard_phrase" not in parse_reason(r.reason)
 
 
 # --------------------------------------------------------------------------- aggregation

@@ -346,12 +346,32 @@ class CitationFidelityEvaluator(Evaluator):
 class InsufficientEvidenceEvaluator(Evaluator):
     """
     For cases marked `expected_output.insufficient_evidence: true`, checks the prompt's
-    protocol: result "fail", confidence <= 0.49, empty extractedText. The phrase the
-    model chose for "insufficient evidence" is recorded in the reason so the report
-    can show how consistent it is across runs. Other cases are not applicable.
+    protocol: result "fail", confidence <= 0.49, and `shortExplanation` opening with the
+    standard "insufficient evidence" phrase of the output language. Whether extractedText
+    is empty is still recorded (`empty_extracted`) but is not a pass criterion: on the
+    Citations path the field is filled from the citation blocks Bedrock attaches to the
+    explanation, which the model cannot suppress, and the prompt now asks it to cite the
+    passage that shows the gap. The phrase itself is kept in the reason so the report can
+    show how consistent it is across runs. Other cases are not applicable.
     """
 
     MAX_CONFIDENCE = 0.49
+    # Standard opening phrases per language (the prompt names these three; any other
+    # language is accepted with the prefix check reported as not applicable).
+    STANDARD_PHRASES = {
+        "ko": ("근거 불충분",),
+        "ja": ("証拠不十分",),
+        "en": ("insufficient evidence",),
+    }
+
+    def __init__(self, language: str | None = None):
+        self.language = language
+
+    def _starts_with_standard(self, phrase: str) -> bool | None:
+        if not self.language or self.language not in self.STANDARD_PHRASES:
+            return None
+        head = phrase.strip().lower().lstrip("「『\"'“‘[(（【")
+        return any(head.startswith(p.lower()) for p in self.STANDARD_PHRASES[self.language])
 
     def evaluate(self, evaluation_case: EvaluationData) -> list[EvaluationOutput]:
         expected = evaluation_case.expected_output or {}
@@ -360,16 +380,20 @@ class InsufficientEvidenceEvaluator(Evaluator):
         out: ReviewAgentOutput | None = evaluation_case.actual_output
         if out is None:
             return [EvaluationOutput(score=0.0, test_pass=False, reason="applicable=1|cause=no_output", label="insufficient_evidence")]
+        raw_phrase = out.short_explanation or ""
+        standard = self._starts_with_standard(raw_phrase)
         checks = {
             "result_fail": out.result == "fail",
             "low_confidence": (out.confidence or 0.0) <= self.MAX_CONFIDENCE,
-            "empty_extracted": not _as_list(out.extracted_text),
         }
+        if standard is not None:
+            checks["standard_phrase"] = standard
+        empty_extracted = not _as_list(out.extracted_text)
         score = sum(checks.values()) / len(checks)
-        phrase = (out.short_explanation or "").replace("|", "/").replace("\n", " ")
+        phrase = raw_phrase.replace("|", "/").replace("\n", " ")
         reason = (
             "applicable=1|" + "|".join(f"{k}={int(v)}" for k, v in checks.items())
-            + f"|confidence={out.confidence:.2f}|phrase={phrase}"
+            + f"|empty_extracted={int(empty_extracted)}|confidence={out.confidence:.2f}|phrase={phrase}"
         )
         return [EvaluationOutput(score=score, test_pass=all(checks.values()), reason=reason, label="insufficient_evidence")]
 

@@ -181,7 +181,7 @@ def aggregate_suite(suite: str, by_run: dict[int, dict]) -> dict:
             insuf["applicable"] += 1
             passed = rec["evaluations"]["InsufficientEvidenceEvaluator"].get("pass")
             insuf["protocol_pass"] += int(bool(passed))
-            for comp in ("result_fail", "low_confidence", "empty_extracted"):
+            for comp in ("result_fail", "low_confidence", "standard_phrase", "empty_extracted"):
                 if d.get(comp) == "0":
                     insuf["fail_components"][comp] += 1
             phrase = rec["agent_output"].get("short_explanation", "")

@@ -955,8 +955,8 @@ Do NOT use your pre-trained general knowledge or make assumptions.
 - Set "result": "fail"
 - Set "confidence": 0.40 (or lower if extremely uncertain)
 - In "explanation", clearly state in {language_name} that the required information was not found and describe what specific information is missing
-- In "shortExplanation", write the phrase for "insufficient evidence" in {language_name}
-- Set "extractedText": "" (empty string)
+- In "shortExplanation", start with the standard phrase for "insufficient evidence" in {language_name}, then a colon and what is missing (English: "Insufficient evidence: ...", Japanese: "証拠不十分: ...", Korean: "근거 불충분: ...")
+- In "extractedText", quote only passages that show the information is absent or incomplete (an empty field, the line where the value should appear); leave it empty if there is no such passage. Do not quote unrelated text
 </INSUFFICIENT_INFORMATION_HANDLING>
 </CRITICAL_RULES>
 
@@ -1036,8 +1036,8 @@ Do NOT use your pre-trained general knowledge or make assumptions.
 - Set "result": "fail"
 - Set "confidence": 0.40 (or lower if extremely uncertain)
 - In "explanation", clearly state in {language_name} that the required information was not found and describe what specific information is missing
-- In "shortExplanation", write the phrase for "insufficient evidence" in {language_name}
-- Set "citations": [] (empty array)
+- In "shortExplanation", start with the standard phrase for "insufficient evidence" in {language_name}, then a colon and what is missing (English: "Insufficient evidence: ...", Japanese: "証拠不十分: ...", Korean: "근거 불충분: ...")
+- Cite only passages that show the information is absent or incomplete (an empty field, the line where the value should appear). Do not cite unrelated text
 </INSUFFICIENT_INFORMATION_HANDLING>
 </CRITICAL_RULES>
 
@@ -1171,7 +1171,7 @@ Do NOT use your pre-trained general knowledge or make assumptions.
 - Set "result": "fail"
 - Set "confidence": 0.40 (or lower if extremely uncertain)
 - In "explanation", clearly state in {language_name} that the required visual information was not found and describe what specific visual elements are missing
-- In "shortExplanation", write the phrase for "insufficient evidence" in {language_name}
+- In "shortExplanation", start with the standard phrase for "insufficient evidence" in {language_name}, then a colon and what is missing (English: "Insufficient evidence: ...", Japanese: "証拠不十分: ...", Korean: "근거 불충분: ...")
 - Set "usedImageIndexes": [] (empty array)
 </INSUFFICIENT_INFORMATION_HANDLING>
 </CRITICAL_RULES>
