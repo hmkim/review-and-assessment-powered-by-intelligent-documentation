@@ -33,7 +33,7 @@ export class FeedbackAggregator extends Construct {
     const aggregationDays = props.aggregationDays || 7;
     const scheduleExpression = props.scheduleExpression || "cron(0 2 * * ? *)";
     const summaryModelId =
-      props.summaryModelId || "global.anthropic.claude-sonnet-4-6";
+      props.summaryModelId || "global.anthropic.claude-sonnet-5-5";
 
     // Security group
     this.securityGroup = new ec2.SecurityGroup(this, "SecurityGroup", {

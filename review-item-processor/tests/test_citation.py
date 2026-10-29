@@ -103,6 +103,87 @@ def test_extract_citations_empty_on_non_json():
 
 
 # ---------------------------------------------------------------------------
+# citationsContent blocks (Converse Citations API, non-streaming)
+# ---------------------------------------------------------------------------
+
+
+def _citation_block(generated: str, *sources: str) -> dict:
+    """A citationsContent block as returned by Converse: generated text + cited spans."""
+    return {
+        "citationsContent": {
+            "content": [{"text": generated}],
+            "citations": [
+                {
+                    "title": "policy",
+                    "sourceContent": [{"text": src}],
+                    "location": {"documentPage": {"documentIndex": 0, "start": 3, "end": 4}},
+                }
+                for src in sources
+            ],
+        }
+    }
+
+
+def _split_message() -> dict:
+    """The model's JSON answer split across text and citationsContent blocks."""
+    return {
+        "content": [
+            {"text": '<<JSON_START>>{"result": "fail", "explanation": "제9조에는 '},
+            _citation_block(
+                "성명: 김가온 / 직위: 경영지원본부장",
+                "개인정보 보호책임자 성명: 김가온 / 직위: 경영지원본부장",
+            ),
+            {"text": '으로 기재되어 있으나 연락처가 없다.", "extractedText": "제9조 표", '},
+            {"text": '"pageNumber": 3}<<JSON_END>>'},
+        ]
+    }
+
+
+def test_json_is_reassembled_across_citation_blocks():
+    """Cited sentences inside citationsContent must stay in the explanation text."""
+    parsed, combined = agent._extract_json_from_message(_split_message())
+    assert parsed is not None
+    assert parsed["explanation"] == (
+        "제9조에는 성명: 김가온 / 직위: 경영지원본부장으로 기재되어 있으나 연락처가 없다."
+    )
+    assert "<<JSON_END>>" in combined
+
+
+def test_extracted_text_comes_from_citation_sources():
+    """extractedText is the verbatim cited source span(s), deduplicated, in order."""
+    message = _split_message()
+    # a second block citing the same span and one new span
+    message["content"].insert(
+        3,
+        _citation_block(
+            "쿠키 안내",
+            "개인정보 보호책임자 성명: 김가온 / 직위: 경영지원본부장",
+            "회사는 쿠키를 사용합니다.",
+        ),
+    )
+    assert _extract_citations_text(message) == [
+        "개인정보 보호책임자 성명: 김가온 / 직위: 경영지원본부장",
+        "회사는 쿠키를 사용합니다.",
+    ]
+
+
+def test_extracted_text_falls_back_to_json_field_without_citation_blocks():
+    """Without citation blocks the model's own extractedText string is kept."""
+    message = _message_with_text(
+        '<<JSON_START>>{"result": "fail", "extractedText": "제9조 표"}<<JSON_END>>'
+    )
+    assert _extract_citations_text(message) == ["제9조 표"]
+
+
+def test_claude_5_models_omit_temperature():
+    """Claude 5.x rejects `temperature`; the registry flags it so the agent omits it."""
+    assert ModelConfig.create("global.anthropic.claude-sonnet-5-5").supports_temperature is False
+    assert ModelConfig.create("us.anthropic.claude-sonnet-5-5").supports_temperature is False
+    assert ModelConfig.create(CITATION_MODEL_ID).supports_temperature is True
+    assert ModelConfig.create(agent.DEFAULT_DOCUMENT_MODEL_ID).supports_citation is True
+
+
+# ---------------------------------------------------------------------------
 # Opt-in Bedrock integration test (real API call, requires AWS credentials)
 # ---------------------------------------------------------------------------
 

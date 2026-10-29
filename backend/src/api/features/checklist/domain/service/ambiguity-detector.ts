@@ -15,7 +15,7 @@ import {
 const BEDROCK_REGION = process.env.BEDROCK_REGION || "us-west-2";
 const MODEL_ID =
   process.env.DOCUMENT_PROCESSING_MODEL_ID ||
-  "global.anthropic.claude-sonnet-4-6";
+  "global.anthropic.claude-sonnet-5-5";
 
 const getAmbiguityDetectionPrompt = (
   languageName: string,

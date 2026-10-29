@@ -30,6 +30,9 @@ export const parameters = {
   // 注意: モデルIDのプレフィックス（us., eu., apac.など）はbedrockRegionに対応している必要があります
   // 詳細: https://docs.aws.amazon.com/bedrock/latest/userguide/inference-profiles-support.html
   // ---------------------------------------------------
+  // documentProcessingModelId: "global.anthropic.claude-sonnet-5-5", // Claude Sonnet 5.5 (Global, default)
+  // documentProcessingModelId: "us.anthropic.claude-sonnet-5-5", // Claude Sonnet 5.5 (US)
+  // documentProcessingModelId: "eu.anthropic.claude-sonnet-5-5", // Claude Sonnet 5.5 (EU)
   // documentProcessingModelId: "global.anthropic.claude-sonnet-4-6", // Claude Sonnet 4.6 (Global)
   // documentProcessingModelId: "us.anthropic.claude-sonnet-4-6", // Claude Sonnet 4.6 (US)
   // documentProcessingModelId: "eu.anthropic.claude-sonnet-4-6", // Claude Sonnet 4.6 (EU)
@@ -47,6 +50,7 @@ export const parameters = {
   // documentProcessingModelId: "apac.anthropic.claude-3-7-sonnet-20250219-v1:0",  // 日本リージョンでClaude利用する場合
   // documentProcessingModelId: "mistral.mistral-large-2407-v1:0", // Mistral利用する場合
   // documentProcessingModelId: "us.amazon.nova-2-omni-v1:0", // Nova 2 Omni
+  // imageReviewModelId: "global.anthropic.claude-sonnet-5-5", // Claude Sonnet 5.5 (Global, default)
   // imageReviewModelId: "global.anthropic.claude-sonnet-4-6", // Claude Sonnet 4.6 (Global)
   // imageReviewModelId: "us.anthropic.claude-sonnet-4-6", // Claude Sonnet 4.6 (US)
   // imageReviewModelId: "eu.anthropic.claude-sonnet-4-6", // Claude Sonnet 4.6 (EU)
