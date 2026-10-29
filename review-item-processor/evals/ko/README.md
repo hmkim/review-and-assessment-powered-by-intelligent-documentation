@@ -30,14 +30,14 @@ D4 fixture(래스터화 PDF·PNG, 약 9 MB)와 D2/D3 fixture(law.go.kr 첨부 �
 
 ## 문서 코퍼스와 세트
 
-| 코퍼스 | 문서 | 노리는 것 | 세트 파일 | 케이스 |
-| --- | --- | --- | --- | --- |
-| D1 | `examples/ko`의 심사 대상 PDF 3건(Noto Sans KR 임베딩, 텍스트 레이어 정상) | 기준선 | `examples/korean_examples_suite.json` | 40 (fail 15 / pass 22 / 근거 부족 3) |
-| D4 | D1 심사 대상을 300 dpi로 래스터화한 스캔 PDF(텍스트 레이어 없음)와 쪽별 PNG | 스캔 PDF 경로와 이미지 경로의 한국어 판독·판정 | `examples/korean_examples_image_suite.json` | 30 (IMGPDF 15 / PNG 15, fail 항목만) |
-| D2 | 「사업장 위험성평가에 관한 지침」 고시 전문 PDF 18쪽(law.go.kr 첨부). 텍스트 레이어의 띄어쓰기가 대부분 소실 | 띄어쓰기 없는 텍스트에서의 인용 정합·설명 가독성 | `corpus/corpus_suite.json` | 6 (pass 3 / fail 2 / 근거 부족 1) |
-| D3 | 같은 고시의 별표·별지 서식 4건, HWP 서식의 law.go.kr PDF 변환본 | 한국 공공문서의 실제 입력 경로(서식 구조 점검) | `corpus/corpus_suite.json` | 9 (pass 5 / fail 3 / 근거 부족 1) |
-| D5 | 생성한 한·영 혼합 IT 운영·재해복구(DR) 계획서: RTO/RPO, 99.9 %, ≤ 300 ms, ①②③, 「법령」, 제품명 | 토큰화·인용 경계 | `corpus/corpus_suite.json` | 10 (pass 6 / fail 3 / 근거 부족 1) |
-| D6 | 185쪽 장문 PDF | 분할 추출의 시간·비용 | — | 계획상 선택 항목, 미구성 |
+| 코퍼스 | 문서                                                                                                         | 노리는 것                                        | 세트 파일                                   | 케이스                               |
+| ------ | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------ | ------------------------------------------- | ------------------------------------ |
+| D1     | `examples/ko`의 심사 대상 PDF 3건(Noto Sans KR 임베딩, 텍스트 레이어 정상)                                   | 기준선                                           | `examples/korean_examples_suite.json`       | 40 (fail 15 / pass 22 / 근거 부족 3) |
+| D4     | D1 심사 대상을 300 dpi로 래스터화한 스캔 PDF(텍스트 레이어 없음)와 쪽별 PNG                                  | 스캔 PDF 경로와 이미지 경로의 한국어 판독·판정   | `examples/korean_examples_image_suite.json` | 30 (IMGPDF 15 / PNG 15, fail 항목만) |
+| D2     | 「사업장 위험성평가에 관한 지침」 고시 전문 PDF 18쪽(law.go.kr 첨부). 텍스트 레이어의 띄어쓰기가 대부분 소실 | 띄어쓰기 없는 텍스트에서의 인용 정합·설명 가독성 | `corpus/corpus_suite.json`                  | 6 (pass 3 / fail 2 / 근거 부족 1)    |
+| D3     | 같은 고시의 별표·별지 서식 4건, HWP 서식의 law.go.kr PDF 변환본                                              | 한국 공공문서의 실제 입력 경로(서식 구조 점검)   | `corpus/corpus_suite.json`                  | 9 (pass 5 / fail 3 / 근거 부족 1)    |
+| D5     | 생성한 한·영 혼합 IT 운영·재해복구(DR) 계획서: RTO/RPO, 99.9 %, ≤ 300 ms, ①②③, 「법령」, 제품명              | 토큰화·인용 경계                                 | `corpus/corpus_suite.json`                  | 10 (pass 6 / fail 3 / 근거 부족 1)   |
+| D6     | 185쪽 장문 PDF                                                                                               | 분할 추출의 시간·비용                            | —                                           | 계획상 선택 항목, 미구성             |
 
 합계 95 케이스. D3는 계획서의 "HWP→PDF 변환 도구" 전제 대신 law.go.kr가 HWP 서식과 함께 배포하는 PDF 변환본을 사용했습니다(변환 도구 불필요, 실제 사용자가 받는 파일과 동일).
 
@@ -55,14 +55,14 @@ D4 fixture(래스터화 PDF·PNG, 약 9 MB)와 D2/D3 fixture(law.go.kr 첨부 �
 
 `--experiment quality`는 기존 정확도·확신도 보정 evaluator에 다음을 더합니다. 모두 `evals/quality_evaluators.py`에 있고 언어 매개변수를 받으므로 ja/en 세트에도 쓸 수 있습니다.
 
-| Evaluator | 측정 내용 | 통과 기준(케이스) | 세트 수용 기준 |
-| --- | --- | --- | --- |
-| `OutputLanguageEvaluator(language="ko")` | `explanation`·`shortExplanation`의 문자 종류 집계. 가나(일본어) 혼입은 즉시 실패, 영문 약어·URL·단위는 중립 처리 | 한글 비율 ≥ 70%, 가나 0 | 준수율 100% |
-| `JsonParseEvaluator` | 에이전트가 JSON 파싱 폴백(`Failed to analyze JSON parse` 등)을 반환했는지 | 폴백 아님 | 100% |
-| `ShortExplanationLengthEvaluator(max_chars=80)` | 프롬프트의 "80자 이내" 규칙 | 1~80자 | 80자 초과 ≤ 5%, 분포(중앙값·p95) 보고 |
-| `CitationFidelityEvaluator` | `extractedText`의 각 인용이 PDF 텍스트 레이어(pypdf)에 실제로 있는지. 문자·숫자만 남기는 정규화 후 비교하고, 에이전트가 말한 `pageNumber`에서 찾으면 `page_match`, 다른 쪽이면 `other_page`, 없으면 `mismatch`. 불일치 인용에는 토큰 포함율(`mismatch_coverage`: 인용의 단어·숫자 중 문서에 있는 비율)을 함께 기록해 재구성(≈1.0)과 환각(낮음)을 구분. 스캔 fixture는 `citation_reference_pdf`와 비교(OCR 정합), 참조가 없으면 평가 제외. 이미지 심사는 해당 없음 | `mismatch` 0 | mismatch 0건 또는 건별 원인 문서화 |
-| `InsufficientEvidenceEvaluator` | 근거 부족 케이스의 규약 준수(fail / ≤ 0.49 / 빈 extractedText)와 사용된 문구 수집 | 3항목 모두 충족 | 규약 100%, 문구 2종 이하 |
-| `OutputEvaluator`(LLM-as-judge) | 설명의 명확성·근거·완결성·언어·관련성 | — | 평균 점수 보고 |
+| Evaluator                                       | 측정 내용                                                                                                                                                                                                                                                                                                                                                                                                                                                         | 통과 기준(케이스)       | 세트 수용 기준                        |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | ------------------------------------- |
+| `OutputLanguageEvaluator(language="ko")`        | `explanation`·`shortExplanation`의 문자 종류 집계. 가나(일본어) 혼입은 즉시 실패, 영문 약어·URL·단위는 중립 처리                                                                                                                                                                                                                                                                                                                                                  | 한글 비율 ≥ 70%, 가나 0 | 준수율 100%                           |
+| `JsonParseEvaluator`                            | 에이전트가 JSON 파싱 폴백(`Failed to analyze JSON parse` 등)을 반환했는지                                                                                                                                                                                                                                                                                                                                                                                         | 폴백 아님               | 100%                                  |
+| `ShortExplanationLengthEvaluator(max_chars=80)` | 프롬프트의 "80자 이내" 규칙                                                                                                                                                                                                                                                                                                                                                                                                                                       | 1~80자                  | 80자 초과 ≤ 5%, 분포(중앙값·p95) 보고 |
+| `CitationFidelityEvaluator`                     | `extractedText`의 각 인용이 PDF 텍스트 레이어(pypdf)에 실제로 있는지. 문자·숫자만 남기는 정규화 후 비교하고, 에이전트가 말한 `pageNumber`에서 찾으면 `page_match`, 다른 쪽이면 `other_page`, 없으면 `mismatch`. 불일치 인용에는 토큰 포함율(`mismatch_coverage`: 인용의 단어·숫자 중 문서에 있는 비율)을 함께 기록해 재구성(≈1.0)과 환각(낮음)을 구분. 스캔 fixture는 `citation_reference_pdf`와 비교(OCR 정합), 참조가 없으면 평가 제외. 이미지 심사는 해당 없음 | `mismatch` 0            | mismatch 0건 또는 건별 원인 문서화    |
+| `InsufficientEvidenceEvaluator`                 | 근거 부족 케이스의 규약 준수(fail / ≤ 0.49 / 빈 extractedText)와 사용된 문구 수집                                                                                                                                                                                                                                                                                                                                                                                 | 3항목 모두 충족         | 규약 100%, 문구 2종 이하              |
+| `OutputEvaluator`(LLM-as-judge)                 | 설명의 명확성·근거·완결성·언어·관련성                                                                                                                                                                                                                                                                                                                                                                                                                             | —                       | 평균 점수 보고                        |
 
 집계 결과는 결과 JSON의 `aggregated_metrics.Quality`에, 요약은 실행 끝의 `OUTPUT QUALITY` 절에 출력됩니다. 정확도 지표(재현율·정밀도·고확신 오판)는 기존과 같이 `AccuracyEvaluator` / `ConfidenceCalibrationEvaluator` 절에 나옵니다.
 
@@ -100,3 +100,13 @@ evals/ko/
 ```
 
 단위 테스트: `uv run --extra evals --extra dev pytest tests/test_quality_evaluators.py` (Bedrock 호출 없음).
+
+## 반복 실행 집계
+
+여러 번 실행한 결과 JSON(`run{N}_{suite}.json`)을 한 디렉터리에 모아 두고 다음을 실행하면 Q1~Q7·Q11 표(`summary.md`)와 기계용 `summary.json`이 생성됩니다. 결정성(Q6)은 같은 케이스의 run 간 `result` 일치로 계산합니다.
+
+```bash
+python evals/ko/aggregate_runs.py --results-dir <결과 디렉터리> --out <출력 디렉터리>
+```
+
+2026-10-29 3회 실행 결과와 해석은 [`docs/ko/m4-quality-report.md`](../../../docs/ko/m4-quality-report.md)에 있습니다.
