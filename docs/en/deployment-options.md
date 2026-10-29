@@ -33,8 +33,8 @@ Most options map directly to the CDK parameters described in [Parameter Customiz
 | `--closed-network`               | Deploy in fully closed network mode (true/false, default: false). Maps to `closedNetwork`; see [Closed / Private Network Deployment](#closed--private-network-deployment). |
 | `--agentcore-network-mode`       | AgentCore Runtime network mode when closed, `PUBLIC` or `VPC` (default: PUBLIC). Maps to `agentCoreNetworkMode`.    |
 | `--bedrock-region`               | Region to use for Amazon Bedrock (default: us-west-2). Maps to `bedrockRegion`.                                     |
-| `--document-model`               | AI model ID for document processing (default: global.anthropic.claude-sonnet-4-6). Maps to `documentProcessingModelId`. |
-| `--image-model`                  | AI model ID for image review processing (default: global.anthropic.claude-sonnet-4-6). Maps to `imageReviewModelId`. |
+| `--document-model`               | AI model ID for document processing (default: global.anthropic.claude-sonnet-5-5). Maps to `documentProcessingModelId`. |
+| `--image-model`                  | AI model ID for image review processing (default: global.anthropic.claude-sonnet-5-5). Maps to `imageReviewModelId`. |
 | `--disable-ipv6`                 | Disable IPv6 support in the frontend WAF and CloudFront.                                                            |
 | `--repo-url`                     | URL of the repository to deploy.                                                                                    |
 | `--branch`                       | Branch name to deploy.                                                                                              |
@@ -85,6 +85,9 @@ This application uses Strands agents with tools such as file reading, so you mus
 **Examples of tool-use supported models**:
 
 - `global.anthropic.claude-opus-4-6-v1` (Claude Opus 4.6 Global)
+- `global.anthropic.claude-sonnet-5-5` (Claude Sonnet 5.5 Global, default)
+- `us.anthropic.claude-sonnet-5-5` (Claude Sonnet 5.5 US)
+- `eu.anthropic.claude-sonnet-5-5` (Claude Sonnet 5.5 EU)
 - `global.anthropic.claude-sonnet-4-6` (Claude Sonnet 4.6 Global)
 - `us.anthropic.claude-sonnet-4-6` (Claude Sonnet 4.6 US)
 - `eu.anthropic.claude-sonnet-4-6` (Claude Sonnet 4.6 EU)
@@ -112,7 +115,7 @@ This application uses Strands agents with tools such as file reading, so you mus
 
 ```typescript
 export const parameters = {
-  documentProcessingModelId: "global.anthropic.claude-sonnet-4-6", // Claude Sonnet 4.6 (Global)
+  documentProcessingModelId: "global.anthropic.claude-sonnet-5-5", // Claude Sonnet 5.5 (Global)
   bedrockRegion: "us-west-2", // Oregon region
   // ...
 };
@@ -120,7 +123,7 @@ export const parameters = {
 
 ### Per-Checklist-Item Model Selection
 
-By default, each checklist item can be assigned a specific AI model from the `availableModels` list. The default set includes Claude Opus 4.6, Sonnet 4.6, Haiku 4.5, and Sonnet 4 (Global). When no model is selected for an item, `documentProcessingModelId` (default: `global.anthropic.claude-sonnet-4-6`) is used for documents, and `imageReviewModelId` (default: `global.anthropic.claude-sonnet-4-6`) is used for images.
+By default, each checklist item can be assigned a specific AI model from the `availableModels` list. The default set includes Claude Sonnet 5.5, Opus 4.6, Sonnet 4.6, Haiku 4.5, and Sonnet 4 (Global). When no model is selected for an item, `documentProcessingModelId` (default: `global.anthropic.claude-sonnet-5-5`) is used for documents, and `imageReviewModelId` (default: `global.anthropic.claude-sonnet-5-5`) is used for images.
 
 To customize the available models:
 
@@ -128,6 +131,7 @@ To customize the available models:
 export const parameters = {
   availableModels: [
     { modelId: "global.anthropic.claude-opus-4-6-v1", displayName: "Claude Opus 4.6 (Global)" },
+    { modelId: "global.anthropic.claude-sonnet-5-5", displayName: "Claude Sonnet 5.5 (Global)" },
     { modelId: "global.anthropic.claude-sonnet-4-6", displayName: "Claude Sonnet 4.6 (Global)" },
     { modelId: "global.anthropic.claude-haiku-4-5-20251001-v1:0", displayName: "Claude Haiku 4.5 (Global)" },
     { modelId: "global.anthropic.claude-sonnet-4-20250514-v1:0", displayName: "Claude Sonnet 4 (Global)" },

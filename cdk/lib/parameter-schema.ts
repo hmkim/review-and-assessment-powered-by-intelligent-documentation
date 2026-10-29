@@ -48,12 +48,12 @@ const parameterSchema = z.object({
   // AI モデル設定
   documentProcessingModelId: z
     .string()
-    .default("global.anthropic.claude-sonnet-4-6")
+    .default("global.anthropic.claude-sonnet-5-5")
     .describe("ドキュメント処理に使用するAIモデルID"),
 
   imageReviewModelId: z
     .string()
-    .default("global.anthropic.claude-sonnet-4-6")
+    .default("global.anthropic.claude-sonnet-5-5")
     .describe("画像レビューに使用するAIモデルID"),
 
   // チェックリスト項目ごとに選択可能なモデル一覧
@@ -65,6 +65,10 @@ const parameterSchema = z.object({
       }),
     )
     .default([
+      {
+        modelId: "global.anthropic.claude-sonnet-5-5",
+        displayName: "Claude Sonnet 5.5 (Global)",
+      },
       {
         modelId: "global.anthropic.claude-opus-4-6-v1",
         displayName: "Claude Opus 4.6 (Global)",

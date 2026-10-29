@@ -90,9 +90,14 @@ import { getDatabaseUrl } from "../utils/database";
 // ============================================================================
 
 /** Default AI model for generating feedback summaries (cross-region inference) */
-const DEFAULT_SUMMARY_MODEL_ID = "global.anthropic.claude-sonnet-4-6";
+const DEFAULT_SUMMARY_MODEL_ID = "global.anthropic.claude-sonnet-5-5";
 
-/** Model ID for CountTokens API (must be single-region, no prefix) */
+/**
+ * Model ID for CountTokens API (must be single-region, no prefix).
+ * Kept on Claude Sonnet 4.6: the CountTokens API rejects anthropic.claude-sonnet-5-5
+ * ("The provided model doesn't support counting tokens"). The count is only an estimate
+ * used for chunking, so a same-family tokenizer is sufficient.
+ */
 const COUNT_TOKENS_MODEL_ID = "anthropic.claude-sonnet-4-6";
 
 /** Maximum tokens to include in AI context (input limit) - 95% of Claude Sonnet 4's 200k context window */
