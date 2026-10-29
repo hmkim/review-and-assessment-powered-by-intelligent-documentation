@@ -364,3 +364,113 @@ def calculate_explanation_quality_metrics(report: EvaluationReport) -> dict[str,
         "low_quality_cases": low_quality_cases,
         "total_cases": len(scores),
     }
+
+
+# ============================================================================
+# Output-quality metrics (OutputLanguage / ShortExplanationLength / JsonParse /
+# CitationFidelity / InsufficientEvidence evaluators, see quality_evaluators.py)
+# ============================================================================
+
+
+def _reasons(report: EvaluationReport) -> list[dict[str, str]]:
+    from .quality_evaluators import parse_reason
+
+    return [parse_reason(r) for r in (report.reasons or [])]
+
+
+def calculate_quality_metrics(reports_by_evaluator: dict[str, EvaluationReport]) -> dict[str, Any]:
+    """
+    Aggregate the output-quality evaluators into one dictionary.
+
+    Args:
+        reports_by_evaluator: {evaluator type name: EvaluationReport}. Missing
+            evaluators are simply skipped.
+
+    Returns:
+        {
+          "language": {"compliance_rate", "foreign_letter_cases", "min_explanation_ratio", ...},
+          "short_explanation": {"median_chars", "p95_chars", "max_chars", "over_limit_rate", "limit"},
+          "json_parse": {"parse_rate", "failed_cases"},
+          "citation": {"applicable_cases", "page_match_rate", "mismatch_count", "other_page_count", "no_citation_cases"},
+          "insufficient_evidence": {"applicable_cases", "protocol_pass_rate", "phrases": {phrase: count}},
+        }
+    """
+    from .quality_evaluators import median_or_none, percentile
+
+    out: dict[str, Any] = {}
+
+    rep = reports_by_evaluator.get("OutputLanguageEvaluator")
+    if rep and rep.scores:
+        reasons = _reasons(rep)
+        passes = list(rep.test_passes or [])
+        ratios = [float(r.get("explanation_ratio", 0)) for r in reasons if "explanation_ratio" in r]
+        out["language"] = {
+            "cases": len(rep.scores),
+            "compliance_rate": sum(passes) / len(passes) if passes else 0.0,
+            "foreign_letter_cases": sum(1 for r in reasons if int(r.get("foreign_letters", "0")) > 0),
+            "min_explanation_ratio": min(ratios) if ratios else None,
+            "median_explanation_ratio": median_or_none(ratios),
+        }
+
+    rep = reports_by_evaluator.get("ShortExplanationLengthEvaluator")
+    if rep and rep.scores:
+        reasons = _reasons(rep)
+        lengths = [int(r.get("length", 0)) for r in reasons if "length" in r]
+        limit = int(reasons[0].get("max", 80)) if reasons else 80
+        out["short_explanation"] = {
+            "cases": len(lengths),
+            "limit": limit,
+            "median_chars": median_or_none(lengths),
+            "p95_chars": percentile(lengths, 0.95),
+            "max_chars": max(lengths) if lengths else None,
+            "over_limit_count": sum(1 for n in lengths if n > limit),
+            "over_limit_rate": (sum(1 for n in lengths if n > limit) / len(lengths)) if lengths else 0.0,
+            "empty_count": sum(1 for n in lengths if n == 0),
+        }
+
+    rep = reports_by_evaluator.get("JsonParseEvaluator")
+    if rep and rep.scores:
+        passes = list(rep.test_passes or [])
+        reasons = _reasons(rep)
+        out["json_parse"] = {
+            "cases": len(passes),
+            "parse_rate": sum(passes) / len(passes) if passes else 0.0,
+            "failed_cases": [r.get("cause", "unknown") for r in reasons if r.get("parsed") == "0"],
+        }
+
+    rep = reports_by_evaluator.get("CitationFidelityEvaluator")
+    if rep and rep.scores:
+        reasons = _reasons(rep)
+        applicable = [r for r in reasons if r.get("applicable") == "1"]
+        cited = [r for r in applicable if int(r.get("citations", "0")) > 0]
+        total_cit = sum(int(r.get("citations", "0")) for r in cited)
+        page_match = sum(int(r.get("page_match", "0")) for r in cited)
+        other_page = sum(int(r.get("other_page", "0")) for r in cited)
+        mismatch = sum(int(r.get("mismatch", "0")) for r in cited)
+        out["citation"] = {
+            "applicable_cases": len(applicable),
+            "no_citation_cases": sum(1 for r in applicable if r.get("cause") == "no_citation"),
+            "total_citations": total_cit,
+            "page_match_rate": page_match / total_cit if total_cit else None,
+            "other_page_count": other_page,
+            "mismatch_count": mismatch,
+            "not_applicable_cases": sum(1 for r in reasons if r.get("applicable") == "0"),
+        }
+
+    rep = reports_by_evaluator.get("InsufficientEvidenceEvaluator")
+    if rep and rep.scores:
+        reasons = _reasons(rep)
+        passes = list(rep.test_passes or [])
+        applicable_idx = [i for i, r in enumerate(reasons) if r.get("applicable") == "1"]
+        phrases: dict[str, int] = {}
+        for i in applicable_idx:
+            phrase = reasons[i].get("phrase", "")
+            phrases[phrase] = phrases.get(phrase, 0) + 1
+        out["insufficient_evidence"] = {
+            "applicable_cases": len(applicable_idx),
+            "protocol_pass_rate": (sum(passes[i] for i in applicable_idx) / len(applicable_idx)) if applicable_idx else None,
+            "distinct_phrases": len(phrases),
+            "phrases": phrases,
+        }
+
+    return out

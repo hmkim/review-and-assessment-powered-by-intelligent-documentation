@@ -150,13 +150,18 @@ def run_review_agent(
 def load_test_case_from_json(
     json_path: Path,
     fixtures_dir: Path | None = None,
+    base_dir: Path | None = None,
 ) -> Case[ReviewAgentInput, ReviewAgentOutput]:
     """
     Load a test case from JSON file.
 
     Args:
         json_path: Path to JSON file
-        fixtures_dir: Directory containing fixture files
+        fixtures_dir: Directory containing fixture files (fallback)
+        base_dir: Directory a relative `input.fixtures_dir` in the JSON is resolved
+            against (defaults to the JSON file's directory). A per-case
+            `fixtures_dir` lets a suite point at documents that live elsewhere in
+            the repository (e.g. examples/ko/...) without copying them.
 
     Returns:
         Case object for use with Strands Evals
@@ -166,13 +171,22 @@ def load_test_case_from_json(
 
     # Parse input
     input_data = data["input"]
+    case_fixtures_dir = input_data.get("fixtures_dir")
+    if case_fixtures_dir:
+        resolved = Path(case_fixtures_dir)
+        if not resolved.is_absolute():
+            resolved = (base_dir or Path(json_path).parent) / resolved
+        resolved_fixtures_dir: str | None = str(resolved.resolve())
+    else:
+        resolved_fixtures_dir = str(fixtures_dir) if fixtures_dir else None
+
     agent_input = ReviewAgentInput(
         document_paths=input_data["document_paths"],
         check_name=input_data["check_name"],
         check_description=input_data["check_description"],
         language_name=input_data.get("language_name", "日本語"),
         tool_configuration=input_data.get("tool_configuration"),
-        fixtures_dir=str(fixtures_dir) if fixtures_dir else None,
+        fixtures_dir=resolved_fixtures_dir,
     )
 
     # Parse expected output (for ground truth comparison)
@@ -215,7 +229,9 @@ def load_test_suite_from_json(
                 tmp_path = Path(tmp.name)
 
             try:
-                case = load_test_case_from_json(tmp_path, fixtures_dir=fixtures_dir)
+                case = load_test_case_from_json(
+                    tmp_path, fixtures_dir=fixtures_dir, base_dir=Path(json_path).parent
+                )
                 cases.append(case)
             finally:
                 tmp_path.unlink()

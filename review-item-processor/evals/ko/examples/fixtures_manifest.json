@@ -1,0 +1,23 @@
+[
+  {
+    "use_case": "001",
+    "path": "examples/ko/use_case_001_privacy_policy_review/심사대상_가온누리투어_개인정보_처리방침.pdf",
+    "sha256": "e4207476b2e4b125bc315903b4d642868e32d4250f6120b8c9d45529b3a37a90",
+    "size_bytes": 52899,
+    "pages": 4
+  },
+  {
+    "use_case": "002",
+    "path": "examples/ko/use_case_002_building_design_summary_check/심사대상_근린생활시설_신축_설계개요서.pdf",
+    "sha256": "653bd894b7edb304082027e8d6b157b4c276911afa017ca2d4476162c74065ea",
+    "size_bytes": 28984,
+    "pages": 2
+  },
+  {
+    "use_case": "003",
+    "path": "examples/ko/use_case_003_risk_assessment_report/심사대상_프레스공정_위험성평가_결과서.pdf",
+    "sha256": "ef40216f382af3df9777f29311a0d1b6a2d4600112cb4ffa23441fada94d8b83",
+    "size_bytes": 44247,
+    "pages": 2
+  }
+]

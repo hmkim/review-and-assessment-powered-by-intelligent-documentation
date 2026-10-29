@@ -16,12 +16,22 @@ from .evaluators import AccuracyEvaluator, ConfidenceCalibrationEvaluator
 from .experiments import (
     create_accuracy_experiment,
     create_comprehensive_experiment,
+    create_quality_experiment,
     create_tool_efficiency_experiment,
 )
 from .metrics import (
     calculate_calibration_metrics,
     calculate_explanation_quality_metrics,
+    calculate_quality_metrics,
     calculate_sklearn_metrics,
+)
+from .quality_evaluators import (
+    CitationFidelityEvaluator,
+    InsufficientEvidenceEvaluator,
+    JsonParseEvaluator,
+    OutputLanguageEvaluator,
+    ShortExplanationLengthEvaluator,
+    language_code_from_name,
 )
 from .wrapper import (
     ReviewAgentInput,
@@ -43,12 +53,20 @@ __all__ = [
     # Custom evaluators
     "AccuracyEvaluator",
     "ConfidenceCalibrationEvaluator",
+    "OutputLanguageEvaluator",
+    "ShortExplanationLengthEvaluator",
+    "JsonParseEvaluator",
+    "CitationFidelityEvaluator",
+    "InsufficientEvidenceEvaluator",
+    "language_code_from_name",
     # Experiment factories
     "create_accuracy_experiment",
     "create_comprehensive_experiment",
+    "create_quality_experiment",
     "create_tool_efficiency_experiment",
     # Post-processing metrics
     "calculate_sklearn_metrics",
     "calculate_calibration_metrics",
     "calculate_explanation_quality_metrics",
+    "calculate_quality_metrics",
 ]

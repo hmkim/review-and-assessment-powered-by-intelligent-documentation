@@ -30,8 +30,11 @@ from evals import (
     calculate_explanation_quality_metrics,
     calculate_sklearn_metrics,
     create_accuracy_experiment,
+    calculate_quality_metrics,
     create_comprehensive_experiment,
+    create_quality_experiment,
     create_tool_efficiency_experiment,
+    language_code_from_name,
     load_test_case_from_json,
     load_test_suite_from_json,
     run_review_agent,
@@ -68,9 +71,22 @@ def main():
     # Experiment type
     parser.add_argument(
         "--experiment",
-        choices=["accuracy", "tool", "comprehensive"],
+        choices=["accuracy", "tool", "comprehensive", "quality"],
         default="comprehensive",
-        help="Experiment type (default: comprehensive)",
+        help="Experiment type (default: comprehensive). 'quality' adds output-language, "
+        "shortExplanation length, JSON parse, citation fidelity and insufficient-evidence checks",
+    )
+
+    parser.add_argument(
+        "--language",
+        choices=["ko", "ja", "en"],
+        help="Expected output language for --experiment quality (default: inferred from the cases' language_name)",
+    )
+
+    parser.add_argument(
+        "--no-llm-judge",
+        action="store_true",
+        help="Skip the LLM-as-judge OutputEvaluator in --experiment quality (saves one model call per case)",
     )
 
     # Output options
@@ -115,10 +131,17 @@ def main():
 
         print(f"Using fixtures directory: {fixtures_dir}")
 
-        # Verify it exists
+        # Verify it exists (a suite whose cases all carry their own `fixtures_dir` does not need it)
         if not fixtures_dir.exists():
-            print(f"ERROR: Fixtures directory does not exist: {fixtures_dir}")
-            return 1
+            source = args.suite or args.case
+            with open(source, encoding="utf-8") as f:
+                raw = json.load(f)
+            raw_cases = raw if isinstance(raw, list) else [raw]
+            if all(c.get("input", {}).get("fixtures_dir") for c in raw_cases):
+                print("  (not present; every case defines its own fixtures_dir)")
+            else:
+                print(f"ERROR: Fixtures directory does not exist: {fixtures_dir}")
+                return 1
 
         # Load test cases
         if args.suite:
@@ -135,6 +158,15 @@ def main():
             experiment = create_accuracy_experiment(test_cases)
         elif args.experiment == "tool":
             experiment = create_tool_efficiency_experiment(test_cases)
+        elif args.experiment == "quality":
+            language = args.language or language_code_from_name(test_cases[0].input.language_name)
+            print(f"Quality experiment language: {language}")
+            experiment = create_quality_experiment(
+                test_cases,
+                language=language,
+                fixtures_dir=str(fixtures_dir),
+                with_llm_judge=not args.no_llm_judge,
+            )
         else:
             experiment = create_comprehensive_experiment(test_cases)
 
@@ -168,9 +200,11 @@ def main():
         accuracy_report = None
         calibration_report = None
         output_evaluator_report = None
+        reports_by_name = {}
 
         for i, report in enumerate(reports):
             evaluator_name = experiment.evaluators[i].get_type_name()
+            reports_by_name[evaluator_name] = report
 
             if evaluator_name == "AccuracyEvaluator":
                 accuracy_report = report
@@ -206,6 +240,12 @@ def main():
             else:
                 print(f"⚠️  Explanation quality metrics error: {explanation_metrics['error']}")
 
+        # Aggregate the output-quality evaluators (quality experiment)
+        quality_metrics = calculate_quality_metrics(reports_by_name)
+        if quality_metrics:
+            aggregated["Quality"] = quality_metrics
+            print("✓ Output-quality metrics calculated")
+
         print()
 
         # Format case results for storage
@@ -222,6 +262,8 @@ def main():
                     "tool_configuration": case.input.tool_configuration,
                     "fixtures_dir": case.input.fixtures_dir,
                 },
+                "expected_output": case.expected_output,
+                "metadata": case.metadata or {},
             }
 
             # Extract agent output from first report (all reports share same cases)
@@ -236,6 +278,10 @@ def main():
                             "confidence": actual_output.get('confidence'),
                             "explanation": actual_output.get('explanation'),
                             "short_explanation": actual_output.get('shortExplanation') or actual_output.get('short_explanation'),
+                            "extracted_text": actual_output.get('extractedText', actual_output.get('extracted_text')),
+                            "page_number": actual_output.get('pageNumber', actual_output.get('page_number')),
+                            "review_type": actual_output.get('reviewType', actual_output.get('review_type')),
+                            "review_meta": actual_output.get('reviewMeta', actual_output.get('review_meta')),
                         }
                 else:
                     if hasattr(eval_case, 'actual_output') and hasattr(eval_case.actual_output, 'result'):
@@ -244,6 +290,10 @@ def main():
                             "confidence": eval_case.actual_output.confidence,
                             "explanation": eval_case.actual_output.explanation,
                             "short_explanation": eval_case.actual_output.short_explanation,
+                            "extracted_text": eval_case.actual_output.extracted_text,
+                            "page_number": eval_case.actual_output.page_number,
+                            "review_type": eval_case.actual_output.review_type,
+                            "review_meta": eval_case.actual_output.review_meta,
                         }
 
             # Extract evaluations from each evaluator's report
@@ -336,6 +386,28 @@ def main():
             print(f"Max Score:          {exp_metrics.get('max_score', 0):.2f}")
             print(f"Low Quality Count:  {exp_metrics.get('low_quality_count', 0)} (score < 0.5)")
 
+        if "Quality" in aggregated:
+            q = aggregated["Quality"]
+            print(f"\n{'=' * 60}")
+            print("OUTPUT QUALITY")
+            print("=" * 60)
+            if "language" in q:
+                lang = q["language"]
+                print(f"Language compliance:  {lang['compliance_rate']:.0%} ({lang['cases']} cases, foreign-script cases: {lang['foreign_letter_cases']})")
+            if "json_parse" in q:
+                print(f"JSON parse rate:      {q['json_parse']['parse_rate']:.0%}")
+            if "short_explanation" in q:
+                se = q["short_explanation"]
+                print(f"shortExplanation:     median {se['median_chars']} chars, p95 {se['p95_chars']:.0f}, max {se['max_chars']}, over {se['limit']}: {se['over_limit_rate']:.0%}")
+            if "citation" in q:
+                c = q["citation"]
+                rate = f"{c['page_match_rate']:.0%}" if c["page_match_rate"] is not None else "n/a"
+                print(f"Citation fidelity:    page-match {rate} of {c['total_citations']} citations, other-page {c['other_page_count']}, mismatch {c['mismatch_count']}, no-citation cases {c['no_citation_cases']}")
+            if "insufficient_evidence" in q:
+                ie = q["insufficient_evidence"]
+                if ie["applicable_cases"]:
+                    print(f"Insufficient-evidence protocol: {ie['protocol_pass_rate']:.0%} of {ie['applicable_cases']} cases, {ie['distinct_phrases']} distinct phrase(s)")
+
         print("\n" + "=" * 60)
 
     finally:
@@ -343,4 +415,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main() or 0)

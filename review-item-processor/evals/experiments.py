@@ -191,3 +191,65 @@ See accuracy experiment rubric for detailed criteria.
         cases=test_cases,
         evaluators=evaluators,
     )
+
+
+def create_quality_experiment(
+    test_cases: list[Case[ReviewAgentInput, dict[str, Any]]],
+    language: str = "ko",
+    max_short_chars: int = 80,
+    fixtures_dir: str | None = None,
+    with_llm_judge: bool = True,
+) -> Experiment[ReviewAgentInput, dict[str, Any]]:
+    """
+    Create the output-quality experiment used for a language evaluation set.
+
+    Evaluates, per case:
+    1. Accuracy and confidence calibration (as in the accuracy experiment)
+    2. Output language compliance of explanation / shortExplanation
+    3. shortExplanation length against the prompt's limit
+    4. JSON parse success (no fallback answer)
+    5. Citation fidelity: extractedText is a verbatim span of the source PDF on the stated page
+    6. Insufficient-evidence protocol for cases flagged `insufficient_evidence`
+    7. (optional) Explanation quality by LLM-as-judge, told which language is expected
+
+    Args:
+        test_cases: Cases to evaluate (all in the same output language)
+        language: "ko" | "ja" | "en" — the language the agent was asked to answer in
+        max_short_chars: the shortExplanation limit stated in the agent prompt
+        fixtures_dir: fallback fixtures directory for resolving PDFs (per-case fixtures_dir wins)
+        with_llm_judge: include the OutputEvaluator (costs one judge call per case)
+    """
+    from .quality_evaluators import (
+        CitationFidelityEvaluator,
+        InsufficientEvidenceEvaluator,
+        JsonParseEvaluator,
+        OutputLanguageEvaluator,
+        ShortExplanationLengthEvaluator,
+    )
+
+    language_names = {"ko": "Korean", "ja": "Japanese", "en": "English"}
+    evaluators: list[Any] = [
+        AccuracyEvaluator(),
+        ConfidenceCalibrationEvaluator(high_confidence_threshold=0.8),
+        OutputLanguageEvaluator(language=language),
+        ShortExplanationLengthEvaluator(max_chars=max_short_chars),
+        JsonParseEvaluator(),
+        CitationFidelityEvaluator(fixtures_dir=fixtures_dir),
+        InsufficientEvidenceEvaluator(),
+    ]
+    if with_llm_judge:
+        evaluators.append(
+            OutputEvaluator(
+                rubric=f"""
+Evaluate the review explanation (0.0-1.0). The requested output language is {language_names.get(language, language)}.
+- Clarity (0.2): the reasoning is easy to follow.
+- Evidence (0.3): it points at concrete places in the document (section/article/page) and quotes or paraphrases them.
+- Completeness (0.2): every requirement in the check description is addressed.
+- Language (0.15): all prose is in {language_names.get(language, language)}; quoted document text may stay in the document's language.
+- Relevance (0.15): no unrelated content.
+Return a single score between 0.0 and 1.0.
+"""
+            )
+        )
+
+    return Experiment(cases=test_cases, evaluators=evaluators)

@@ -1,0 +1,1029 @@
+[
+  {
+    "name": "KO-UC001-PDF-fail-item05",
+    "input": {
+      "document_paths": [
+        "심사대상_가온누리투어_개인정보_처리방침.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_001_privacy_policy_review",
+      "check_name": "개인정보의 처리 및 보유 기간",
+      "check_description": "모든 처리 목적에 대해 보유·이용기간이 구체적인 기간 또는 기간을 결정하는 기준으로 기재되어 있는가. '목적 달성 시', '목적 달성 시까지' 와 같은 추상적 기재만 있는 항목이 없는가. 법령에 따른 보존 항목은 근거 법령과 기간이 함께 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "use_case": "001",
+      "item": "5",
+      "kind": "fail",
+      "basis": "법 §30①2, 작성지침 Ⅲ-5",
+      "tags": [
+        "corporate-governance"
+      ],
+      "variant": "pdf",
+      "defect": 1,
+      "defect_text": "보유기간 추상 기재: '여행상품 예약·결제' 항목의 보유기간을 '목적 달성 시까지'로만 기재 (작성지침 Ⅲ-5 잘못 작성된 사례 ①)"
+    }
+  },
+  {
+    "name": "KO-UC001-PDF-fail-item06",
+    "input": {
+      "document_paths": [
+        "심사대상_가온누리투어_개인정보_처리방침.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_001_privacy_policy_review",
+      "check_name": "개인정보의 파기 절차 및 방법",
+      "check_description": "보유기간 경과·목적 달성 시의 파기 절차(파기 대상 선정, 승인, 파기)와 파기 방법(전자적 파일·출력물 각각)이 기재되어 있는가. 다른 법령에 따라 보존하는 경우 보존 근거와 보존 항목이 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "use_case": "001",
+      "item": "6",
+      "kind": "fail",
+      "basis": "법 §30①3의2, 작성지침 Ⅲ-6",
+      "tags": [
+        "corporate-governance"
+      ],
+      "variant": "pdf",
+      "defect": 2,
+      "defect_text": "파기 절차 및 방법 조항 전체 누락 (법 제30조제1항제3호의2)"
+    }
+  },
+  {
+    "name": "KO-UC001-PDF-fail-item16",
+    "input": {
+      "document_paths": [
+        "심사대상_가온누리투어_개인정보_처리방침.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_001_privacy_policy_review",
+      "check_name": "정보주체와 법정대리인의 권리·의무 및 행사 방법",
+      "check_description": "열람, 전송 요구, 정정·삭제, 처리정지, 동의 철회, 자동화된 결정에 대한 거부·설명 요구의 권리가 모두 안내되어 있는가. 권리 행사 방법(서면·전화·이메일·홈페이지 메뉴 등)과 접수 부서·처리 기한, 대리인을 통한 행사 방법이 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "use_case": "001",
+      "item": "16",
+      "kind": "fail",
+      "basis": "법 §30①5, §35~§37의2, 작성지침 Ⅲ-16",
+      "tags": [
+        "corporate-governance"
+      ],
+      "variant": "pdf",
+      "defect": 3,
+      "defect_text": "정보주체 권리: 열람·정정·삭제만 안내하고 처리정지·동의철회·전송요구와 행사 방법(접수 부서·절차) 누락 (법 제30조제1항제5호)"
+    }
+  },
+  {
+    "name": "KO-UC001-PDF-fail-item18",
+    "input": {
+      "document_paths": [
+        "심사대상_가온누리투어_개인정보_처리방침.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_001_privacy_policy_review",
+      "check_name": "개인정보 보호책임자 및 고충처리 부서",
+      "check_description": "개인정보 보호책임자의 성명(또는 보호업무 및 고충사항을 처리하는 부서의 명칭)과 전화번호 등 연락처가 기재되어 있는가. 정보주체가 열람 청구 등을 접수할 수 있는 담당 부서명과 연락처가 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "use_case": "001",
+      "item": "18",
+      "kind": "fail",
+      "basis": "법 §30①6, 작성지침 Ⅲ-18",
+      "tags": [
+        "corporate-governance"
+      ],
+      "variant": "pdf",
+      "defect": 4,
+      "defect_text": "개인정보 보호책임자: 성명·직위만 기재, 전화번호·이메일 등 연락처 누락 (법 제30조제1항제6호)"
+    }
+  },
+  {
+    "name": "KO-UC001-PDF-fail-item07",
+    "input": {
+      "document_paths": [
+        "심사대상_가온누리투어_개인정보_처리방침.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_001_privacy_policy_review",
+      "check_name": "개인정보의 제3자 제공 (해당 시)",
+      "check_description": "제공받는 자, 제공받는 자의 이용 목적, 제공하는 개인정보 항목, 제공받는 자의 보유·이용기간, 제공의 법적 근거가 모두 기재되어 있는가. 제공받는 자 전체가 공개되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "use_case": "001",
+      "item": "7",
+      "kind": "fail",
+      "basis": "법 §30①3, §17②, 작성지침 Ⅲ-7",
+      "tags": [
+        "corporate-governance"
+      ],
+      "variant": "pdf",
+      "defect": 5,
+      "defect_text": "제3자 제공 표에 '제공받는 자의 보유·이용기간' 열 누락 (법 제17조제2항제4호, 작성지침 Ⅲ-7)"
+    }
+  },
+  {
+    "name": "KO-UC001-PDF-fail-item10",
+    "input": {
+      "document_paths": [
+        "심사대상_가온누리투어_개인정보_처리방침.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_001_privacy_policy_review",
+      "check_name": "개인정보의 국외 수집 및 이전 (해당 시)",
+      "check_description": "국외 이전이 있는 경우 이전받는 자(법인은 명칭과 연락처), 이전 항목, 이전 국가·일시·방법, 이전받는 자의 이용 목적과 보유·이용기간, 이전의 법적 근거, 이전을 거부하는 방법·절차 및 거부의 효과가 모두 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "use_case": "001",
+      "item": "10",
+      "kind": "fail",
+      "basis": "영 §31①2, 법 §28의8②, 작성지침 Ⅲ-10",
+      "tags": [
+        "corporate-governance"
+      ],
+      "variant": "pdf",
+      "defect": 6,
+      "defect_text": "국외 이전: 이전받는 자의 연락처와 '이전을 거부하는 방법·절차 및 거부의 효과' 누락 (법 제28조의8제2항, 시행령 제31조제1항제2호)"
+    }
+  },
+  {
+    "name": "KO-UC001-PDF-pass-item01",
+    "input": {
+      "document_paths": [
+        "심사대상_가온누리투어_개인정보_처리방침.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_001_privacy_policy_review",
+      "check_name": "제목 및 서문",
+      "check_description": "문서 제목에 '개인정보 처리방침'이 있고, 서문에 개인정보처리자명과 법 제30조에 따라 수립·공개한다는 취지가 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "001",
+      "item": "1",
+      "kind": "pass",
+      "basis": "작성지침 Ⅲ-1",
+      "tags": [
+        "corporate-governance"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC001-PDF-pass-item02",
+    "input": {
+      "document_paths": [
+        "심사대상_가온누리투어_개인정보_처리방침.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_001_privacy_policy_review",
+      "check_name": "개인정보의 처리 목적",
+      "check_description": "처리 목적이 서비스·업무 단위로 구체적으로 기재되어 있는가. '~등', '기타 서비스 제공' 같은 불명확한 표현만으로 목적을 기재하지 않았는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "001",
+      "item": "2",
+      "kind": "pass",
+      "basis": "법 §30①1, 작성지침 Ⅲ-2",
+      "tags": [
+        "corporate-governance"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC001-PDF-pass-item03",
+    "input": {
+      "document_paths": [
+        "심사대상_가온누리투어_개인정보_처리방침.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_001_privacy_policy_review",
+      "check_name": "처리하는 개인정보의 항목",
+      "check_description": "처리 목적별로 수집·이용하는 개인정보 항목이 모두 기재되어 있는가. 동의 없이 처리하는 항목과 동의를 받아 처리하는 항목이 구분되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "001",
+      "item": "3",
+      "kind": "pass",
+      "basis": "영 §31①1, 작성지침 Ⅲ-3",
+      "tags": [
+        "corporate-governance"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC001-PDF-pass-item04",
+    "input": {
+      "document_paths": [
+        "심사대상_가온누리투어_개인정보_처리방침.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_001_privacy_policy_review",
+      "check_name": "14세 미만 아동의 개인정보 처리 (해당 시)",
+      "check_description": "아동의 개인정보를 처리하는 경우 법정대리인 동의 확인 방법이 기재되어 있는가. 처리하지 않는 경우 그 사실이 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "001",
+      "item": "4",
+      "kind": "pass",
+      "basis": "법 §22의2, 작성지침 Ⅲ-4",
+      "tags": [
+        "corporate-governance"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC001-PDF-pass-item09",
+    "input": {
+      "document_paths": [
+        "심사대상_가온누리투어_개인정보_처리방침.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_001_privacy_policy_review",
+      "check_name": "개인정보 처리업무의 위탁 (해당 시)",
+      "check_description": "수탁자와 위탁하는 업무의 내용이 모두 기재되어 있는가. 위탁 업무 변경 시 공개 방법이 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "001",
+      "item": "9",
+      "kind": "pass",
+      "basis": "법 §30①4, §26②, 작성지침 Ⅲ-9",
+      "tags": [
+        "corporate-governance"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC001-PDF-pass-item11",
+    "input": {
+      "document_paths": [
+        "심사대상_가온누리투어_개인정보_처리방침.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_001_privacy_policy_review",
+      "check_name": "개인정보의 안전성 확보조치",
+      "check_description": "관리적·기술적·물리적 조치가 각각 기재되어 있는가(내부관리계획, 접근권한 관리, 암호화, 접속기록 보관, 보안프로그램, 물리적 접근 통제 등).",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "001",
+      "item": "11",
+      "kind": "pass",
+      "basis": "영 §31①3, §30, 작성지침 Ⅲ-11",
+      "tags": [
+        "corporate-governance"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC001-PDF-pass-item14",
+    "input": {
+      "document_paths": [
+        "심사대상_가온누리투어_개인정보_처리방침.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_001_privacy_policy_review",
+      "check_name": "개인정보 자동 수집 장치의 설치·운영 및 거부 (해당 시)",
+      "check_description": "쿠키 등 자동 수집 장치의 사용 목적, 설치·운영 및 거부 방법(브라우저 설정 등)과 거부 시 영향이 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "001",
+      "item": "14",
+      "kind": "pass",
+      "basis": "법 §30①7, 작성지침 Ⅲ-14",
+      "tags": [
+        "corporate-governance"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC001-PDF-pass-item20",
+    "input": {
+      "document_paths": [
+        "심사대상_가온누리투어_개인정보_처리방침.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_001_privacy_policy_review",
+      "check_name": "정보주체의 권익침해에 대한 구제 방법 (권장)",
+      "check_description": "개인정보 분쟁조정위원회, 개인정보침해 신고센터, 대검찰청, 경찰청 등 구제기관의 연락처가 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "001",
+      "item": "20",
+      "kind": "pass",
+      "basis": "작성지침 Ⅲ-20",
+      "tags": [
+        "corporate-governance"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC001-PDF-pass-item24",
+    "input": {
+      "document_paths": [
+        "심사대상_가온누리투어_개인정보_처리방침.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_001_privacy_policy_review",
+      "check_name": "개인정보 처리방침의 변경",
+      "check_description": "시행일자가 기재되어 있는가. 변경 시 변경 사항의 공지 방법과 이전 처리방침 열람 방법(변경 이력)이 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "001",
+      "item": "24",
+      "kind": "pass",
+      "basis": "작성지침 Ⅲ-24",
+      "tags": [
+        "corporate-governance"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC001-PDF-insufficient-1",
+    "input": {
+      "document_paths": [
+        "심사대상_가온누리투어_개인정보_처리방침.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_001_privacy_policy_review",
+      "check_name": "홈페이지 게재 여부",
+      "check_description": "이 개인정보 처리방침이 개인정보처리자의 인터넷 홈페이지에 지속적으로 게재되어 있는가(시행령 제31조제2항). 게재 위치와 최종 게재일을 확인한다.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail",
+      "insufficient_evidence": true
+    },
+    "metadata": {
+      "use_case": "001",
+      "kind": "insufficient",
+      "tags": [
+        "corporate-governance"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC002-PDF-fail-item05",
+    "input": {
+      "document_paths": [
+        "심사대상_근린생활시설_신축_설계개요서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_002_building_design_summary_check",
+      "check_name": "용적률 재계산",
+      "check_description": "용적률(%) = 용적률 산정용 연면적 ÷ 대지면적 × 100 을 다시 계산하여 기재값과 일치하는가(허용 오차 ±0.01%p). 계산값이 해당 용도지역의 시행령 상한(제2종일반주거지역 250%) 이내인가. 기재값과 재계산값이 다르면 그 원인(제외 면적 누락 등)을 적는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "use_case": "002",
+      "item": "5",
+      "kind": "fail",
+      "basis": "법 §56, 영 §119①4, 국토계획법 영 §85①",
+      "tags": [
+        "real-estate"
+      ],
+      "variant": "pdf",
+      "defect": 1,
+      "defect_text": "용적률 산정용 연면적을 지하층(350.00㎡)까지 포함한 1,801.40㎡로 잡아 용적률을 272.94%로 기재 (시행령 제119조제1항제4호가목에 따라 지하층 면적 제외 → 1,451.40㎡, 용적률 219.91%, 상한 250% 이내)"
+    }
+  },
+  {
+    "name": "KO-UC002-PDF-fail-item04",
+    "input": {
+      "document_paths": [
+        "심사대상_근린생활시설_신축_설계개요서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_002_building_design_summary_check",
+      "check_name": "용적률 산정용 연면적의 제외 면적 확인",
+      "check_description": "용적률 산정용 연면적에서 지하층 면적과 지상층 부속용도 주차용 면적이 제외되어 있는가. 제외 전·후 면적이 각각 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "use_case": "002",
+      "item": "4",
+      "kind": "fail",
+      "basis": "영 §119①4 가·나목",
+      "tags": [
+        "real-estate"
+      ],
+      "variant": "pdf",
+      "defect": 1,
+      "defect_text": "용적률 산정용 연면적을 지하층(350.00㎡)까지 포함한 1,801.40㎡로 잡아 용적률을 272.94%로 기재 (시행령 제119조제1항제4호가목에 따라 지하층 면적 제외 → 1,451.40㎡, 용적률 219.91%, 상한 250% 이내)"
+    }
+  },
+  {
+    "name": "KO-UC002-PDF-fail-item03",
+    "input": {
+      "document_paths": [
+        "심사대상_근린생활시설_신축_설계개요서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_002_building_design_summary_check",
+      "check_name": "층별 바닥면적 합계 검산",
+      "check_description": "층별 면적표의 각 층 바닥면적을 모두 더한 값이 표의 합계란 및 면적 개요의 연면적 기재값과 일치하는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "use_case": "002",
+      "item": "3",
+      "kind": "fail",
+      "basis": "영 §119①3·4",
+      "tags": [
+        "real-estate"
+      ],
+      "variant": "pdf",
+      "defect": 2,
+      "defect_text": "층별 면적표의 합계란을 1,811.40㎡로 기재 (각 층 바닥면적의 실제 합 1,801.40㎡, 면적 개요의 연면적과도 불일치)"
+    }
+  },
+  {
+    "name": "KO-UC002-PDF-fail-item08",
+    "input": {
+      "document_paths": [
+        "심사대상_근린생활시설_신축_설계개요서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_002_building_design_summary_check",
+      "check_name": "조경 계획",
+      "check_description": "대지면적 200㎡ 이상인 경우 조경면적(㎡)이 기재되어 있는가. 공란이면 보완 요청(조경 기준 자체는 지자체 조례이므로 수치 적정성은 점검 범위 밖).",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "use_case": "002",
+      "item": "8",
+      "kind": "fail",
+      "basis": "법 §42①",
+      "tags": [
+        "real-estate"
+      ],
+      "variant": "pdf",
+      "defect": 3,
+      "defect_text": "조경면적 란 공란 (대지면적 200㎡ 이상이므로 건축법 제42조에 따른 조경 계획 기재 필요)"
+    }
+  },
+  {
+    "name": "KO-UC002-PDF-pass-item01",
+    "input": {
+      "document_paths": [
+        "심사대상_근린생활시설_신축_설계개요서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_002_building_design_summary_check",
+      "check_name": "대지 개요 기재",
+      "check_description": "대지 위치, 대지면적(㎡), 용도지역·지구, 주용도가 기재되어 있는가. 용도지역은 국토계획법 시행령 제84조·제85조의 용도지역 명칭과 일치하는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "002",
+      "item": "1",
+      "kind": "pass",
+      "basis": "서식 1의4 설계개요",
+      "tags": [
+        "real-estate"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC002-PDF-pass-item02",
+    "input": {
+      "document_paths": [
+        "심사대상_근린생활시설_신축_설계개요서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_002_building_design_summary_check",
+      "check_name": "건폐율 재계산",
+      "check_description": "건폐율(%) = 건축면적 ÷ 대지면적 × 100 을 다시 계산하여 기재값과 일치하는가(소수점 둘째 자리 반올림, 허용 오차 ±0.01%p). 계산값이 해당 용도지역의 시행령 상한(제2종일반주거지역 60%) 이내인가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "002",
+      "item": "2",
+      "kind": "pass",
+      "basis": "법 §55, 영 §119①2, 국토계획법 영 §84①",
+      "tags": [
+        "real-estate"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC002-PDF-pass-item06",
+    "input": {
+      "document_paths": [
+        "심사대상_근린생활시설_신축_설계개요서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_002_building_design_summary_check",
+      "check_name": "규모 기재",
+      "check_description": "층수가 지하·지상으로 구분되어 기재되어 있고, 층별 면적표의 층 구성과 일치하는가. 건축물 높이(m)와 구조 형식이 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "002",
+      "item": "6",
+      "kind": "pass",
+      "basis": "영 §119①5·9",
+      "tags": [
+        "real-estate"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC002-PDF-pass-item07",
+    "input": {
+      "document_paths": [
+        "심사대상_근린생활시설_신축_설계개요서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_002_building_design_summary_check",
+      "check_name": "주차 계획",
+      "check_description": "법정 주차대수와 계획 주차대수가 기재되어 있고 계획 대수가 법정 대수 이상인가. 계획 대수가 층별 면적표의 주차장 배치(지하·지상)와 일치하는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "002",
+      "item": "7",
+      "kind": "pass",
+      "basis": "서식 1의4 설계개요 (법정 대수 산정 기준은 지자체 조례이므로 기재 여부와 대소 관계만 점검)",
+      "tags": [
+        "real-estate"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC002-PDF-pass-item09",
+    "input": {
+      "document_paths": [
+        "심사대상_근린생활시설_신축_설계개요서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_002_building_design_summary_check",
+      "check_name": "설계자 정보",
+      "check_description": "설계자(건축사사무소 명칭, 건축사 성명·자격번호), 작성일이 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "002",
+      "item": "9",
+      "kind": "pass",
+      "basis": "서식 1의4",
+      "tags": [
+        "real-estate"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC002-PDF-insufficient-1",
+    "input": {
+      "document_paths": [
+        "심사대상_근린생활시설_신축_설계개요서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_002_building_design_summary_check",
+      "check_name": "설계도서와의 면적 일치",
+      "check_description": "설계개요서의 대지면적·건축면적·층별 바닥면적이 배치도 및 각 층 평면도의 면적 산출표와 일치하는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail",
+      "insufficient_evidence": true
+    },
+    "metadata": {
+      "use_case": "002",
+      "kind": "insufficient",
+      "tags": [
+        "real-estate"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC003-PDF-fail-item05",
+    "input": {
+      "document_paths": [
+        "심사대상_프레스공정_위험성평가_결과서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_003_risk_assessment_report",
+      "check_name": "근로자 참여",
+      "check_description": "유해·위험요인 파악, 위험성 결정, 감소대책 수립·실행·확인의 각 단계에 해당 작업에 종사하는 근로자가 참여한 기록(참여자 명단·서명·회의록 등)이 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "use_case": "003",
+      "item": "5",
+      "kind": "fail",
+      "basis": "법 §36②, 고시 §6",
+      "tags": [
+        "manufacturing"
+      ],
+      "variant": "pdf",
+      "defect": 1,
+      "defect_text": "근로자 참여 없음: 평가팀이 공장장·안전관리자·생산팀장으로만 구성되고, 해당 작업 근로자 또는 근로자대표의 참여 기록이 없음 (고시 제6조)"
+    }
+  },
+  {
+    "name": "KO-UC003-PDF-fail-item03",
+    "input": {
+      "document_paths": [
+        "심사대상_프레스공정_위험성평가_결과서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_003_risk_assessment_report",
+      "check_name": "허용 가능한 위험성 수준",
+      "check_description": "허용 가능한 위험성의 수준이 명시되어 있는가(법에서 정한 기준 이상). 공란이거나 '추후 결정' 등으로 되어 있지 않은가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "use_case": "003",
+      "item": "3",
+      "kind": "fail",
+      "basis": "고시 §9②2",
+      "tags": [
+        "manufacturing"
+      ],
+      "variant": "pdf",
+      "defect": 2,
+      "defect_text": "허용 가능한 위험성 수준 미확정: 위험성 판단 기준(빈도×강도) 표만 있고 '허용 가능한 위험성 수준' 란이 공란 (고시 제9조제2항제2호)"
+    }
+  },
+  {
+    "name": "KO-UC003-PDF-fail-item10",
+    "input": {
+      "document_paths": [
+        "심사대상_프레스공정_위험성평가_결과서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_003_risk_assessment_report",
+      "check_name": "감소대책의 수립",
+      "check_description": "허용 불가능한 모든 요인에 대해 감소대책이 수립되어 있고, 각 대책에 담당자와 완료 기한이 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "use_case": "003",
+      "item": "10",
+      "kind": "fail",
+      "basis": "고시 §12①",
+      "tags": [
+        "manufacturing"
+      ],
+      "variant": "pdf",
+      "defect": 3,
+      "defect_text": "감소대책 담당자·완료기한 공란: 소음(No.4), 유류 누출(No.6) 대책의 담당자와 완료 기한이 비어 있음 (고시 제12조제1항)"
+    }
+  },
+  {
+    "name": "KO-UC003-PDF-fail-item12",
+    "input": {
+      "document_paths": [
+        "심사대상_프레스공정_위험성평가_결과서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_003_risk_assessment_report",
+      "check_name": "이행 후 위험성 재확인",
+      "check_description": "감소대책 실행 후 위험성이 허용 가능한 수준으로 내려왔는지 확인한 기록이 있는가. 내려오지 않은 요인에 추가 대책이 수립되었는가. 중대재해 우려 요인에 대한 잠정 조치가 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "use_case": "003",
+      "item": "12",
+      "kind": "fail",
+      "basis": "고시 §12②③④",
+      "tags": [
+        "manufacturing"
+      ],
+      "variant": "pdf",
+      "defect": 4,
+      "defect_text": "이행 후 위험성 재확인 기록 없음: '이행 후 위험성' 열이 전부 '-' (고시 제12조제2항·제3항)"
+    }
+  },
+  {
+    "name": "KO-UC003-PDF-fail-item11",
+    "input": {
+      "document_paths": [
+        "심사대상_프레스공정_위험성평가_결과서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_003_risk_assessment_report",
+      "check_name": "감소대책의 우선순위",
+      "check_description": "대책이 ①위험 작업의 폐지·변경, 유해·위험물질 대체, 설계·계획 단계의 제거·저감 → ②공학적 대책 → ③관리적 대책 → ④개인용 보호구의 순서를 고려하여 수립되었는가. 위험성이 높은 요인에 보호구·교육만으로 대응하고 상위 대책의 검토 기록이 없지는 않은가. 법령에서 정한 조치(방호장치 등)가 반영되었는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail"
+    },
+    "metadata": {
+      "use_case": "003",
+      "item": "11",
+      "kind": "fail",
+      "basis": "고시 §12①",
+      "tags": [
+        "manufacturing"
+      ],
+      "variant": "pdf",
+      "defect": 5,
+      "defect_text": "감소대책 우선순위 미반영: 위험성 9(최고)인 금형 끼임에 대해 보호구 착용·주의 교육(관리적·보호구 대책)만 수립하고 양수조작식 방호장치·광전자식 방호장치 등 공학적 대책 검토가 없음 (고시 제12조제1항 각 호의 순서)"
+    }
+  },
+  {
+    "name": "KO-UC003-PDF-pass-item01",
+    "input": {
+      "document_paths": [
+        "심사대상_프레스공정_위험성평가_결과서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_003_risk_assessment_report",
+      "check_name": "실시규정",
+      "check_description": "위험성평가 실시규정이 작성·관리되고 있으며 평가의 목적·방법, 담당자·책임자의 역할, 평가 시기·절차, 근로자 참여·공유 방법, 결과의 기록·보존이 포함되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "003",
+      "item": "1",
+      "kind": "pass",
+      "basis": "고시 §9①",
+      "tags": [
+        "manufacturing"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC003-PDF-pass-item02",
+    "input": {
+      "document_paths": [
+        "심사대상_프레스공정_위험성평가_결과서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_003_risk_assessment_report",
+      "check_name": "위험성 수준 판단 기준",
+      "check_description": "위험성의 수준과 그 수준을 판단하는 기준(빈도·강도 등급 정의, 조합 방법)이 평가 전에 확정되어 결과서에 기재되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "003",
+      "item": "2",
+      "kind": "pass",
+      "basis": "고시 §9②1",
+      "tags": [
+        "manufacturing"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC003-PDF-pass-item04",
+    "input": {
+      "document_paths": [
+        "심사대상_프레스공정_위험성평가_결과서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_003_risk_assessment_report",
+      "check_name": "사전 안전보건정보 조사",
+      "check_description": "작업표준·절차, 설비 사양서·MSDS, 공정 흐름, 재해사례·통계, 작업환경측정·건강진단 결과 등 사전 조사한 안전보건정보가 기록되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "003",
+      "item": "4",
+      "kind": "pass",
+      "basis": "고시 §9③, §14①1",
+      "tags": [
+        "manufacturing"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC003-PDF-pass-item06",
+    "input": {
+      "document_paths": [
+        "심사대상_프레스공정_위험성평가_결과서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_003_risk_assessment_report",
+      "check_name": "실시 체계",
+      "check_description": "안전보건관리책임자가 총괄하고 안전관리자 등이 보좌·지도하는 체계가 기재되어 있는가. 기계·설비 관련 평가에 해당 설비 전문 지식을 갖춘 사람이 참여하였는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "003",
+      "item": "6",
+      "kind": "pass",
+      "basis": "고시 §7①",
+      "tags": [
+        "manufacturing"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC003-PDF-pass-item07",
+    "input": {
+      "document_paths": [
+        "심사대상_프레스공정_위험성평가_결과서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_003_risk_assessment_report",
+      "check_name": "평가 대상·시기",
+      "check_description": "평가 종류(최초·정기·수시)와 실시 기간이 기재되어 있는가. 정기평가는 매년 1회 이상 실시되었는가. 아차사고·재해가 있었다면 그 요인이 포함되었는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "003",
+      "item": "7",
+      "kind": "pass",
+      "basis": "규칙 §37②, 고시 §5의2, §15",
+      "tags": [
+        "manufacturing"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC003-PDF-pass-item08",
+    "input": {
+      "document_paths": [
+        "심사대상_프레스공정_위험성평가_결과서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_003_risk_assessment_report",
+      "check_name": "유해·위험요인 파악 방법",
+      "check_description": "사업장 순회점검을 포함한 파악 방법이 기재되어 있는가(근로자 제안, 청취조사, 안전보건 자료, 체크리스트 등 병행 가능).",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "003",
+      "item": "8",
+      "kind": "pass",
+      "basis": "고시 §10",
+      "tags": [
+        "manufacturing"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC003-PDF-pass-item13",
+    "input": {
+      "document_paths": [
+        "심사대상_프레스공정_위험성평가_결과서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_003_risk_assessment_report",
+      "check_name": "결과 공유",
+      "check_description": "유해·위험요인, 위험성 결정 결과, 감소대책과 실행 계획·실행 여부, 근로자 준수·주의 사항을 근로자에게 게시·주지한 기록이 있는가. 중대재해 우려 요인은 TBM 등으로 상시 주지하는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "003",
+      "item": "13",
+      "kind": "pass",
+      "basis": "고시 §13",
+      "tags": [
+        "manufacturing"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC003-PDF-pass-item14",
+    "input": {
+      "document_paths": [
+        "심사대상_프레스공정_위험성평가_결과서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_003_risk_assessment_report",
+      "check_name": "기록 및 보존",
+      "check_description": "평가 대상 작업, 파악된 유해·위험요인, 위험성 결정 내용, 감소대책 수립·실행 내용, 사전조사 안전보건정보가 기록되어 있고 보존 기간(3년)이 명시되어 있는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "pass"
+    },
+    "metadata": {
+      "use_case": "003",
+      "item": "14",
+      "kind": "pass",
+      "basis": "규칙 §37, 고시 §14",
+      "tags": [
+        "manufacturing"
+      ],
+      "variant": "pdf"
+    }
+  },
+  {
+    "name": "KO-UC003-PDF-insufficient-1",
+    "input": {
+      "document_paths": [
+        "심사대상_프레스공정_위험성평가_결과서.pdf"
+      ],
+      "fixtures_dir": "../../../../examples/ko/use_case_003_risk_assessment_report",
+      "check_name": "작업환경측정 결과서 확인",
+      "check_description": "프레스 구역 소음 측정값(92 dB(A))이 2025년 작업환경측정 결과서 원본의 측정 지점·측정값과 일치하는가.",
+      "language_name": "Korean"
+    },
+    "expected_output": {
+      "result": "fail",
+      "insufficient_evidence": true
+    },
+    "metadata": {
+      "use_case": "003",
+      "kind": "insufficient",
+      "tags": [
+        "manufacturing"
+      ],
+      "variant": "pdf"
+    }
+  }
+]
