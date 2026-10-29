@@ -19,6 +19,11 @@ from model_config import ModelConfig
 from tool_history_collector import ToolHistoryCollector
 from tools.factory import create_custom_tools
 
+# Bedrock prompt-cache pricing for Anthropic models, relative to the base input token price:
+# cache writes are billed at 125 %, cache reads at 10 %.
+CACHE_WRITE_PRICE_MULTIPLIER = 1.25
+CACHE_READ_PRICE_MULTIPLIER = 0.10
+
 
 class ReviewMetaTracker:
     """Class to track review metadata such as pricing and execution time."""
@@ -34,21 +39,36 @@ class ReviewMetaTracker:
 
         metrics = agent_result.metrics
         usage = metrics.accumulated_usage
-        input_tokens = usage.get("inputTokens", 0)
-        output_tokens = usage.get("outputTokens", 0)
-        total_tokens = usage.get("totalTokens", 0)
+        # Bedrock reports prompt-cache tokens separately from inputTokens. With auto prompt
+        # caching on (see _apply_cache_config) nearly the whole document prefix lands in the
+        # cache fields, so inputTokens alone understates the request by 3 orders of magnitude.
+        uncached_input_tokens = usage.get("inputTokens", 0) or 0
+        cache_read_tokens = usage.get("cacheReadInputTokens", 0) or 0
+        cache_write_tokens = usage.get("cacheWriteInputTokens", 0) or 0
+        input_tokens = uncached_input_tokens + cache_read_tokens + cache_write_tokens
+        output_tokens = usage.get("outputTokens", 0) or 0
+        total_tokens = usage.get("totalTokens", 0) or 0
 
         logger.debug(
-            f"Token usage from metrics: input={input_tokens}, output={output_tokens}, total={total_tokens}"
+            f"Token usage from metrics: input={input_tokens} "
+            f"(uncached={uncached_input_tokens}, cache_read={cache_read_tokens}, cache_write={cache_write_tokens}), "
+            f"output={output_tokens}, total={total_tokens}"
         )
 
-        input_cost = (input_tokens / 1000) * self.model.input_per_1k
+        input_cost = (
+            uncached_input_tokens * self.model.input_per_1k
+            + cache_read_tokens * self.model.input_per_1k * CACHE_READ_PRICE_MULTIPLIER
+            + cache_write_tokens * self.model.input_per_1k * CACHE_WRITE_PRICE_MULTIPLIER
+        ) / 1000
         output_cost = (output_tokens / 1000) * self.model.output_per_1k
         total_cost = input_cost + output_cost
 
         return {
             "model_id": self.model.model_id,
             "input_tokens": input_tokens,
+            "uncached_input_tokens": uncached_input_tokens,
+            "cache_read_input_tokens": cache_read_tokens,
+            "cache_write_input_tokens": cache_write_tokens,
             "output_tokens": output_tokens,
             "input_cost": input_cost,
             "output_cost": output_cost,
@@ -604,6 +624,51 @@ def _message_text_parts(message: Any) -> List[str]:
     return parts
 
 
+def _repair_unescaped_quotes(json_str: str) -> Optional[Dict[str, Any]]:
+    """
+    Second-chance parse for model output that quotes the source document with
+    unescaped double quotes inside a JSON string value, e.g.
+        "explanation": "제1조 ④항에서 "다음의 개인정보는 … 보존합니다."라고 안내하고 …"
+    Walks the text once: while inside a string, a `"` is only accepted as the
+    closing quote when the next non-space character is a structural token
+    (`,` `}` `]` `:`); otherwise it is escaped. Returns None when the repaired
+    text still does not parse, so callers fall through to their existing fallback.
+    """
+    out: List[str] = []
+    in_string = False
+    i = 0
+    n = len(json_str)
+    while i < n:
+        ch = json_str[i]
+        if in_string:
+            if ch == "\\":
+                out.append(json_str[i : i + 2])
+                i += 2
+                continue
+            if ch == '"':
+                j = i + 1
+                while j < n and json_str[j] in " \t\r\n":
+                    j += 1
+                if j >= n or json_str[j] in ",}]:":
+                    in_string = False
+                    out.append(ch)
+                else:
+                    out.append('\\"')
+                i += 1
+                continue
+            out.append(ch)
+        else:
+            if ch == '"':
+                in_string = True
+            out.append(ch)
+        i += 1
+    try:
+        parsed = json.loads("".join(out))
+    except Exception:
+        return None
+    return parsed if isinstance(parsed, dict) else None
+
+
 def _extract_json_from_message(message: Any) -> Tuple[Optional[Dict[str, Any]], str]:
     """
     メッセージからJSONとテキストを抽出
@@ -627,6 +692,10 @@ def _extract_json_from_message(message: Any) -> Tuple[Optional[Dict[str, Any]], 
             return json.loads(json_str), combined
         except Exception as e:
             logger.warning(f"Marker JSON parsing failed: {e}")
+            repaired = _repair_unescaped_quotes(json_str)
+            if repaired is not None:
+                logger.info("Marker JSON parsed after escaping stray quotes inside string values")
+                return repaired, combined
 
     # フォールバック: 通常のJSON抽出
     m = re.search(r"\{.*\}", combined, re.DOTALL)
