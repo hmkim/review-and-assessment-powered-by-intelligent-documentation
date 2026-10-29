@@ -365,6 +365,7 @@ class InsufficientEvidenceEvaluator(Evaluator):
     }
 
     def __init__(self, language: str | None = None):
+        super().__init__()
         self.language = language
 
     def _starts_with_standard(self, phrase: str) -> bool | None:

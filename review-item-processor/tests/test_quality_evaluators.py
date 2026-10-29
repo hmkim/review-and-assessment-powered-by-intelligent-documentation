@@ -287,3 +287,16 @@ def test_generated_korean_suites_are_consistent(relative):
             assert len(inp["document_paths"]) >= 1 and all(d.endswith(".png") for d in inp["document_paths"])
         if meta["kind"] == "fail" and "defect" in meta:
             assert isinstance(meta["defect"], int) and meta["defect"] >= 1
+
+
+def test_quality_evaluators_call_base_init():
+    """The harness drives evaluators through Evaluator.aggregator; a subclass that skips
+    super().__init__() raises 'object has no attribute aggregator' at run time only."""
+    for ev in (
+        OutputLanguageEvaluator(language="ja"),
+        ShortExplanationLengthEvaluator(),
+        JsonParseEvaluator(),
+        CitationFidelityEvaluator(),
+        InsufficientEvidenceEvaluator(language="ko"),
+    ):
+        assert hasattr(ev, "aggregator"), type(ev).__name__
