@@ -30,6 +30,35 @@ if (process.env.DOCUMENT_PROCESSING_MODEL_ID) {
   console.info(`Using default document processing model: ${MODEL_ID}`);
 }
 
+/**
+ * Concatenate the model's output text in order.
+ *
+ * When Citations are enabled, Converse returns the answer as a sequence of
+ * `text` blocks and `citationsContent` blocks; the cited spans live ONLY in
+ * `citationsContent[].content[].text`. Reading `text` blocks alone drops
+ * every cited span, which turns the JSON array into fragments such as
+ * `{"name":"...","description":" 확인한다.","parent_id":0}` (the cited part of
+ * the description is missing) or `[\n,\n,\n{...` and fails to parse.
+ */
+export function collectOutputText(message: any): string {
+  if (!message || !Array.isArray(message.content)) {
+    return "";
+  }
+  let out = "";
+  for (const block of message.content) {
+    if (typeof block?.text === "string") {
+      out += block.text;
+    } else if (block?.citationsContent) {
+      for (const part of block.citationsContent.content ?? []) {
+        if (typeof part?.text === "string") {
+          out += part.text;
+        }
+      }
+    }
+  }
+  return out;
+}
+
 const BEDROCK_REGION = process.env.BEDROCK_REGION || "us-west-2";
 
 // Helper function to get the checklist extraction prompt based on language
@@ -253,17 +282,12 @@ export async function processWithLLM({
     throw error;
   }
 
-  // Extract text from response
+  // Extract text from response (text + citationsContent blocks, in order)
   console.log(`Processing response from LLM...`);
-  const outputMessage = response.output?.message;
-  let llmResponse = "";
-  if (outputMessage && outputMessage.content) {
-    outputMessage.content.forEach((block: any) => {
-      if ("text" in block) {
-        llmResponse += block.text;
-      }
-    });
-  }
+  const llmResponse = collectOutputText(response.output?.message);
+  console.log(
+    `[DEBUG] Response length: ${llmResponse.length} characters, stopReason: ${response.stopReason}`
+  );
 
   // JSONコードブロック（```json...```）をスペースなし正確に抽出する関数を修正
   function extractJsonBlocks(text: string): string {
@@ -341,16 +365,8 @@ export async function processWithLLM({
 
       console.log(`[DEBUG] Retry Bedrock API call successful`);
 
-      // Extract text from retry response
-      const retryOutputMessage = retryResponse.output?.message;
-      let retryLlmResponse = "";
-      if (retryOutputMessage && retryOutputMessage.content) {
-        retryOutputMessage.content.forEach((block: any) => {
-          if ("text" in block) {
-            retryLlmResponse += block.text;
-          }
-        });
-      }
+      // Extract text from retry response (text + citationsContent blocks, in order)
+      const retryLlmResponse = collectOutputText(retryResponse.output?.message);
 
       console.log(
         `[DEBUG] Retry response length: ${retryLlmResponse.length} characters`
