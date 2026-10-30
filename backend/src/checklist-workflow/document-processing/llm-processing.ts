@@ -23,6 +23,14 @@ import { ulid } from "ulid";
 const DEFAULT_MODEL_ID = "global.anthropic.claude-sonnet-5-5";
 const MODEL_ID = process.env.DOCUMENT_PROCESSING_MODEL_ID || DEFAULT_MODEL_ID;
 
+// Output token budget for one page of checklist JSON. Converse defaults to 4096 for Claude,
+// which a dense page (Korean/Japanese legal text, ~3,000+ characters of JSON) exceeds:
+// the response then stops with stopReason "max_tokens" and the truncated JSON fails to
+// parse. 16k covers the largest pages seen in evaluation with room to spare.
+const MAX_OUTPUT_TOKENS = Number(
+  process.env.DOCUMENT_PROCESSING_MAX_OUTPUT_TOKENS || 16000
+);
+
 // Log model configuration
 if (process.env.DOCUMENT_PROCESSING_MODEL_ID) {
   console.info(`Using custom document processing model: ${MODEL_ID}`);
@@ -239,6 +247,7 @@ export async function processWithLLM({
     response = await bedrockClient.send(
       new ConverseCommand({
         modelId: MODEL_ID,
+        inferenceConfig: { maxTokens: MAX_OUTPUT_TOKENS },
         messages: [
           {
             role: "user",
@@ -334,6 +343,7 @@ export async function processWithLLM({
       const retryResponse = await bedrockClient.send(
         new ConverseCommand({
           modelId: MODEL_ID,
+          inferenceConfig: { maxTokens: MAX_OUTPUT_TOKENS },
           messages: [
             {
               role: "user",
