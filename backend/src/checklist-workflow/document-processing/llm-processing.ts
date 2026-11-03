@@ -47,7 +47,15 @@ if (process.env.DOCUMENT_PROCESSING_MODEL_ID) {
  * every cited span, which turns the JSON array into fragments such as
  * `{"name":"...","description":" 확인한다.","parent_id":0}` (the cited part of
  * the description is missing) or `[\n,\n,\n{...` and fails to parse.
+ *
+ * The model sometimes writes its citation markup literally inside JSON string
+ * values (`"description":"<cite index=\"1-4\">...</cite>"`); Bedrock does not
+ * convert those into citationsContent blocks, so they would reach the database
+ * and the UI verbatim (observed on 37/138 items of a Korean checklist). The
+ * tags carry no information the checklist needs, so they are stripped here.
  */
+const CITE_TAG = /<\/?cite(?:\s[^<>]*)?>/g;
+
 export function collectOutputText(message: any): string {
   if (!message || !Array.isArray(message.content)) {
     return "";
@@ -64,7 +72,7 @@ export function collectOutputText(message: any): string {
       }
     }
   }
-  return out;
+  return out.replace(CITE_TAG, "");
 }
 
 const BEDROCK_REGION = process.env.BEDROCK_REGION || "us-west-2";

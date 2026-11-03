@@ -35,6 +35,24 @@ describe("collectOutputText", () => {
     ]);
   });
 
+  it("strips literal <cite> markup the model writes inside JSON strings", () => {
+    // Observed in a deployed run (M4-d, UC003): the model emitted its citation
+    // markup inside the JSON value instead of as a citationsContent block.
+    const msg = {
+      content: [
+        {
+          text: '[{"name":"평가의 목적 및 방법","description":"<cite index=\\"1-4\\">실시규정에 평가의 목적 및 방법이 포함되어 있는지 확인</cite>","parent_id":0}]',
+        },
+      ],
+    };
+    const parsed = JSON.parse(collectOutputText(msg));
+    expect(parsed[0].description).toBe(
+      "실시규정에 평가의 목적 및 방법이 포함되어 있는지 확인"
+    );
+    // A real less-than sign in content is left alone.
+    expect(collectOutputText({ content: [{ text: "a < b" }] })).toBe("a < b");
+  });
+
   it("returns an empty string for a missing message", () => {
     expect(collectOutputText(undefined)).toBe("");
     expect(collectOutputText({})).toBe("");

@@ -34,9 +34,11 @@ from pathlib import Path
 import boto3
 import requests
 
-API = "https://9n8lnz87t2.execute-api.us-west-2.amazonaws.com/api"
-REGION = "us-west-2"
-ENV_FILE = Path.home() / ".cache" / "rapid-m4" / "cognito_user.env"
+# Deployment under test. RAPID_API is the ApiEndpoint stack output (without trailing slash).
+API = os.environ.get("RAPID_API", "https://9n8lnz87t2.execute-api.us-west-2.amazonaws.com/api").rstrip("/")
+REGION = os.environ.get("RAPID_REGION", "us-west-2")
+# Cognito user: a 0600 env file with RAPID_CLIENT / RAPID_USER / RAPID_PASS (never committed).
+ENV_FILE = Path(os.environ.get("RAPID_ENV_FILE", str(Path.home() / ".cache" / "rapid-m4" / "cognito_user.env")))
 POLL_SECS = 15
 TIMEOUT_SECS = 40 * 60
 

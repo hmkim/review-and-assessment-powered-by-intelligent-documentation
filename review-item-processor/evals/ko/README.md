@@ -110,3 +110,18 @@ python evals/ko/aggregate_runs.py --results-dir <결과 디렉터리> --out <출
 ```
 
 2026-10-29 3회 실행 결과와 해석은 [`docs/ko/m4-quality-report.md`](../../../docs/ko/m4-quality-report.md)에 있습니다.
+
+## 배포 환경 측정: 체크리스트 추출·모호성 검출 (Q8·Q9, `m4d/`)
+
+심사 에이전트와 달리 체크리스트 추출과 모호성 검출은 배포된 RAPID 백엔드 안에서만 돌기 때문에, REST API로 문서를 올려 측정합니다. Cognito 사용자(`USER_PASSWORD_AUTH` 허용)와 API URL이 필요합니다.
+
+```bash
+# 0) Cognito 사용자 정보는 0600 파일에만 둡니다 (RAPID_CLIENT=<app client id> / RAPID_USER=<email> / RAPID_PASS=<password>)
+# 1) 추출 + 모호성 검출 실행 (inputs.json: slug, path, name, kind(designed|official|law|form), module)
+RAPID_API=https://<api-id>.execute-api.<region>.amazonaws.com/api RAPID_REGION=<region> RAPID_ENV_FILE=~/.cache/rapid-m4/cognito_user.env \
+  uv run --extra evals python evals/ko/m4d/run_extraction.py --inputs <결과>/m4d/inputs.json --out <결과>/m4d/raw
+# 2) 채점 (LLM judge는 Bedrock us-west-2; --no-judge 면 건수·언어 통계만)
+uv run --extra evals python evals/ko/m4d/score_extraction.py --results <결과>/m4d
+```
+
+채점은 `kind: designed` 문서에 대해 **설계 항목 재현율**(설계 항목마다 그 내용을 담은 추출 항목이 있는가)과 **조문 오추출**(법령 원문 조문이 점검 항목이 된 수, 기준 ≤ 설계 항목 수의 20%)을, 모든 문서에 대해 언어(한글 비율·가나)와 모호성 제안의 언어·`NO_AMBIGUOUS` 누출을 계산합니다. 재현·분류는 LLM judge가 결정하고 원 출력을 `scored/<slug>.json`에 남기므로 수작업 검증이 가능합니다. 자격 증명은 결과 JSON에 기록되지 않습니다. 2026-10-30 측정 결과와 해석은 보고서 §4.8·§4.9에 있습니다.
