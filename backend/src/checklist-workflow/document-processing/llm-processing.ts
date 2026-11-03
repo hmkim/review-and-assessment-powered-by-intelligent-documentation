@@ -107,6 +107,20 @@ Each checklist item should include the following fields:
 - Parent nodes (items that have children) should have empty string "" for description
 - Leaf nodes (items without children) should have detailed descriptions
 
+## What Counts as a Check Item
+A check item is a statement a reviewer verifies against a target document: a question or criterion ("Is X stated?", "Does the value match?"), a numbered requirement in a checklist table, or a step in a review flowchart. Keep the legal or regulatory basis cited by a check item inside that item's description; do NOT create separate items for the cited articles.
+
+## What NOT to Extract
+Documents often contain material that is not a check item. Never turn the following into items:
+- Laws, regulations, standards or guidelines reproduced for reference (articles such as "Article 5", "第5条", "제5조", numbered paragraphs and sub-items), including appendices or sections introduced as reference / basis / source text / 参考 / 原文 / 근거 / 원문. When the page also contains explicit check items, extract only those check items.
+- Explanatory text: purpose, scope, how to use the checklist, judgment or scoring method, formula summaries, glossary or definitions, overall verdict / summary sections.
+- Blank fields of an application form or template (name, address, date, signature boxes) and headings that have no check content.
+- Running headers, footers, page numbers and disclaimers.
+If the document is itself a regulation, standard or internal rule with no explicit checklist, convert each requirement ("shall", "must", "~하여야 한다", "~しなければならない") into a check item. Do not do this for reference text quoted inside a checklist.
+
+## When the Page Has No Check Items
+This prompt receives one page at a time. If the page contains only reference text, explanations, a form, or a cover page, return an empty array: []
+
 ## Extraction Rules
 1. Identify simple check items and flowchart-type items
 2. Express hierarchical structure through parent-child relationships (parent_id)
@@ -114,6 +128,7 @@ Each checklist item should include the following fields:
 4. Eliminate and organize duplicates
 5. Express parent_id as a number (starting from 0, null for top-level items)
 6. Generate descriptions ONLY for leaf nodes - parent nodes get empty descriptions
+7. Apply "What NOT to Extract": reference text, explanations and form fields are never items
 
 ## Example Output Format (Array)
 Example response (note: the example below is in English, but YOUR RESPONSE MUST BE IN ${languageName}):
@@ -137,7 +152,7 @@ Example response (note: the example below is in English, but YOUR RESPONSE MUST 
 ]
 
 ## Notes
-- Include all information that can be extracted from the document
+- Include every check item that can be extracted from the document (but nothing that is not a check item)
 - Accurately reflect the hierarchical structure
 - Output only strict JSON arrays.
 - ALWAYS OUTPUT IN ${languageName} including all field values

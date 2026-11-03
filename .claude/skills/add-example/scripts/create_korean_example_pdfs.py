@@ -40,6 +40,7 @@ try:
     from reportlab.pdfbase import pdfmetrics
     from reportlab.pdfbase.ttfonts import TTFont
     from reportlab.platypus import (
+        Flowable,
         PageBreak,
         Paragraph,
         SimpleDocTemplate,
@@ -177,6 +178,26 @@ def _law_blocks(text: str, style: ParagraphStyle) -> list:
     return flowables
 
 
+class _SectionMarker(Flowable):
+    """Zero-height flowable that records the current section label on the canvas.
+
+    The page decorator reads it, so every page from this marker on (until the next
+    marker) carries the label in its running header.
+    """
+
+    def __init__(self, label: str):
+        super().__init__()
+        self.label = label
+        self.width = 0
+        self.height = 0
+
+    def wrap(self, availWidth, availHeight):  # noqa: N803 (reportlab API)
+        return 0, 0
+
+    def draw(self):
+        self.canv._rapid_section = self.label
+
+
 def _table(spec: dict, st: dict, avail_width: float) -> Table:
     header = spec["header"]
     rows = spec["rows"]
@@ -233,6 +254,11 @@ def build_pdf(doc: dict, out_path: Path) -> None:
             story.append(Spacer(1, block[1]))
         elif kind == "pagebreak":
             story.append(PageBreak())
+        elif kind == "section":
+            # Running section label shown in the page header from this point on
+            # (e.g. marks the statute-reference pages as "reference, not check
+            # items" so a page-by-page extractor can tell them apart).
+            story.append(_SectionMarker(block[1]))
         else:
             raise ValueError(f"unknown block type: {kind}")
 
@@ -243,7 +269,8 @@ def build_pdf(doc: dict, out_path: Path) -> None:
         canvas.saveState()
         canvas.setFont(FONT_REGULAR, 7.5)
         canvas.setFillColor(colors.HexColor("#6B7280"))
-        canvas.drawString(margin, A4[1] - 12 * mm, header_label)
+        section = getattr(canvas, "_rapid_section", "")
+        canvas.drawString(margin, A4[1] - 12 * mm, f"{header_label}  |  {section}" if section else header_label)
         canvas.drawRightString(A4[0] - margin, A4[1] - 12 * mm, f"{canvas.getPageNumber()}")
         canvas.setStrokeColor(colors.HexColor("#D1D5DB"))
         canvas.line(margin, A4[1] - 13.5 * mm, A4[0] - margin, A4[1] - 13.5 * mm)
