@@ -28,6 +28,7 @@ from .metrics import (
 from .quality_evaluators import (
     CitationFidelityEvaluator,
     InsufficientEvidenceEvaluator,
+    KnowledgeBaseUsageEvaluator,
     JsonParseEvaluator,
     OutputLanguageEvaluator,
     ShortExplanationLengthEvaluator,
@@ -58,6 +59,7 @@ __all__ = [
     "JsonParseEvaluator",
     "CitationFidelityEvaluator",
     "InsufficientEvidenceEvaluator",
+    "KnowledgeBaseUsageEvaluator",
     "language_code_from_name",
     # Experiment factories
     "create_accuracy_experiment",

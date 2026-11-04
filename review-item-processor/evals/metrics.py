@@ -495,4 +495,20 @@ def calculate_quality_metrics(reports_by_evaluator: dict[str, EvaluationReport])
             "phrases": phrases,
         }
 
+    kb = reports_by_evaluator.get("KnowledgeBaseUsageEvaluator")
+    if kb and kb.scores:
+        reasons = _reasons(kb)
+        n = len(reasons)
+        configured = [i for i in range(n) if reasons[i].get("kb_configured") == "1"]
+        calls = [int(reasons[i].get("kb_calls", 0)) for i in range(n)]
+        out["knowledge_base"] = {
+            "cases": n,
+            "kb_configured_cases": len(configured),
+            "cases_with_kb_call": sum(1 for c in calls if c > 0),
+            "kb_calls_total": sum(calls),
+            "kb_hits_total": sum(int(reasons[i].get("kb_hits", 0)) for i in range(n)),
+            "cites_guideline_rate": (sum(reasons[i].get("cites_guideline") == "1" for i in range(n)) / n) if n else None,
+            "cites_guideline_rate_configured": (sum(reasons[i].get("cites_guideline") == "1" for i in configured) / len(configured)) if configured else None,
+        }
+
     return out

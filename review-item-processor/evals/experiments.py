@@ -223,6 +223,7 @@ def create_quality_experiment(
         CitationFidelityEvaluator,
         InsufficientEvidenceEvaluator,
         JsonParseEvaluator,
+        KnowledgeBaseUsageEvaluator,
         OutputLanguageEvaluator,
         ShortExplanationLengthEvaluator,
     )
@@ -236,6 +237,7 @@ def create_quality_experiment(
         JsonParseEvaluator(),
         CitationFidelityEvaluator(fixtures_dir=fixtures_dir),
         InsufficientEvidenceEvaluator(language=language),
+        KnowledgeBaseUsageEvaluator(language=language),
     ]
     if with_llm_judge:
         evaluators.append(

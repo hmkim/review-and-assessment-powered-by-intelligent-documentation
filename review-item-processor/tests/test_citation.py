@@ -216,3 +216,21 @@ if __name__ == "__main__":
     os.environ["RUN_BEDROCK_INTEGRATION"] = "1"
     test_citation_review_integration()
     print("Integration test passed")
+
+
+def test_literal_cite_markup_is_stripped_from_message_text():
+    # Observed in deployed runs: the model writes its citation markup inside the JSON
+    # string value; Bedrock does not turn it into a citationsContent block.
+    message = {
+        "content": [
+            {
+                "text": '{"result":"fail","confidence":0.9,"explanation":"담당자는 (cite index=\\"1-7\\">고객센터 운영팀</cite>만 적혀 있습니다.","shortExplanation":"연락처 없음"}'
+            }
+        ]
+    }
+    parsed, combined = agent._extract_json_from_message(message)
+    assert parsed is not None
+    assert parsed["explanation"] == "담당자는 고객센터 운영팀만 적혀 있습니다."
+    assert "</cite>" not in combined
+    # Ordinary less-than comparisons are untouched
+    assert agent._strip_cite_markup("a < b and <b>bold</b>") == "a < b and <b>bold</b>"

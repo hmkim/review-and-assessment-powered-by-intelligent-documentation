@@ -19,6 +19,7 @@ metrics.calculate_quality_metrics() can aggregate them from an EvaluationReport.
 
 from __future__ import annotations
 
+import json
 import re
 import statistics
 import unicodedata
@@ -426,3 +427,67 @@ def percentile(values: Iterable[float], pct: float) -> float | None:
 def median_or_none(values: Iterable[float]) -> float | None:
     data = list(values)
     return statistics.median(data) if data else None
+
+
+# --------------------------------------------------------------------------- knowledge base (Q10)
+# Patterns that show the explanation leans on the *guideline* knowledge base rather than
+# only on the checklist text. Korean set: 개인정보위 작성지침 Part Ⅲ item references, the
+# word 작성지침 itself, and the guideline's own vocabulary ("잘못 작성된 사례", "바람직한 작성 예").
+KB_CITATION_PATTERNS: dict[str, list[str]] = {
+    "ko": [
+        r"작성\s*지침", r"작성지침", r"지침\s*(?:Part|파트)?\s*[ⅠⅡⅢIVX]+[\-–]?\d*", r"[ⅠⅡⅢ]\s*[\-–]\s*\d+",
+        r"잘못\s*작성된\s*사례", r"바람직한\s*작성\s*예", r"작성\s*예시", r"표준\s*처리방침",
+        r"지식\s*베이스", r"참고\s*지침", r"개인정보\s*보호위원회\s*지침",
+    ],
+    "ja": [r"ガイドライン", r"作成指針", r"記載例"],
+    "en": [r"\bguideline", r"\bguidance\b", r"knowledge base"],
+}
+
+
+class KnowledgeBaseUsageEvaluator(Evaluator):
+    """
+    Q10: did the agent call `knowledge_base_query`, and does the explanation cite the
+    guideline material the KB holds (rather than only the law text already present in the
+    checklist)?
+
+    reason: `kb_calls=<n>|kb_hits=<n>|cites_guideline=<0|1>|kb_configured=<0|1>`
+    - kb_calls: knowledge_base_query invocations recorded in verificationDetails
+    - kb_hits:  total retrieved chunks across those calls (from the collector's essentials)
+    - cites_guideline: KB_CITATION_PATTERNS[language] matched in explanation/shortExplanation
+    - kb_configured: the case's tool_configuration had a knowledgeBase entry
+    test_pass is "cites_guideline" when a KB was configured, else always True (so the
+    evaluator can run on the KB-off arm and report cites_guideline for comparison).
+    """
+
+    def __init__(self, language: str = "ko"):
+        super().__init__()
+        self.language = language
+        self.patterns = [re.compile(p) for p in KB_CITATION_PATTERNS.get(language, [])]
+
+    def evaluate(self, evaluation_case: EvaluationData) -> list[EvaluationOutput]:
+        out: ReviewAgentOutput | None = evaluation_case.actual_output
+        inp = evaluation_case.input
+        tool_conf = (getattr(inp, "tool_configuration", None) or {}) if inp is not None else {}
+        if not tool_conf and isinstance(inp, dict):
+            tool_conf = inp.get("tool_configuration") or {}
+        configured = bool(tool_conf.get("knowledgeBase"))
+        if out is None:
+            return [EvaluationOutput(score=0.0, test_pass=False, reason=f"kb_calls=0|kb_hits=0|cites_guideline=0|kb_configured={int(configured)}|cause=no_output", label="knowledge_base")]
+        kb_calls = [t for t in (out.tool_usage or []) if t.get("toolName") == "knowledge_base_query"]
+        hits = 0
+        for t in kb_calls:
+            o = t.get("output")
+            if isinstance(o, str):
+                try:
+                    o = json.loads(o)
+                except Exception:
+                    o = None
+            if isinstance(o, dict):
+                hits += int(o.get("total_results") or len(o.get("results") or []))
+            elif isinstance(o, list):
+                hits += len(o)
+        text = f"{out.explanation or ''} {out.short_explanation or ''}"
+        cites = any(p.search(text) for p in self.patterns)
+        reason = f"kb_calls={len(kb_calls)}|kb_hits={hits}|cites_guideline={int(cites)}|kb_configured={int(configured)}"
+        passed = cites if configured else True
+        return [EvaluationOutput(score=1.0 if cites else 0.0, test_pass=passed, reason=reason, label="knowledge_base")]

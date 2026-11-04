@@ -616,12 +616,30 @@ def _message_text_parts(message: Any) -> List[str]:
         if not isinstance(block, dict):
             continue
         if "text" in block:
-            parts.append(block["text"])
+            parts.append(_strip_cite_markup(block["text"]))
         elif "citationsContent" in block:
             for generated in block["citationsContent"].get("content", []) or []:
                 if isinstance(generated, dict) and "text" in generated:
-                    parts.append(generated["text"])
+                    parts.append(_strip_cite_markup(generated["text"]))
     return parts
+
+
+# Opening tag appears as `<cite index="1-7">` or, as actually observed in JSON output,
+# `(cite index="1-7">` (the model's `<` arrives as `(`); closing tag is `</cite>`.
+_CITE_TAG_RE = re.compile(r"[<(]cite(?:\s[^<>()]*)?>|</cite>")
+
+
+def _strip_cite_markup(text: str) -> str:
+    """
+    Remove literal `<cite index="...">…</cite>` markup.
+
+    With document citations enabled the model occasionally writes its citation
+    markup inside the JSON string instead of emitting a citationsContent block;
+    Bedrock passes it through verbatim and it would reach the UI as
+    "…호팀</cite>만 적혀 있습니다" (seen in 63 of 347 Korean evaluation answers).
+    The tags carry nothing the review needs, so they are dropped.
+    """
+    return _CITE_TAG_RE.sub("", text) if text else text
 
 
 def _repair_unescaped_quotes(json_str: str) -> Optional[Dict[str, Any]]:

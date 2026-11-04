@@ -310,6 +310,8 @@ def main():
                             "page_number": eval_case.actual_output.page_number,
                             "review_type": eval_case.actual_output.review_type,
                             "review_meta": eval_case.actual_output.review_meta,
+                            # tool calls (knowledge_base_query / code_interpreter / MCP) with compacted outputs
+                            "tool_usage": getattr(eval_case.actual_output, "tool_usage", None) or [],
                         }
 
             # Extract evaluations from each evaluator's report
@@ -433,6 +435,9 @@ def main():
                 ie = q["insufficient_evidence"]
                 if ie["applicable_cases"]:
                     print(f"Insufficient-evidence protocol: {fmt(ie['protocol_pass_rate'], '.0%')} of {ie['applicable_cases']} cases, {ie['distinct_phrases']} distinct phrase(s)")
+            if "knowledge_base" in q:
+                kb = q["knowledge_base"]
+                print(f"Knowledge base:       configured in {kb['kb_configured_cases']}/{kb['cases']} cases; {kb['cases_with_kb_call']} case(s) called knowledge_base_query ({kb['kb_calls_total']} calls, {kb['kb_hits_total']} chunks); guideline cited in {fmt(kb['cites_guideline_rate'], '.0%')} of cases")
 
         print("\n" + "=" * 60)
 

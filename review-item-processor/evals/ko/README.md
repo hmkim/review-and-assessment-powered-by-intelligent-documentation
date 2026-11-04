@@ -125,3 +125,15 @@ uv run --extra evals python evals/ko/m4d/score_extraction.py --results <결과>/
 ```
 
 채점은 `kind: designed` 문서에 대해 **설계 항목 재현율**(설계 항목마다 그 내용을 담은 추출 항목이 있는가)과 **조문 오추출**(법령 원문 조문이 점검 항목이 된 수, 기준 ≤ 설계 항목 수의 20%)을, 모든 문서에 대해 언어(한글 비율·가나)와 모호성 제안의 언어·`NO_AMBIGUOUS` 누출을 계산합니다. 재현·분류는 LLM judge가 결정하고 원 출력을 `scored/<slug>.json`에 남기므로 수작업 검증이 가능합니다. 자격 증명은 결과 JSON에 기록되지 않습니다. 2026-10-30 측정 결과와 해석은 보고서 §4.8·§4.9에 있습니다.
+
+## Knowledge Base 인용 (Q10, `examples/generate_kb_suite.py`)
+
+UC001의 16케이스를 KB 연결/미연결 두 갈래로 복제합니다(`tool_configuration.knowledgeBase`). Bedrock Knowledge Base는 `examples/ko/use_case_001_privacy_policy_review/knowledge_base_sources/` 5개 파일로 미리 만들어 두어야 합니다.
+
+```bash
+python evals/ko/examples/generate_kb_suite.py --kb-id <KB id>          # korean_kb_on_suite.json / korean_kb_off_suite.json
+uv run --extra evals python evals/scripts/run_eval.py --experiment quality --language ko --suite ko/examples/korean_kb_on_suite.json --output <결과>/run1_kb_on.json
+uv run --extra evals python evals/scripts/run_eval.py --experiment quality --language ko --suite ko/examples/korean_kb_off_suite.json --output <결과>/run1_kb_off.json
+```
+
+`KnowledgeBaseUsageEvaluator`가 케이스별 `knowledge_base_query` 호출·청크 수와 지침 인용 여부(작성지침·지식베이스·Ⅲ-n·"잘못 작성된 사례" 등 패턴)를 기록하고, 결과 JSON의 `agent_output.tool_usage`에 도구 호출(질의·압축된 검색 결과)이 저장됩니다. 생성된 두 세트 파일은 KB ID를 담고 있어 커밋하지 않습니다.
