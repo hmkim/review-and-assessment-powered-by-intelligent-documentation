@@ -279,8 +279,8 @@ def score_record(rec: dict, inp: dict, use_judge: bool) -> dict:
     if judge_text is not None:
         res["judge"] = {"model": JUDGE_MODEL, "usage": usage, "raw": judge_text}
 
-    # ---- Q9
-    amb = rec["ambiguity"]
+    # ---- Q9 (absent when the run used --skip-ambiguity)
+    amb = rec.get("ambiguity") or {"status": "skipped", "seconds": None, "items": []}
     amb_items = amb.get("items", [])
     flagged = [i for i in amb_items if i.get("ambiguityReview")]
     suggestions = [s for i in flagged for s in i["ambiguityReview"].get("suggestions", [])]
